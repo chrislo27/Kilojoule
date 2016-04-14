@@ -1,4 +1,4 @@
-package chrislo27.kilojoule.client;
+package chrislo27.kilojoule.client.packer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,13 +20,13 @@ public class TileTexturePacker {
 
 	private Array<NamedTexture> texturesToPack = new Array<>();
 
-	private TextureAtlas packedTex = null;
+	private TilePackedTextureAtlas packedTex = null;
 
 	public TileTexturePacker(int tileSize) {
 		this.tileSize = tileSize;
 	}
 
-	public TextureAtlas pack() {
+	public TilePackedTextureAtlas pack() {
 		if (packedTex != null) return getPackedTexture();
 		if (texturesToPack.size == 0) throw new IllegalStateException("No textures to pack");
 
@@ -80,7 +80,7 @@ public class TileTexturePacker {
 			PixmapIO.writePNG(Gdx.files.local(debugOutputDir), pixmap);
 		}
 
-		packedTex = new TextureAtlas();
+		packedTex = new TilePackedTextureAtlas();
 		Texture newTex = new Texture(pixmap);
 		pixmap.dispose();
 		for (int y = 0; y < tilesHeight; y++) {
@@ -108,20 +108,20 @@ public class TileTexturePacker {
 		return this;
 	}
 
-	public TextureAtlas getPackedTexture() {
+	public TilePackedTextureAtlas getPackedTexture() {
 		if (packedTex == null) throw new IllegalStateException("Texture was not packed yet");
 
 		return packedTex;
 	}
 
-	public class PackingException extends RuntimeException {
+	public static class PackingException extends RuntimeException {
 
 		public PackingException(String reason) {
 			super(reason);
 		}
 	}
 
-	private class NamedTexture {
+	private static class NamedTexture {
 
 		protected final Texture texture;
 		protected final String name;
