@@ -3,7 +3,7 @@ package chrislo27.kilojoule.desktop;
 import com.badlogic.gdx.Files.FileType;
 
 import chrislo27.kilojoule.client.Main;
-import chrislo27.kilojoule.init.IoniumEngineTweaks;
+import chrislo27.kilojoule.core.init.IoniumEngineTweaks;
 import ionium.desktop.ArgumentInferredLwjglAppConfig;
 import ionium.desktop.GameLwjglApp;
 import ionium.registry.GlobalVariables;

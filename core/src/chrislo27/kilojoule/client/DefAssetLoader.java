@@ -1,4 +1,4 @@
-package chrislo27.kilojoule.init;
+package chrislo27.kilojoule.client;
 
 import java.util.HashMap;
 

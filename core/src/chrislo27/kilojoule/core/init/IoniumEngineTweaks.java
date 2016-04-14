@@ -1,4 +1,4 @@
-package chrislo27.kilojoule.init;
+package chrislo27.kilojoule.core.init;
 
 import ionium.registry.GlobalVariables;
 import ionium.util.DebugSetting;
