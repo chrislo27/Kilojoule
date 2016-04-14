@@ -1,4 +1,4 @@
-package chrislo27.kilojoule;
+package chrislo27.kilojoule.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
