@@ -34,22 +34,30 @@ public class TileTexturePacker {
 		int tilesHeight = 1;
 
 		while (tilesWidth * tilesHeight <= texturesToPack.size) {
-			if (tilesWidth <= tilesHeight) {
-				int n = 1;
+			if (mustUsePowerOfTwo) {
+				if (tilesWidth <= tilesHeight) {
+					int n = 1;
 
-				while (n <= tilesWidth) {
-					n = n << 1;
+					while (n <= tilesWidth) {
+						n = n << 1;
+					}
+
+					tilesWidth = n;
+				} else {
+					int n = 1;
+
+					while (n <= tilesHeight) {
+						n = n << 1;
+					}
+
+					tilesHeight = n;
 				}
-
-				tilesWidth = n;
 			} else {
-				int n = 1;
-
-				while (n <= tilesHeight) {
-					n = n << 1;
+				if (tilesWidth <= tilesHeight) {
+					tilesWidth++;
+				} else {
+					tilesHeight++;
 				}
-
-				tilesHeight = n;
 			}
 
 			if (tilesWidth * tileSize > maxTextureSize || tilesHeight * tileSize > maxTextureSize) {
