@@ -14,7 +14,7 @@ public class Dimension {
 	public Dimension(int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
 				"Size parameters must evenly divide into chunk boundaries (got " + sizex + "x"
-						+ sizey + ")");
+						+ sizey + ", chunk size is " + Chunk.SIZE + "x" + Chunk.SIZE + ")");
 
 		dimWidth = sizex;
 		dimHeight = sizey;
