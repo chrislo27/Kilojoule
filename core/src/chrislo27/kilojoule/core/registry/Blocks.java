@@ -40,12 +40,12 @@ public class Blocks {
 		return instance().reverseMap.get(block);
 	}
 
-	public static Array<Block> getAllBlocks() {
-		return instance().allBlocks;
+	public Array<Block> getAllBlocks() {
+		return allBlocks;
 	}
 
-	public static Array<String> getAllKeys() {
-		return instance().allKeys;
+	public Array<String> getAllKeys() {
+		return allKeys;
 	}
 
 	public static void addBlock(String key, Block block) {
