@@ -6,6 +6,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.client.packer.TilePackedTextureAtlas;
 import chrislo27.kilojoule.core.block.Block;
+import chrislo27.kilojoule.core.block.BlockDirt;
+import chrislo27.kilojoule.core.block.BlockGrass;
+import chrislo27.kilojoule.core.block.BlockStone;
 
 public class Blocks {
 
@@ -32,9 +35,9 @@ public class Blocks {
 	private ObjectMap<String, AtlasRegion> regions = new ObjectMap<>();
 
 	private void loadResources() {
-		addBlock("dirt", new Block() {
-
-		});
+		addBlock("dirt", new BlockDirt());
+		addBlock("grass", new BlockGrass());
+		addBlock("stone", new BlockStone());
 	}
 
 	public void setAtlas(TilePackedTextureAtlas a) {
