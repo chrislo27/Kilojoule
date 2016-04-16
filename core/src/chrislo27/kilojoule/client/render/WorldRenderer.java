@@ -24,12 +24,17 @@ public class WorldRenderer {
 	}
 
 	public void render(Batch batch) {
+		Dimension currentDim = world.getCurrentDim();
+
+		camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth * 0.5f,
+				currentDim.dimWidth - camera.viewportWidth * 0.5f);
+		camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight * 0.5f,
+				currentDim.dimHeight - camera.viewportHeight * 0.5f);
 		camera.update();
+
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
-
-		Dimension currentDim = world.getCurrentDim();
 
 		int minX = (int) MathUtils.clamp(
 				camera.position.x - camera.viewportWidth * 0.5f - extraMargin, 0,
@@ -48,7 +53,7 @@ public class WorldRenderer {
 		for (int x = minX; x < maxX; x++) {
 			for (int y = minY; y < maxY; y++) {
 				b = currentDim.getBlock(x, y);
-				
+
 				if (b == null) continue;
 				if (b.getRenderBlock() == null) continue;
 
