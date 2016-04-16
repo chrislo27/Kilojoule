@@ -8,10 +8,18 @@ public class Chunk {
 
 	public int chunkX, chunkY;
 	private Block[][] blocks = new Block[SIZE][SIZE];
+	public int loadedTime = 0;
 
 	public Chunk(int x, int y) {
 		chunkX = x;
 		chunkY = y;
+	}
+
+	public void tickUpdate() {
+		if (!isChunkActive()) {
+			loadedTime = 0;
+			return;
+		}
 	}
 
 	public void setBlock(Block block, int x, int y) {
@@ -24,6 +32,10 @@ public class Chunk {
 		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return null;
 
 		return blocks[x][y];
+	}
+
+	public boolean isChunkActive() {
+		return loadedTime > 0;
 	}
 
 }
