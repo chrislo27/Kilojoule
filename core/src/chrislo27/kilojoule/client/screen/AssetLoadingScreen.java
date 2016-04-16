@@ -10,9 +10,7 @@ import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.client.packer.TilePackedTextureAtlas;
 import chrislo27.kilojoule.client.packer.TileTexturePacker;
 import chrislo27.kilojoule.core.block.Block;
-import chrislo27.kilojoule.core.registry.BlockTextures;
 import chrislo27.kilojoule.core.registry.Blocks;
-import ionium.registry.AssetRegistry;
 
 public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 
@@ -45,7 +43,7 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 
 		TilePackedTextureAtlas atlas = ttp.pack();
 
-		BlockTextures.instance().setAtlas(atlas);
+		Blocks.instance().setAtlas(atlas);
 	}
 
 }
