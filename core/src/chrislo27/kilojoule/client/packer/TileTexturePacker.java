@@ -14,7 +14,7 @@ public class TileTexturePacker {
 
 	public boolean mustUsePowerOfTwo = true;
 	public int maxTextureSize = 2048;
-	public String debugOutputDir = null;
+	public String debugOutputFile = null;
 
 	private int tileSize = 32;
 
@@ -78,8 +78,8 @@ public class TileTexturePacker {
 			}
 		}
 
-		if (debugOutputDir != null) {
-			PixmapIO.writePNG(Gdx.files.local(debugOutputDir), pixmap);
+		if (debugOutputFile != null) {
+			PixmapIO.writePNG(Gdx.files.local(debugOutputFile), pixmap);
 		}
 
 		packedTex = new TilePackedTextureAtlas();
