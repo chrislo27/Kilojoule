@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import chrislo27.kilojoule.client.render.block.RenderBlock;
 
 public abstract class Block {
-	
+
 	public static final int TILE_SIZE = 32;
 
 	protected RenderBlock renderBlock;
@@ -19,8 +19,6 @@ public abstract class Block {
 		return renderBlock;
 	}
 
-	public void getRequiredTextures(ObjectMap<String, Texture> map) {
-
-	}
+	public abstract void getRequiredTextures(ObjectMap<String, Texture> map);
 
 }
