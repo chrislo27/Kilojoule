@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.dimension;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
@@ -19,7 +20,6 @@ public class Dimension {
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
 	private boolean shouldRebuildActiveEntitiesArray = true;
-	private Rectangle tempChunkActiveEntityRect = new Rectangle();
 
 	public Dimension(int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
@@ -50,6 +50,10 @@ public class Dimension {
 
 	}
 
+	public float getFoliageColor() {
+		return Color.toFloatBits(0, 175, 17, 255);
+	}
+
 	public Array<Entity> getActiveEntities() {
 		return activeEntities;
 	}
@@ -57,6 +61,7 @@ public class Dimension {
 	public void addEntity(Entity e) {
 		allEntities.add(e);
 
+		if (isEntityInActiveChunk(e)) activeEntities.add(e);
 	}
 
 	public boolean isEntityInActiveChunk(Entity e) {
@@ -73,6 +78,11 @@ public class Dimension {
 	public Chunk getChunk(int cx, int cy) {
 		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight)
 			throw new IllegalArgumentException("Chunk " + cx + ", " + cy + " is out of bounds");
+
+		if (chunks[cx][cy] == null) {
+			// generate
+			chunks[cx][cy] = new Chunk(cx, cy);
+		}
 
 		return chunks[cx][cy];
 	}
