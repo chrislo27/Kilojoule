@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.dimension.Dimension;
 import chrislo27.kilojoule.core.world.World;
+import ionium.templates.Main;
 
 public class WorldRenderer {
 
@@ -19,7 +20,7 @@ public class WorldRenderer {
 		this.world = world;
 
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280, 720);
+		camera.setToOrtho(false, 1280 / 32f, 720 / 32f);
 	}
 
 	public void render(Batch batch) {
@@ -43,11 +44,13 @@ public class WorldRenderer {
 				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
 				currentDim.dimHeight);
 
+		Main.logger.debug(minX + " " + maxX + " | " + minY + " " + maxY);
+
 		Block b;
 		for (int x = minX; x < maxX; x++) {
-			for (int y = minY; x < maxY; y++) {
+			for (int y = minY; y < maxY; y++) {
 				b = currentDim.getBlock(x, y);
-
+				
 				if (b == null) continue;
 				if (b.getRenderBlock() == null) continue;
 
