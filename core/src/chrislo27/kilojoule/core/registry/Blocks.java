@@ -9,6 +9,7 @@ import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.block.BlockDirt;
 import chrislo27.kilojoule.core.block.BlockGrass;
 import chrislo27.kilojoule.core.block.BlockStone;
+import ionium.util.render.TextureRegionDebleeder;
 
 public class Blocks {
 
@@ -46,7 +47,10 @@ public class Blocks {
 		Array<AtlasRegion> allRegions = atlas.getRegions();
 		regions.clear();
 
+		TextureRegionDebleeder.fixAmountPx = 0.25f;
+
 		for (AtlasRegion ar : allRegions) {
+			TextureRegionDebleeder.fixBleeding(ar);
 			regions.put(ar.name + (ar.name.endsWith("_") ? ar.index : ""), ar);
 		}
 	}
