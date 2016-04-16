@@ -42,6 +42,12 @@ public class Dimension {
 			rebuildActiveEntitiesArray();
 		}
 
+		for (int y = 0; y < chunksHeight; y++) {
+			for (int x = 0; x < chunksWidth; x++) {
+				if (getChunk(x, y).isChunkActive()) getChunk(x, y).tickUpdate();
+			}
+		}
+
 	}
 
 	public Array<Entity> getActiveEntities() {
@@ -79,6 +85,10 @@ public class Dimension {
 		return getChunk(cx, cy).isChunkActive();
 	}
 
+	public void loadChunk(int time, int x, int y) {
+		getChunk(x, y).loadedTime = time;
+	}
+
 	public Block getBlock(int x, int y) {
 		if (x < 0 || y < 0 || x >= dimWidth || y >= dimHeight) return null;
 
@@ -93,6 +103,10 @@ public class Dimension {
 
 	private void rebuildActiveEntitiesArray() {
 		activeEntities.clear();
+
+		for (Entity e : allEntities) {
+			if (isEntityInActiveChunk(e)) activeEntities.add(e);
+		}
 	}
 
 }
