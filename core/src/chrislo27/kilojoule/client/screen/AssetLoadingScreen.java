@@ -22,6 +22,8 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 	public void onFinishLoading() {
 		super.onFinishLoading();
 
+		long nanoTime = System.nanoTime();
+
 		Array<Block> allBlocks = Blocks.instance().getAllBlocks();
 		ObjectMap<String, Texture> tempMap = new ObjectMap<>();
 		for (Block block : allBlocks) {
@@ -32,6 +34,7 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 
 		ttp.maxTextureSize = 2048;
 		ttp.mustUsePowerOfTwo = true;
+		ttp.debugOutputFile = "debug/blockTextures.png";
 
 		Entries<String, Texture> iterator = tempMap.entries();
 		Entry<String, Texture> entry;
@@ -44,6 +47,8 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 		TilePackedTextureAtlas atlas = ttp.pack();
 
 		Blocks.instance().setAtlas(atlas);
+
+		Main.logger.info("Packing block textures took " + ((System.nanoTime() - nanoTime) / 1_000_000f) + " ms");
 	}
 
 }
