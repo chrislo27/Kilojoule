@@ -1,8 +1,8 @@
 package chrislo27.kilojoule.client;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.AssetLoadingScreen;
+import chrislo27.kilojoule.client.screen.WorldScreen;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
 import ionium.util.DebugSetting;
@@ -38,7 +39,7 @@ public class Main extends ionium.templates.Main {
 
 	@Override
 	public String getScreenToSwitchToAfterLoadingAssets() {
-		return "mainMenu";
+		return "world";
 	}
 
 	@Override
@@ -73,6 +74,7 @@ public class Main extends ionium.templates.Main {
 		ScreenRegistry reg = ScreenRegistry.instance();
 
 		reg.add("assetloading", new AssetLoadingScreen(this));
+		reg.add("world", new WorldScreen(this));
 	}
 
 	@Override

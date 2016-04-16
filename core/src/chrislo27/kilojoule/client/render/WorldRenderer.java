@@ -20,7 +20,7 @@ public class WorldRenderer {
 		this.world = world;
 
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280 / 32f, 720 / 32f);
+		camera.setToOrtho(false, 26.5f, 15);
 	}
 
 	public void render(Batch batch) {
@@ -43,8 +43,6 @@ public class WorldRenderer {
 		int maxY = (int) MathUtils.clamp(
 				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
 				currentDim.dimHeight);
-
-		Main.logger.debug(minX + " " + maxX + " | " + minY + " " + maxY);
 
 		Block b;
 		for (int x = minX; x < maxX; x++) {
