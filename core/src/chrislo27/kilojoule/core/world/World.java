@@ -10,7 +10,7 @@ public class World {
 	public String playerDimension = "overworld";
 
 	public World() {
-		dimensions.put("overworld", new Dimension(1600, 800));
+		dimensions.put("overworld", new Dimension(System.currentTimeMillis(), 1600, 800));
 	}
 
 	public Dimension getCurrentDim() {
