@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.registry;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.core.block.Block;
@@ -22,8 +23,13 @@ public class Blocks {
 	private ObjectMap<String, Block> blocks = new ObjectMap<>();
 	private ObjectMap<Block, String> reverseMap = new ObjectMap<>();
 
-	private void loadResources() {
+	private Array<Block> allBlocks = new Array<>();
+	private Array<String> allKeys = new Array<>();
 
+	private void loadResources() {
+		addBlock("dirt", new Block() {
+
+		});
 	}
 
 	public static Block getBlock(String key) {
@@ -34,9 +40,19 @@ public class Blocks {
 		return instance().reverseMap.get(block);
 	}
 
+	public static Array<Block> getAllBlocks() {
+		return instance().allBlocks;
+	}
+
+	public static Array<String> getAllKeys() {
+		return instance().allKeys;
+	}
+
 	public static void addBlock(String key, Block block) {
 		instance().blocks.put(key, block);
 		instance().reverseMap.put(block, key);
+		instance().allBlocks.add(block);
+		instance().allKeys.add(key);
 	}
 
 }
