@@ -13,7 +13,7 @@ import chrislo27.kilojoule.core.dimension.Dimension;
  */
 public class DimensionGenerator {
 
-	private final Dimension dimension;
+	public final Dimension dimension;
 
 	private int currentStep = 0;
 	private Array<Step> steps;
