@@ -16,12 +16,12 @@ public class WorldGenerator {
 	public final World dimension;
 
 	private int currentStep = 0;
-	private Array<Step> steps;
+	private Array<Step> steps = new Array<>();
 	private float cachedPercentage = 0;
 
-	public WorldGenerator(World dim, Array<Step> steps) {
+	public WorldGenerator(World dim) {
 		this.dimension = dim;
-		this.steps = steps;
+
 	}
 
 	public void step(FrameBuffer fbuffer) {

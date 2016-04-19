@@ -22,10 +22,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 		world = w;
 
-		Array<Step> steps = new Array<>();
-		world.provideGenerationSteps(steps);
-
-		generator = new WorldGenerator(world, steps);
+		generator = new WorldGenerator(world);
 
 		buffer = new FrameBuffer(Format.RGBA8888, world.worldWidth, world.worldHeight, false);
 
@@ -38,6 +35,9 @@ public class GenerationScreen extends Updateable<Main> {
 
 	@Override
 	public void renderUpdate() {
+		if (generator.isFinished() == false) {
+			generator.step(buffer);
+		}
 	}
 
 	@Override

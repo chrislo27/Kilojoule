@@ -17,6 +17,7 @@ public class World {
 	public final int chunksWidth, chunksHeight;
 
 	private Chunk[][] chunks;
+	private Array<Chunk> activeChunks;
 
 	public QuadTree<Entity> quadTree;
 	private Array<Entity> allEntities = new Array<>();
@@ -42,10 +43,6 @@ public class World {
 
 		generationSeed = seed;
 		simplexNoise = new SimplexNoise(seed);
-	}
-
-	public void provideGenerationSteps(Array<Step> steps) {
-
 	}
 
 	public void tickUpdate() {
