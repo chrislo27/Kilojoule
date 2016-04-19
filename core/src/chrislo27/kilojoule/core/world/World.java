@@ -109,6 +109,8 @@ public class World {
 
 	public void setChunk(Chunk chunk, int cx, int cy) {
 		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight) return;
+		
+		chunks[cx][cy] = chunk;
 	}
 
 	public boolean isChunkActive(int cx, int cy) {
