@@ -7,7 +7,8 @@ import chrislo27.kilojoule.core.dimension.Dimension;
 
 /**
  * Generates a dimension by calling #step() continuously until it is done.
- * 
+ * <br>
+ * A dimension should provide an array of ordered Steps to follow.
  *
  */
 public class DimensionGenerator {
@@ -15,11 +16,12 @@ public class DimensionGenerator {
 	private final Dimension dimension;
 
 	private int currentStep = 0;
-	private Array<Step> steps = new Array<>();
+	private Array<Step> steps;
 	private float cachedPercentage = 0;
 
-	public DimensionGenerator(Dimension dim) {
+	public DimensionGenerator(Dimension dim, Array<Step> steps) {
 		this.dimension = dim;
+		this.steps = steps;
 	}
 
 	public void step(FrameBuffer fbuffer) {
