@@ -1,29 +1,39 @@
 package chrislo27.kilojoule.client.screen;
 
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.Main;
-import chrislo27.kilojoule.client.render.WorldRenderer;
+import chrislo27.kilojoule.core.generation.WorldGenerator;
+import chrislo27.kilojoule.core.generation.Step;
 import chrislo27.kilojoule.core.world.World;
 import ionium.screen.Updateable;
 
-public class WorldScreen extends Updateable<Main> {
+public class GenerationScreen extends Updateable<Main> {
 
-	World world;
-	WorldRenderer renderer;
+	private final World world;
 
-	public WorldScreen(Main m) {
+	private WorldGenerator generator;
+	private FrameBuffer buffer;
+
+	public GenerationScreen(Main m, World w) {
 		super(m);
 
-		world = new World(System.nanoTime(), 1600, 800);
-		renderer = new WorldRenderer(world);
+		world = w;
+
+		Array<Step> steps = new Array<>();
+		world.provideGenerationSteps(steps);
+
+		generator = new WorldGenerator(world, steps);
+
+		buffer = new FrameBuffer(Format.RGBA8888, world.worldWidth, world.worldHeight, false);
+
 	}
 
 	@Override
 	public void render(float delta) {
-		renderer.render(main.batch);
 
-		main.batch.setProjectionMatrix(main.camera.combined);
 	}
 
 	@Override
@@ -32,8 +42,6 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void tickUpdate() {
-		world.tickUpdate();
-
 	}
 
 	@Override
@@ -62,6 +70,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void dispose() {
+		buffer.dispose();
 	}
 
 }

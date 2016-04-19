@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 public abstract class Step {
 
 	private float percentageComplete = 0;
-	protected final DimensionGenerator generator;
+	protected final WorldGenerator generator;
 
 	public String messageString = "";
 
-	public Step(DimensionGenerator gen) {
+	public Step(WorldGenerator gen) {
 		generator = gen;
 	}
 

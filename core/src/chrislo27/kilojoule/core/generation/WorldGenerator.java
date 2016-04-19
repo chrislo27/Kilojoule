@@ -3,23 +3,23 @@ package chrislo27.kilojoule.core.generation;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 
-import chrislo27.kilojoule.core.dimension.Dimension;
+import chrislo27.kilojoule.core.world.World;
 
 /**
- * Generates a dimension by calling #step() continuously until it is done.
+ * Generates a world by calling #step() continuously until it is done.
  * <br>
- * A dimension should provide an array of ordered Steps to follow.
+ * A world should provide an array of ordered Steps to follow.
  *
  */
-public class DimensionGenerator {
+public class WorldGenerator {
 
-	public final Dimension dimension;
+	public final World dimension;
 
 	private int currentStep = 0;
 	private Array<Step> steps;
 	private float cachedPercentage = 0;
 
-	public DimensionGenerator(Dimension dim, Array<Step> steps) {
+	public WorldGenerator(World dim, Array<Step> steps) {
 		this.dimension = dim;
 		this.steps = steps;
 	}

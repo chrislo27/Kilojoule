@@ -2,10 +2,10 @@ package chrislo27.kilojoule.client.render.block;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import chrislo27.kilojoule.core.dimension.Dimension;
+import chrislo27.kilojoule.core.world.World;
 
 public abstract class BlockRenderer {
 
-	public abstract void render(Batch batch, Dimension dim, int x, int y);
+	public abstract void render(Batch batch, World world, int x, int y);
 
 }
