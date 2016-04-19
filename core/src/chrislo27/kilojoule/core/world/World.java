@@ -22,7 +22,6 @@ public class World {
 	public QuadTree<Entity> quadTree;
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
-	private boolean shouldRebuildActiveEntitiesArray = true;
 
 	public SimplexNoise simplexNoise;
 	public final long generationSeed;
@@ -46,10 +45,6 @@ public class World {
 	}
 
 	public void tickUpdate() {
-		if (shouldRebuildActiveEntitiesArray) {
-			shouldRebuildActiveEntitiesArray = false;
-			rebuildActiveEntitiesArray();
-		}
 
 		for (int y = 0; y < chunksHeight; y++) {
 			for (int x = 0; x < chunksWidth; x++) {
@@ -76,11 +71,11 @@ public class World {
 	public boolean isEntityInActiveChunk(Entity e) {
 		return isChunkActive(((int) (e.boundingBox.x)) / Chunk.SIZE,
 				((int) (e.boundingBox.y)) / Chunk.SIZE)
-				&& isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
+				|| isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
 						((int) (e.boundingBox.y)) / Chunk.SIZE)
-				&& isChunkActive(((int) (e.boundingBox.x)) / Chunk.SIZE,
+				|| isChunkActive(((int) (e.boundingBox.x)) / Chunk.SIZE,
 						((int) (e.boundingBox.y + e.boundingBox.height)) / Chunk.SIZE)
-				&& isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
+				|| isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
 						((int) (e.boundingBox.y + e.boundingBox.height)) / Chunk.SIZE);
 	}
 
