@@ -22,6 +22,7 @@ public class World {
 	public QuadTree<Entity> quadTree;
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
+	private boolean shouldRebuildActiveEntitiesArray = true;
 
 	public SimplexNoise simplexNoise;
 	public final long generationSeed;
@@ -45,6 +46,10 @@ public class World {
 	}
 
 	public void tickUpdate() {
+		if (shouldRebuildActiveEntitiesArray) {
+			shouldRebuildActiveEntitiesArray = false;
+			rebuildActiveEntitiesArray();
+		}
 
 		for (int y = 0; y < chunksHeight; y++) {
 			for (int x = 0; x < chunksWidth; x++) {
@@ -66,6 +71,11 @@ public class World {
 		allEntities.add(e);
 
 		if (isEntityInActiveChunk(e)) activeEntities.add(e);
+	}
+
+	public void removeEntity(Entity e) {
+		allEntities.removeValue(e, true);
+		activeEntities.removeValue(e, true);
 	}
 
 	public boolean isEntityInActiveChunk(Entity e) {
