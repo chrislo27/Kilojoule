@@ -17,12 +17,13 @@ public class World {
 	public final int chunksWidth, chunksHeight;
 
 	private Chunk[][] chunks;
-	private Array<Chunk> activeChunks;
+	private Array<Chunk> activeChunks = new Array<>();
+	private boolean shouldRebuildActiveChunksArray = true;
 
 	public QuadTree<Entity> quadTree;
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
-	private boolean shouldRebuildActiveEntitiesArray = true;
+	public boolean shouldRebuildActiveEntitiesArray = true;
 
 	public SimplexNoise simplexNoise;
 	public final long generationSeed;
@@ -49,6 +50,11 @@ public class World {
 		if (shouldRebuildActiveEntitiesArray) {
 			shouldRebuildActiveEntitiesArray = false;
 			rebuildActiveEntitiesArray();
+		}
+
+		if (shouldRebuildActiveChunksArray) {
+			shouldRebuildActiveChunksArray = false;
+			rebuildActiveChunksArray();
 		}
 
 		for (int y = 0; y < chunksHeight; y++) {
@@ -130,6 +136,16 @@ public class World {
 
 		for (Entity e : allEntities) {
 			if (isEntityInActiveChunk(e)) activeEntities.add(e);
+		}
+	}
+
+	private void rebuildActiveChunksArray() {
+		activeChunks.clear();
+
+		for (int x = 0; x < chunksWidth; x++) {
+			for (int y = 0; y < chunksHeight; y++) {
+				if (getChunk(x, y).isChunkActive()) activeChunks.add(getChunk(x, y));
+			}
 		}
 	}
 
