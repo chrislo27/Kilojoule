@@ -1,5 +1,7 @@
 package chrislo27.kilojoule.core.generation;
 
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+
 public abstract class Step {
 
 	private float percentageComplete = 0;
@@ -11,7 +13,7 @@ public abstract class Step {
 		generator = gen;
 	}
 
-	public abstract void step();
+	public abstract void step(FrameBuffer fbuffer);
 
 	public abstract void updateMessageString();
 

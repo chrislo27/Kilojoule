@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.generation;
 
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.core.dimension.Dimension;
@@ -21,10 +22,10 @@ public class DimensionGenerator {
 		this.dimension = dim;
 	}
 
-	public void step() {
+	public void step(FrameBuffer fbuffer) {
 
 		if (!isFinished()) {
-			steps.get(currentStep).step();
+			steps.get(currentStep).step(fbuffer);
 
 			if (steps.get(currentStep).isFinished()) {
 				if (currentStep < steps.size - 1) {
@@ -58,9 +59,9 @@ public class DimensionGenerator {
 	/**
 	 * Will block until the world has been generated.
 	 */
-	public void finishLoading() {
+	public void finishLoading(FrameBuffer fbuffer) {
 		while (!isFinished()) {
-			step();
+			step(fbuffer);
 		}
 	}
 
