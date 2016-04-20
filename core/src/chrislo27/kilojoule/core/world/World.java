@@ -57,9 +57,12 @@ public class World {
 			rebuildActiveChunksArray();
 		}
 
-		for (int y = 0; y < chunksHeight; y++) {
-			for (int x = 0; x < chunksWidth; x++) {
-				if (getChunk(x, y).isChunkActive()) getChunk(x, y).tickUpdate();
+		for (int i = activeChunks.size - 1; i >= 0; i--) {
+			Chunk c = activeChunks.get(i);
+			if (c.isChunkActive()) {
+				c.tickUpdate();
+			} else {
+				activeChunks.removeIndex(i);
 			}
 		}
 
@@ -100,8 +103,7 @@ public class World {
 			throw new IllegalArgumentException("Chunk " + cx + ", " + cy + " is out of bounds");
 
 		if (chunks[cx][cy] == null) {
-			// generate
-			chunks[cx][cy] = new Chunk(cx, cy);
+			setChunk(new Chunk(cx, cy), cx, cy);
 		}
 
 		return chunks[cx][cy];
@@ -109,8 +111,12 @@ public class World {
 
 	public void setChunk(Chunk chunk, int cx, int cy) {
 		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight) return;
-		
+
 		chunks[cx][cy] = chunk;
+
+		if (chunk != null && chunk.isChunkActive()) {
+			activeChunks.add(chunk);
+		}
 	}
 
 	public boolean isChunkActive(int cx, int cy) {
