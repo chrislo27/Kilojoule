@@ -8,6 +8,7 @@ import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.Step;
+import ionium.templates.Main;
 import ionium.util.noise.SimplexNoise;
 import ionium.util.quadtree.QuadTree;
 
@@ -31,7 +32,9 @@ public class World {
 	public World(long seed, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
 				"Size parameters must evenly divide into chunk boundaries (got " + sizex + "x"
-						+ sizey + ", chunk size is " + Chunk.SIZE + "x" + Chunk.SIZE + ")");
+						+ sizey + ", chunk size is " + Chunk.SIZE + "x" + Chunk.SIZE
+						+ ", remainders are " + (sizex % Chunk.SIZE) + ", " + (sizey % Chunk.SIZE)
+						+ ")");
 
 		worldWidth = sizex;
 		worldHeight = sizey;
@@ -61,6 +64,7 @@ public class World {
 			Chunk c = activeChunks.get(i);
 			if (c.isChunkActive()) {
 				c.tickUpdate();
+				Main.logger.debug("jiowjdaoijdwactive");
 			} else {
 				activeChunks.removeIndex(i);
 			}
