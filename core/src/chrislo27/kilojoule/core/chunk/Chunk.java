@@ -17,14 +17,6 @@ public class Chunk {
 	public Chunk(int x, int y) {
 		chunkX = x;
 		chunkY = y;
-
-		for (int xx = 0; xx < SIZE; xx++) {
-			for (int yy = 0; yy < SIZE; yy++) {
-				blocks[xx][yy] = yy == SIZE - 2 ? Blocks.getBlock("grass")
-						: MathUtils.random() > 0.6f ? Blocks.getBlock("dirt")
-								: Blocks.getBlock("stone");
-			}
-		}
 	}
 
 	public void tickUpdate() {
