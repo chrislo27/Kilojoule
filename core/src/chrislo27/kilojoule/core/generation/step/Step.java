@@ -1,6 +1,9 @@
-package chrislo27.kilojoule.core.generation;
+package chrislo27.kilojoule.core.generation.step;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+
+import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
+import chrislo27.kilojoule.core.generation.WorldGenerator;
 
 public abstract class Step {
 
@@ -13,7 +16,7 @@ public abstract class Step {
 		generator = gen;
 	}
 
-	public abstract void step(FrameBuffer fbuffer);
+	public abstract void step(WorldLoadingBuffer buffer);
 
 	public abstract void updateMessageString();
 
