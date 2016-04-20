@@ -1,8 +1,9 @@
 package chrislo27.kilojoule.core.generation;
 
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 
+import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
+import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.world.World;
 
 /**
@@ -21,13 +22,17 @@ public class WorldGenerator {
 
 	public WorldGenerator(World dim) {
 		this.dimension = dim;
-
+		setSteps();
 	}
 
-	public void step(FrameBuffer fbuffer) {
+	public void setSteps() {
+		steps.clear();
+	}
+
+	public void step(WorldLoadingBuffer buffer) {
 
 		if (!isFinished()) {
-			steps.get(currentStep).step(fbuffer);
+			steps.get(currentStep).step(buffer);
 
 			if (steps.get(currentStep).isFinished()) {
 				if (currentStep < steps.size - 1) {
@@ -61,9 +66,9 @@ public class WorldGenerator {
 	/**
 	 * Will block until the world has been generated.
 	 */
-	public void finishLoading(FrameBuffer fbuffer) {
+	public void finishLoading(WorldLoadingBuffer buffer) {
 		while (!isFinished()) {
-			step(fbuffer);
+			step(buffer);
 		}
 	}
 
