@@ -14,14 +14,14 @@ import chrislo27.kilojoule.core.world.World;
  */
 public class WorldGenerator {
 
-	public final World dimension;
+	public final World world;
 
 	private int currentStep = 0;
 	private Array<Step> steps = new Array<>();
 	private float cachedPercentage = 0;
 
 	public WorldGenerator(World dim) {
-		this.dimension = dim;
+		this.world = dim;
 		setSteps();
 	}
 
