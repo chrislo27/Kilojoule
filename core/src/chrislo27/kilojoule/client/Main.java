@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.AssetLoadingScreen;
+import chrislo27.kilojoule.client.screen.GenerationScreen;
 import chrislo27.kilojoule.client.screen.WorldScreen;
+import chrislo27.kilojoule.core.world.World;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
 import ionium.util.DebugSetting;
@@ -38,8 +40,8 @@ public class Main extends ionium.templates.Main {
 	}
 
 	@Override
-	public String getScreenToSwitchToAfterLoadingAssets() {
-		return "world";
+	public Screen getScreenToSwitchToAfterLoadingAssets() {
+		return new GenerationScreen(this, new World(System.nanoTime(), 1600, 800));
 	}
 
 	@Override
