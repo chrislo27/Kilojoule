@@ -64,7 +64,6 @@ public class World {
 			Chunk c = activeChunks.get(i);
 			if (c.isChunkActive()) {
 				c.tickUpdate();
-				Main.logger.debug("jiowjdaoijdwactive");
 			} else {
 				activeChunks.removeIndex(i);
 			}

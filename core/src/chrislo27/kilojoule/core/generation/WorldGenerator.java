@@ -3,6 +3,7 @@ package chrislo27.kilojoule.core.generation;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
+import chrislo27.kilojoule.core.generation.step.OldHeightmapStep;
 import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.world.World;
 
@@ -15,24 +16,28 @@ import chrislo27.kilojoule.core.world.World;
 public class WorldGenerator {
 
 	public final World world;
+	public final GeneratorSettings settings;
 
 	private int currentStep = 0;
 	private Array<Step> steps = new Array<>();
 	private float cachedPercentage = 0;
 
-	public WorldGenerator(World dim) {
-		this.world = dim;
+	public WorldGenerator(World w, GeneratorSettings settings) {
+		this.world = w;
+		this.settings = settings;
 		setSteps();
 	}
 
 	public void setSteps() {
 		steps.clear();
+		
+		steps.add(new OldHeightmapStep(this));
 	}
 
 	public void step(WorldLoadingBuffer buffer) {
 
 		if (!isFinished()) {
-			steps.get(currentStep).step(buffer);
+			steps.get(currentStep).step(world, buffer);
 
 			if (steps.get(currentStep).isFinished()) {
 				if (currentStep < steps.size - 1) {
