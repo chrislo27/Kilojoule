@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
-import chrislo27.kilojoule.core.generation.Step;
+import chrislo27.kilojoule.core.generation.step.Step;
 import ionium.templates.Main;
 import ionium.util.noise.SimplexNoise;
 import ionium.util.quadtree.QuadTree;
