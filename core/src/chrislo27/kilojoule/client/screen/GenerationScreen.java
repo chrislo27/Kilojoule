@@ -16,11 +16,15 @@ import ionium.screen.Updateable;
 
 public class GenerationScreen extends Updateable<Main> {
 
+	private static final long AVG_FRAME_TIME = (long) ((1f / 60f) * 1_000_000_000);
+
 	private final World world;
 
 	private WorldGenerator generator;
 	private FrameBuffer buffer;
 	private WorldLoadingBuffer worldBuffer;
+
+	private long lastNanoRenderTime = AVG_FRAME_TIME;
 
 	public GenerationScreen(Main m, World w) {
 		super(m);
@@ -49,14 +53,18 @@ public class GenerationScreen extends Updateable<Main> {
 				Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.75f, 1, Align.center,
 				false);
 
+		long time = System.nanoTime();
+		
 		main.batch.end();
+		
+		lastNanoRenderTime = Math.max((AVG_FRAME_TIME - (System.nanoTime() - time)), 1_000_000);
 	}
 
 	@Override
 	public void renderUpdate() {
 		long time = System.nanoTime();
 
-		while (System.nanoTime() - time < 15_000_000 && !generator.isFinished()) {
+		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
 			generator.step(worldBuffer);
 		}
 	}
