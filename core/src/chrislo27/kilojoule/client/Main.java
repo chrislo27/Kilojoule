@@ -132,21 +132,25 @@ public class Main extends ionium.templates.Main {
 
 		font = ttfGenerator.generateFont(ttfParam);
 		font.getData().markupEnabled = true;
+		font.setFixedWidthGlyphs("0123456789");
 
 		ttfParam.size *= 4;
 		biggerFont = ttfGenerator.generateFont(ttfParam);
 		biggerFont.getData().markupEnabled = true;
+		biggerFont.setFixedWidthGlyphs("0123456789");
 
 		ttfParam.borderWidth = 1.5f;
 		ttfParam.size /= 4;
 
 		fontBordered = ttfGenerator.generateFont(ttfParam);
 		fontBordered.getData().markupEnabled = true;
+		fontBordered.setFixedWidthGlyphs("0123456789");
 
 		ttfParam.size *= 4;
 		ttfParam.borderWidth *= 4;
 		biggerFontBordered = ttfGenerator.generateFont(ttfParam);
 		biggerFontBordered.getData().markupEnabled = true;
+		biggerFontBordered.setFixedWidthGlyphs("0123456789");
 
 		ttfGenerator.dispose();
 
