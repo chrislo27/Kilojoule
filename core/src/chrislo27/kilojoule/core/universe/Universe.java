@@ -23,6 +23,12 @@ public class Universe {
 		this.seed = seed;
 
 		simplexNoise = new SimplexNoise(seed);
+
+		addWorlds();
+	}
+
+	private void addWorlds() {
+		worlds.put("desoret", new World(this, 4000, 2000));
 	}
 
 	public void tickUpdate() {
