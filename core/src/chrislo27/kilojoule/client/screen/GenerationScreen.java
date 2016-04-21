@@ -97,7 +97,7 @@ public class GenerationScreen extends Updateable<Main> {
 	}
 
 	private String getTruncatedPercentage(float percent) {
-		return String.format("%.3f", percent * 100);
+		return String.format("%.1f", percent * 100);
 	}
 
 	@Override
