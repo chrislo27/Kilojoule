@@ -47,7 +47,10 @@ public class GenerationScreen extends Updateable<Main> {
 	private void updateCurrentGen() {
 		generator = allGenerators.get(currentGen);
 
-		if (buffer == null) {
+		if (buffer == null || buffer.getWidth() != generator.world.worldWidth
+				|| buffer.getHeight() != generator.world.worldHeight) {
+			if (buffer != null) buffer.dispose();
+
 			buffer = new FrameBuffer(Format.RGBA8888, generator.world.worldWidth,
 					generator.world.worldHeight, false);
 		}
