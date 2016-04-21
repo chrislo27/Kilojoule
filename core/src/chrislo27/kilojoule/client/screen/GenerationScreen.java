@@ -14,6 +14,7 @@ import chrislo27.kilojoule.core.generation.WorldGenerator;
 import chrislo27.kilojoule.core.universe.Universe;
 import chrislo27.kilojoule.core.world.World;
 import ionium.screen.Updateable;
+import ionium.util.i18n.Localization;
 
 public class GenerationScreen extends Updateable<Main> {
 
@@ -23,10 +24,11 @@ public class GenerationScreen extends Updateable<Main> {
 
 	private WorldGenerator generator;
 	private FrameBuffer buffer;
-	private WorldLoadingBuffer worldBuffer;
+	private WorldLoadingBuffer worldBuffer = new WorldLoadingBuffer();
 
-	private Array<WorldGenerator> allGenerators;
+	private Array<WorldGenerator> allGenerators = new Array<>();
 	private int currentGen = 0;
+	private float universalTotal = 0;
 
 	private long lastNanoRenderTime = AVG_FRAME_TIME;
 
@@ -35,7 +37,6 @@ public class GenerationScreen extends Updateable<Main> {
 
 		universe = u;
 
-		allGenerators = new Array<>();
 		for (World w : universe.worlds.values()) {
 			allGenerators.add(new WorldGenerator(w, new GeneratorSettings(w)));
 		}
@@ -46,10 +47,14 @@ public class GenerationScreen extends Updateable<Main> {
 	private void updateCurrentGen() {
 		generator = allGenerators.get(currentGen);
 
-		buffer = new FrameBuffer(Format.RGBA8888, generator.world.worldWidth,
-				generator.world.worldHeight, false);
+		if (buffer == null) {
+			buffer = new FrameBuffer(Format.RGBA8888, generator.world.worldWidth,
+					generator.world.worldHeight, false);
+		}
 
-		worldBuffer = new WorldLoadingBuffer(generator.world);
+		worldBuffer.setSize(generator.world.worldWidth, generator.world.worldHeight);
+
+		worldBuffer.clear(0, 0, 0);
 	}
 
 	@Override
@@ -60,11 +65,27 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(main.camera.combined);
 		main.batch.begin();
 
-		main.batch.draw(buffer.getColorBufferTexture(), 0, Gdx.graphics.getHeight(),
-				Gdx.graphics.getWidth(), -Gdx.graphics.getHeight());
+		int width = Math.min(Gdx.graphics.getWidth(), buffer.getColorBufferTexture().getWidth());
+		int height = Math.min(Gdx.graphics.getHeight(), buffer.getColorBufferTexture().getHeight());
+		main.batch.draw(buffer.getColorBufferTexture(),
+				Gdx.graphics.getWidth() * 0.5f - width * 0.5f,
+				Gdx.graphics.getHeight() * 0.5f - height * 0.5f, width, height, 0, 0,
+				buffer.getColorBufferTexture().getWidth(),
+				buffer.getColorBufferTexture().getHeight(), false, true);
+
+		universalTotal = 0;
+		for (WorldGenerator g : allGenerators) {
+			universalTotal += g.getTotalPercentage();
+		}
+		universalTotal /= allGenerators.size;
 
 		main.fontBordered.draw(main.batch,
-				"Loading: " + String.format("%.3f", generator.getTotalPercentage() * 100) + "%",
+				generator.getCurrentStep().getMessageString()
+						+ getTruncatedPercentage(generator.getStepPercentage()) + "%\n"
+						+ Localization.get("generating.worldTotal")
+						+ getTruncatedPercentage(generator.getTotalPercentage()) + "%\n\n"
+						+ Localization.get("generating.universeTotal")
+						+ getTruncatedPercentage(universalTotal) + "%",
 				Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.75f, 1, Align.center,
 				false);
 
@@ -73,6 +94,10 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.end();
 
 		lastNanoRenderTime = Math.max((AVG_FRAME_TIME - (System.nanoTime() - time)), 1_000_000);
+	}
+
+	private String getTruncatedPercentage(float percent) {
+		return String.format("%.3f", percent * 100);
 	}
 
 	@Override
@@ -126,9 +151,14 @@ public class GenerationScreen extends Updateable<Main> {
 
 		private OrthographicCamera tempCam;
 
-		public WorldLoadingBuffer(World world) {
+		private int sizex, sizey;
+
+		public WorldLoadingBuffer() {
 			tempCam = new OrthographicCamera();
-			tempCam.setToOrtho(false, world.worldWidth, world.worldHeight);
+		}
+
+		public void setSize(int width, int height) {
+			tempCam.setToOrtho(false, width, height);
 		}
 
 		public void fillRect(float r, float g, float b, int x, int y, int w, int h) {
@@ -155,22 +185,7 @@ public class GenerationScreen extends Updateable<Main> {
 		}
 
 		public void clear(float r, float g, float b) {
-			buffer.begin();
-
-			tempCam.update();
-			main.batch.setProjectionMatrix(tempCam.combined);
-
-			main.batch.setColor(0, 0, 0, 1);
-			main.batch.begin();
-
-			Main.fillRect(main.batch, 0, 0, buffer.getWidth(), buffer.getHeight());
-
-			main.batch.setColor(1, 1, 1, 1);
-			main.batch.end();
-
-			buffer.end();
-
-			main.batch.setProjectionMatrix(main.camera.combined);
+			fillRect(r, g, b, 0, 0, sizex, sizey);
 		}
 	}
 
