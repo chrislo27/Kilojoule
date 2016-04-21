@@ -108,15 +108,17 @@ public class GenerationScreen extends Updateable<Main> {
 		long time = System.nanoTime();
 
 		main.batch.begin();
+		
 		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
 			generator.step(worldBuffer);
 		}
-		main.batch.end();
 
 		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
 			currentGen++;
 			updateCurrentGen();
 		}
+
+		main.batch.end();
 	}
 
 	@Override
