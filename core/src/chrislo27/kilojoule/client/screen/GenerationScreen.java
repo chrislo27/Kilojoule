@@ -107,18 +107,23 @@ public class GenerationScreen extends Updateable<Main> {
 	public void renderUpdate() {
 		long time = System.nanoTime();
 
+		worldBuffer.tempCam.update();
+		main.batch.setProjectionMatrix(worldBuffer.tempCam.combined);
 		main.batch.begin();
-		
+
 		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
 			generator.step(worldBuffer);
 		}
 
 		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
 			currentGen++;
+			main.batch.flush();
 			updateCurrentGen();
 		}
 
 		main.batch.end();
+
+		main.batch.setProjectionMatrix(main.camera.combined);
 	}
 
 	@Override
@@ -156,7 +161,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 	public class WorldLoadingBuffer {
 
-		private OrthographicCamera tempCam;
+		protected OrthographicCamera tempCam;
 
 		private int sizex, sizey;
 
@@ -171,18 +176,15 @@ public class GenerationScreen extends Updateable<Main> {
 		public void fillRect(float r, float g, float b, int x, int y, int w, int h) {
 			buffer.begin();
 
-			tempCam.update();
-			main.batch.setProjectionMatrix(tempCam.combined);
-
 			main.batch.setColor(r, g, b, 1);
 
 			Main.fillRect(main.batch, x, y, w, h);
 
 			main.batch.setColor(1, 1, 1, 1);
 
-			buffer.end();
+			main.batch.flush();
 
-			main.batch.setProjectionMatrix(main.camera.combined);
+			buffer.end();
 		}
 
 		public void setPixel(float r, float g, float b, int x, int y) {
@@ -190,7 +192,12 @@ public class GenerationScreen extends Updateable<Main> {
 		}
 
 		public void clear(float r, float g, float b) {
-			fillRect(r, g, b, 0, 0, (int) tempCam.viewportWidth, (int) tempCam.viewportHeight);
+			buffer.begin();
+
+			Gdx.gl.glClearColor(r, g, b, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			buffer.end();
 		}
 	}
 
