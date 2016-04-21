@@ -12,17 +12,14 @@ public class WorldRenderer {
 
 	public static int extraMargin = 1;
 
-	private final World world;
 	public OrthographicCamera camera;
 
-	public WorldRenderer(World world) {
-		this.world = world;
-
+	public WorldRenderer() {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 26.5f, 15);
 	}
 
-	public void render(Batch batch) {
+	public void render(Batch batch, World world) {
 		camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth * 0.5f,
 				world.worldWidth - camera.viewportWidth * 0.5f);
 		camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight * 0.5f,

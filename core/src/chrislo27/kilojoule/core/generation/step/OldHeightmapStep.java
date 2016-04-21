@@ -17,7 +17,7 @@ public class OldHeightmapStep extends Step {
 
 	@Override
 	public void step(World world, WorldLoadingBuffer buffer) {
-		double height = world.simplexNoise.eval(x * 0.0325f, 0);
+		double height = world.universe.simplexNoise.eval(x * 0.0325f, 0);
 		int actualHeight = (int) (generator.settings.seaLevel
 				+ (height * generator.settings.hillHeight));
 

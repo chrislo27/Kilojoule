@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.core.generation.GeneratorSettings;
 import chrislo27.kilojoule.core.generation.WorldGenerator;
+import chrislo27.kilojoule.core.universe.Universe;
 import chrislo27.kilojoule.core.world.World;
 import ionium.screen.Updateable;
 
@@ -18,23 +19,37 @@ public class GenerationScreen extends Updateable<Main> {
 
 	private static final long AVG_FRAME_TIME = (long) ((1f / 60f) * 1_000_000_000);
 
-	private final World world;
+	private final Universe universe;
 
 	private WorldGenerator generator;
 	private FrameBuffer buffer;
 	private WorldLoadingBuffer worldBuffer;
 
+	private Array<WorldGenerator> allGenerators;
+	private int currentGen = 0;
+
 	private long lastNanoRenderTime = AVG_FRAME_TIME;
 
-	public GenerationScreen(Main m, World w) {
+	public GenerationScreen(Main m, Universe u) {
 		super(m);
 
-		world = w;
+		universe = u;
 
-		generator = new WorldGenerator(world, new GeneratorSettings(world));
+		allGenerators = new Array<>();
+		for (World w : universe.worlds.values()) {
+			allGenerators.add(new WorldGenerator(w, new GeneratorSettings(w)));
+		}
 
-		buffer = new FrameBuffer(Format.RGBA8888, world.worldWidth, world.worldHeight, false);
-		worldBuffer = new WorldLoadingBuffer();
+		updateCurrentGen();
+	}
+
+	private void updateCurrentGen() {
+		generator = allGenerators.get(currentGen);
+
+		buffer = new FrameBuffer(Format.RGBA8888, generator.world.worldWidth,
+				generator.world.worldHeight, false);
+
+		worldBuffer = new WorldLoadingBuffer(generator.world);
 	}
 
 	@Override
@@ -54,9 +69,9 @@ public class GenerationScreen extends Updateable<Main> {
 				false);
 
 		long time = System.nanoTime();
-		
+
 		main.batch.end();
-		
+
 		lastNanoRenderTime = Math.max((AVG_FRAME_TIME - (System.nanoTime() - time)), 1_000_000);
 	}
 
@@ -66,6 +81,11 @@ public class GenerationScreen extends Updateable<Main> {
 
 		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
 			generator.step(worldBuffer);
+		}
+
+		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
+			currentGen++;
+			updateCurrentGen();
 		}
 	}
 
@@ -106,7 +126,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 		private OrthographicCamera tempCam;
 
-		public WorldLoadingBuffer() {
+		public WorldLoadingBuffer(World world) {
 			tempCam = new OrthographicCamera();
 			tempCam.setToOrtho(false, world.worldWidth, world.worldHeight);
 		}

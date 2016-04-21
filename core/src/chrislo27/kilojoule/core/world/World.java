@@ -7,8 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
-import chrislo27.kilojoule.core.generation.step.Step;
-import ionium.templates.Main;
+import chrislo27.kilojoule.core.universe.Universe;
 import ionium.util.noise.SimplexNoise;
 import ionium.util.quadtree.QuadTree;
 
@@ -16,6 +15,7 @@ public class World {
 
 	public final int worldWidth, worldHeight;
 	public final int chunksWidth, chunksHeight;
+	public final Universe universe;
 
 	private Chunk[][] chunks;
 	private Array<Chunk> activeChunks = new Array<>();
@@ -26,10 +26,8 @@ public class World {
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
 
-	public SimplexNoise simplexNoise;
-	public final long generationSeed;
 
-	public World(long seed, int sizex, int sizey) {
+	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
 				"Size parameters must evenly divide into chunk boundaries (got " + sizex + "x"
 						+ sizey + ", chunk size is " + Chunk.SIZE + "x" + Chunk.SIZE
@@ -45,8 +43,7 @@ public class World {
 
 		quadTree = new QuadTree<>(new Rectangle(0, 0, sizex, sizey), 0, 8, 8);
 
-		generationSeed = seed;
-		simplexNoise = new SimplexNoise(seed);
+		this.universe = un;
 	}
 
 	public void tickUpdate() {

@@ -4,24 +4,28 @@ import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.client.render.WorldRenderer;
+import chrislo27.kilojoule.core.universe.Universe;
 import chrislo27.kilojoule.core.world.World;
 import ionium.screen.Updateable;
 
 public class WorldScreen extends Updateable<Main> {
 
-	World world;
+	Universe universe;
 	WorldRenderer renderer;
 
 	public WorldScreen(Main m) {
 		super(m);
 
-		world = new World(System.nanoTime(), 1600, 800);
-		renderer = new WorldRenderer(world);
+		renderer = new WorldRenderer();
+	}
+
+	public void setUniverse(Universe uni) {
+		universe = uni;
 	}
 
 	@Override
 	public void render(float delta) {
-		renderer.render(main.batch);
+		if (universe != null) renderer.render(main.batch, universe.getCurrentWorld());
 
 		main.batch.setProjectionMatrix(main.camera.combined);
 	}
@@ -32,7 +36,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void tickUpdate() {
-		world.tickUpdate();
+		universe.tickUpdate();
 
 	}
 
