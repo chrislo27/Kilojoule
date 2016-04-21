@@ -30,7 +30,7 @@ public class WorldGenerator {
 
 	public void setSteps() {
 		steps.clear();
-		
+
 		steps.add(new OldHeightmapStep(this));
 	}
 
@@ -66,6 +66,10 @@ public class WorldGenerator {
 
 	public float getStepPercentage() {
 		return steps.get(currentStep).getPercentage();
+	}
+
+	public Step getCurrentStep() {
+		return steps.get(currentStep);
 	}
 
 	/**
