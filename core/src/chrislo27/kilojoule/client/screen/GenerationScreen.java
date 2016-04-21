@@ -107,9 +107,11 @@ public class GenerationScreen extends Updateable<Main> {
 	public void renderUpdate() {
 		long time = System.nanoTime();
 
+		main.batch.begin();
 		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
 			generator.step(worldBuffer);
 		}
+		main.batch.end();
 
 		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
 			currentGen++;
@@ -171,12 +173,10 @@ public class GenerationScreen extends Updateable<Main> {
 			main.batch.setProjectionMatrix(tempCam.combined);
 
 			main.batch.setColor(r, g, b, 1);
-			main.batch.begin();
 
 			Main.fillRect(main.batch, x, y, w, h);
 
 			main.batch.setColor(1, 1, 1, 1);
-			main.batch.end();
 
 			buffer.end();
 
