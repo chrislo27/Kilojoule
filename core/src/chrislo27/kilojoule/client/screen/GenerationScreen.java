@@ -185,7 +185,7 @@ public class GenerationScreen extends Updateable<Main> {
 		}
 
 		public void clear(float r, float g, float b) {
-			fillRect(r, g, b, 0, 0, sizex, sizey);
+			fillRect(r, g, b, 0, 0, (int) tempCam.viewportWidth, (int) tempCam.viewportHeight);
 		}
 	}
 
