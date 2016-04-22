@@ -107,7 +107,6 @@ public class GenerationScreen extends Updateable<Main> {
 	public void renderUpdate() {
 		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
 			currentGen++;
-			main.batch.flush();
 			updateCurrentGen();
 		}
 
