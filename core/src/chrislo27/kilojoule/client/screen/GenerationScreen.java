@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -53,6 +54,8 @@ public class GenerationScreen extends Updateable<Main> {
 
 			buffer = new FrameBuffer(Format.RGBA8888, generator.world.worldWidth,
 					generator.world.worldHeight, false);
+
+			buffer.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		}
 
 		worldBuffer.setSize(generator.world.worldWidth, generator.world.worldHeight);
@@ -68,9 +71,8 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(main.camera.combined);
 		main.batch.begin();
 
-		main.batch.draw(buffer.getColorBufferTexture(), 0, 0,
-				Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0,
-				buffer.getColorBufferTexture().getWidth(),
+		main.batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), 0, 0, buffer.getColorBufferTexture().getWidth(),
 				buffer.getColorBufferTexture().getHeight(), false, true);
 
 		universalTotal = 0;
