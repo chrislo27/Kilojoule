@@ -28,7 +28,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("forest", new World(this, 4000, 2000));
+		worlds.put("forest", new World(this, 1280, 720));
 	}
 
 	public void tickUpdate() {
