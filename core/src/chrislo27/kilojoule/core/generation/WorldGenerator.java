@@ -19,6 +19,7 @@ public class WorldGenerator {
 	public final GeneratorSettings settings;
 
 	private int currentStep = 0;
+	private int lastStep = -1;
 	private Array<Step> steps = new Array<>();
 	private float cachedPercentage = 0;
 
@@ -31,13 +32,19 @@ public class WorldGenerator {
 	public void setSteps() {
 		steps.clear();
 
-//		steps.add(new OldHeightmapStep(this));
+		//		steps.add(new OldHeightmapStep(this));
 		steps.add(new TripleHeightmapStep(this));
 	}
 
 	public void step(WorldLoadingBuffer buffer) {
 
 		if (!isFinished()) {
+			if (lastStep < currentStep) {
+				lastStep = currentStep;
+				if (currentStep > 0) {
+					steps.get(currentStep).onStart(steps.get(currentStep - 1));
+				}
+			}
 			steps.get(currentStep).step(world, buffer);
 
 			if (steps.get(currentStep).isFinished()) {

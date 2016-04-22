@@ -17,6 +17,10 @@ public abstract class Step {
 
 	public abstract String getMessageString();
 
+	public void onStart(Step lastStep) {
+
+	}
+
 	public boolean isFinished() {
 		return percentageComplete >= 1;
 	}
