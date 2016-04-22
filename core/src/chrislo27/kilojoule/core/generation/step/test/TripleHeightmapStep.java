@@ -29,13 +29,13 @@ public class TripleHeightmapStep extends Step {
 		double elevation1 = world.universe.simplexNoise.eval(x * 0.025f, 0);
 		double roughness1 = world.universe.simplexNoise.eval(x * 0.085f,
 				world.worldHeight * 0.085f);
-		double detail1 = world.universe.simplexNoise.eval(x * 0.08f,
+		double detail1 = world.universe.simplexNoise.eval(x * 0.075f,
 				world.worldHeight * 0.08f * 2f);
 
 		double elevation2 = world.universe.simplexNoise.eval((x + STEP_FORWARD_AMT) * 0.025f, 0);
 		double roughness2 = world.universe.simplexNoise.eval((x + STEP_FORWARD_AMT) * 0.085f,
 				world.worldHeight * 0.085f);
-		double detail2 = world.universe.simplexNoise.eval((x + STEP_FORWARD_AMT) * 0.08f,
+		double detail2 = world.universe.simplexNoise.eval((x + STEP_FORWARD_AMT) * 0.075f,
 				world.worldHeight * 0.08f * 2f);
 
 		for (int i = 0; i < STEP_FORWARD_AMT; i++) {
