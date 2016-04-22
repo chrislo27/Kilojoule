@@ -68,7 +68,7 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(main.camera.combined);
 		main.batch.begin();
 
-		main.batch.draw(buffer.getColorBufferTexture(), 0, Gdx.graphics.getHeight(),
+		main.batch.draw(buffer.getColorBufferTexture(), 0, 0,
 				Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0,
 				buffer.getColorBufferTexture().getWidth(),
 				buffer.getColorBufferTexture().getHeight(), false, true);
