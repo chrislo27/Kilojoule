@@ -1,9 +1,10 @@
-package chrislo27.kilojoule.core.generation.step;
+package chrislo27.kilojoule.core.generation.step.test;
 
 import com.badlogic.gdx.math.MathUtils;
 
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
 import chrislo27.kilojoule.core.generation.WorldGenerator;
+import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.registry.Blocks;
 import chrislo27.kilojoule.core.world.World;
 
@@ -17,7 +18,7 @@ public class OldHeightmapStep extends Step {
 
 	@Override
 	public void step(World world, WorldLoadingBuffer buffer) {
-		double height = world.universe.simplexNoise.eval(x * 0.0325f, 0);
+		double height = world.universe.simplexNoise.eval(x * 0.035f, 0);
 		int actualHeight = (int) (generator.settings.seaLevel
 				+ (height * generator.settings.hillHeight));
 
