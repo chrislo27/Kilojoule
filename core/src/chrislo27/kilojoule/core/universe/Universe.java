@@ -28,10 +28,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("desoret", new World(this, 4000, 2000));
-		worlds.put("desoret2", new World(this, 4000, 2000));
-		worlds.put("desoret3", new World(this, 4000, 2000));
-		worlds.put("desoret4", new World(this, 4000, 2000));
+		worlds.put("forest", new World(this, 4000, 2000));
 	}
 
 	public void tickUpdate() {
