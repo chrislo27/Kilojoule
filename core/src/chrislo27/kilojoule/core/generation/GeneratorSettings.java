@@ -6,8 +6,8 @@ public class GeneratorSettings {
 
 	public final World world;
 
-	public int hillHeight = 32;
-	public int seaLevel = 256;
+	public int hillHeight = 16;
+	public int seaLevel = 128;
 
 	public GeneratorSettings(World world) {
 		this.world = world;
