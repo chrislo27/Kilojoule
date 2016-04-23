@@ -29,8 +29,8 @@ public class FineHeightmapStep extends Step {
 		double actualHeight = (elevation + (roughness * detail)) / 0.035f
 				+ generator.settings.seaLevel;
 
-		buffer.fillRect(0.25f + (x % lastStep.interval == 0 ? 0.75f : 0), 0.25f, 0.25f, x, 0, 1,
-				(int) actualHeight);
+		float color = (x % lastStep.interval == 0 ? 0.8f : 0.25f);
+		buffer.fillRect(color, color, color, x, 0, 1, (int) actualHeight);
 
 		setPercentage((x * 1f) / world.worldWidth);
 		x++;
@@ -40,6 +40,8 @@ public class FineHeightmapStep extends Step {
 	public void onStart(Step lastStep) {
 		super.onStart(lastStep);
 
+		
+		
 		if (lastStep instanceof RoughHeightmapStep) {
 			this.lastStep = (RoughHeightmapStep) lastStep;
 		}
