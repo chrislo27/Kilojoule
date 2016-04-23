@@ -26,9 +26,6 @@ public class RoughHeightmapStep extends Step {
 	protected double[] detail = null;
 
 	private int current = -1;
-	private Array<Bar> bars = new Array<>();
-	private Bar[] setBars = { new Bar(0, heightsColor), new Bar(0, roughnessColor),
-			new Bar(0, detailColor) };
 
 	public RoughHeightmapStep(WorldGenerator gen) {
 		super(gen);
@@ -41,8 +38,6 @@ public class RoughHeightmapStep extends Step {
 			roughness = new double[heights.length];
 			detail = new double[roughness.length];
 
-			bars.addAll(setBars, 0, setBars.length);
-
 			current = 0;
 		}
 
@@ -54,17 +49,6 @@ public class RoughHeightmapStep extends Step {
 					.eval(current * interval * roughnessFactor, world.worldHeight);
 			detail[current] = world.universe.simplexNoise.eval(current * interval * detailFactor,
 					world.worldHeight * 2);
-
-			setBars[0].value = heights[current];
-			setBars[1].value = roughness[current];
-			setBars[2].value = detail[current];
-
-			bars.sort();
-			bars.reverse();
-
-			for (Bar b : bars) {
-				drawBar(world, b.color, b.value, buffer);
-			}
 
 		}
 
@@ -85,29 +69,6 @@ public class RoughHeightmapStep extends Step {
 	@Override
 	public String getMessageString() {
 		return Localization.get("generating.heightmapRough");
-	}
-
-	private class Bar implements Comparable {
-
-		double value;
-		Color color;
-
-		protected Bar(double v, Color c) {
-			value = v;
-			this.color = c;
-		}
-
-		@Override
-		public int compareTo(Object o) {
-			if (o instanceof Bar) {
-				Bar b = (Bar) o;
-
-				if (b.value > value) return -1;
-				if (b.value < value) return 1;
-			}
-
-			return 0;
-		}
 	}
 
 }
