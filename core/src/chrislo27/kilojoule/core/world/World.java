@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
+import chrislo27.kilojoule.core.biome.Biome;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
@@ -18,6 +19,7 @@ public abstract class World {
 	public final Universe universe;
 
 	private Chunk[][] chunks;
+	private Biome[] biomes;
 	private Array<Chunk> activeChunks = new Array<>();
 	private boolean shouldRebuildActiveChunksArray = true;
 
@@ -138,6 +140,18 @@ public abstract class World {
 		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
 
 		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setBlock(block, x % Chunk.SIZE, y % Chunk.SIZE);
+	}
+
+	public Biome getBiome(int x) {
+		if (x < 0 || x >= worldWidth) return null;
+
+		return biomes[x];
+	}
+
+	public void setBiome(Biome b, int x) {
+		if (x < 0 || x >= worldWidth) return;
+
+		biomes[x] = b;
 	}
 
 	private void rebuildActiveEntitiesArray() {
