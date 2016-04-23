@@ -28,7 +28,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("forest", new World(this, 1280, 720));
+		worlds.put("desolate", new World(this, 1280, 720));
 	}
 
 	public void tickUpdate() {
