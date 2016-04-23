@@ -10,7 +10,7 @@ import ionium.util.i18n.Localization;
 
 public class RoughHeightmapStep extends Step {
 
-	public int interval = 16;
+	public int interval = 8;
 	public float heightsFactor = 0.025f;
 	public float roughnessFactor = 0.085f;
 	public float detailFactor = 0.075f;
