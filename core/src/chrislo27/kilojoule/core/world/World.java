@@ -41,6 +41,7 @@ public abstract class World {
 		chunksHeight = worldHeight / Chunk.SIZE;
 
 		chunks = new Chunk[chunksWidth][chunksHeight];
+		biomes = new Biome[worldWidth];
 
 		quadTree = new QuadTree<>(new Rectangle(0, 0, sizex, sizey), 0, 8, 8);
 
