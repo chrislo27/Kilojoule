@@ -2,6 +2,7 @@ package chrislo27.kilojoule.client.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -193,8 +194,16 @@ public class GenerationScreen extends Updateable<Main> {
 			buffer.end();
 		}
 
+		public void fillRect(Color c, int x, int y, int w, int h) {
+			fillRect(c.r, c.g, c.b, x, y, w, h);
+		}
+
 		public void setPixel(float r, float g, float b, int x, int y) {
 			fillRect(r, g, b, x, y, 1, 1);
+		}
+
+		public void setPixel(Color c, int x, int y) {
+			setPixel(c.r, c.g, c.b, x, y);
 		}
 
 		public void clear(float r, float g, float b) {
@@ -204,6 +213,10 @@ public class GenerationScreen extends Updateable<Main> {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 			buffer.end();
+		}
+
+		public void clear(Color c) {
+			clear(c.r, c.g, c.b);
 		}
 	}
 
