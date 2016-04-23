@@ -45,7 +45,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 		for (Entry<String, World> entry : universe.worlds.entries()) {
 			allGenerators.add(
-					new WorldGenerator(entry.key, entry.value, new GeneratorSettings(entry.value)));
+					new WorldGenerator(entry.key, entry.value, entry.value.getGeneratorSettings()));
 		}
 
 		updateCurrentGen();
