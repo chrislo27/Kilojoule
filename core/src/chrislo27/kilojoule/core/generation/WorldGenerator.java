@@ -8,6 +8,7 @@ import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.generation.step.height.FineHeightmapStep;
 import chrislo27.kilojoule.core.generation.step.height.RoughHeightmapStep;
 import chrislo27.kilojoule.core.world.World;
+import ionium.templates.Main;
 
 /**
  * Generates a world by calling #step() continuously until it is done.
@@ -18,15 +19,20 @@ import chrislo27.kilojoule.core.world.World;
 public class WorldGenerator {
 
 	public final World world;
+	private final String worldId;
 	public final GeneratorSettings settings;
 
 	private int currentStep = 0;
 	private int lastStep = -1;
 	private Array<Step> steps = new Array<>();
 	private float cachedPercentage = 0;
+	private long lastStepTime = 0;
+	private long totalTime = 0;
+	private boolean firstStep = true;
 
-	public WorldGenerator(World w, GeneratorSettings settings) {
+	public WorldGenerator(String wid, World w, GeneratorSettings settings) {
 		this.world = w;
+		this.worldId = wid;
 		this.settings = settings;
 		setSteps();
 	}
@@ -41,18 +47,41 @@ public class WorldGenerator {
 
 	public void step(WorldLoadingBuffer buffer) {
 
+		if (firstStep) {
+			firstStep = false;
+			Main.logger.info("Starting world generation for \"" + worldId + "\" ("
+					+ world.getClass().getSimpleName() + "), " + steps.size + " steps");
+		}
+
 		if (!isFinished()) {
+			long time = System.nanoTime();
+
 			if (lastStep < currentStep) {
 				lastStep = currentStep;
 				if (currentStep > 0) {
 					steps.get(currentStep).onStart(steps.get(currentStep - 1), buffer);
 				}
 			}
+
 			steps.get(currentStep).step(world, buffer);
 
+			long finishTime = System.nanoTime() - time;
+			lastStepTime += finishTime;
+			totalTime += finishTime;
+
 			if (steps.get(currentStep).isFinished()) {
+				Main.logger.info("Finished world generation step "
+						+ steps.get(currentStep).getClass().getSimpleName() + " in "
+						+ (lastStepTime / 1_000_000f) + " ms (" + (currentStep + 1) + " / "
+						+ steps.size + ")");
+
 				if (currentStep < steps.size - 1) {
 					currentStep++;
+					lastStepTime = 0;
+				} else {
+					Main.logger.info("Completed generating world \"" + worldId + "\" ("
+							+ world.getClass().getSimpleName() + ") in " + (totalTime / 1_000_000f)
+							+ " ms");
 				}
 			}
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.core.generation.GeneratorSettings;
@@ -41,8 +42,9 @@ public class GenerationScreen extends Updateable<Main> {
 
 		universe = u;
 
-		for (World w : universe.worlds.values()) {
-			allGenerators.add(new WorldGenerator(w, new GeneratorSettings(w)));
+		for (Entry<String, World> entry : universe.worlds.entries()) {
+			allGenerators.add(
+					new WorldGenerator(entry.key, entry.value, new GeneratorSettings(entry.value)));
 		}
 
 		updateCurrentGen();
