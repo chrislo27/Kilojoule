@@ -9,6 +9,8 @@ import ionium.util.i18n.Localization;
 
 public class FineHeightmapStep extends Step {
 
+	protected double actualHeights[];
+
 	int x = 0;
 	private RoughHeightmapStep lastStep;
 
@@ -18,22 +20,21 @@ public class FineHeightmapStep extends Step {
 
 	@Override
 	public void step(World world, WorldLoadingBuffer buffer) {
-		// Notch's method of heightmaps
-		// one for height, roughness, detail
-		// (elevation + (roughness*detail)) * coefficient + sealevel
 
 		double elevation = lastStep.getValue(lastStep.heights, x);
 		double roughness = lastStep.getValue(lastStep.roughness, x);
 		double detail = lastStep.getValue(lastStep.detail, x);
 
-		double actualHeight = (elevation + (roughness * detail)) / 0.035f
+		double actualHeight = (elevation + (roughness * detail)) / (lastStep.heightsFactor * 2f)
 				+ generator.settings.seaLevel;
+
+		actualHeights[x] = actualHeight;
 
 		float color = (x % lastStep.interval == 0 ? 0.4f : 0.25f);
 		buffer.fillRect(color, color, color, x, 0, 1, (int) actualHeight);
 
-		setPercentage((x * 1f) / world.worldWidth);
 		x++;
+		setPercentage((x * 1f) / world.worldWidth);
 	}
 
 	@Override
@@ -44,6 +45,9 @@ public class FineHeightmapStep extends Step {
 
 		if (lastStep instanceof RoughHeightmapStep) {
 			this.lastStep = (RoughHeightmapStep) lastStep;
+			actualHeights = new double[this.generator.world.worldWidth];
+		} else {
+			throw new IllegalArgumentException("Previous step must be of RoughHeightmapStep");
 		}
 	}
 
