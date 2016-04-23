@@ -20,7 +20,7 @@ public class WorldGenerator {
 
 	public final World world;
 	private final String worldId;
-	public final GeneratorSettings settings;
+	public final WorldGeneratorSettings settings;
 
 	private int currentStep = 0;
 	private int lastStep = -1;
@@ -30,7 +30,7 @@ public class WorldGenerator {
 	private long totalTime = 0;
 	private boolean firstStep = true;
 
-	public WorldGenerator(String wid, World w, GeneratorSettings settings) {
+	public WorldGenerator(String wid, World w, WorldGeneratorSettings settings) {
 		this.world = w;
 		this.worldId = wid;
 		this.settings = settings;

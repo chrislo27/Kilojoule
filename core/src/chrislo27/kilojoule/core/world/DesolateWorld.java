@@ -2,7 +2,7 @@ package chrislo27.kilojoule.core.world;
 
 import com.badlogic.gdx.utils.Array;
 
-import chrislo27.kilojoule.core.generation.GeneratorSettings;
+import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.registry.Biomes;
 import chrislo27.kilojoule.core.universe.Universe;
@@ -19,8 +19,8 @@ public class DesolateWorld extends World {
 	}
 
 	@Override
-	public GeneratorSettings getGeneratorSettings() {
-		GeneratorSettings gs = new GeneratorSettings(this);
+	public WorldGeneratorSettings getGeneratorSettings() {
+		WorldGeneratorSettings gs = new WorldGeneratorSettings(this);
 		
 		return gs;
 	}

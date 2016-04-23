@@ -8,7 +8,7 @@ import chrislo27.kilojoule.core.biome.Biome;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
-import chrislo27.kilojoule.core.generation.GeneratorSettings;
+import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.util.quadtree.QuadTree;
@@ -51,7 +51,7 @@ public abstract class World {
 
 	public abstract void assignBiomes(Array<BiomeRange> rangeArray);
 	
-	public abstract GeneratorSettings getGeneratorSettings();
+	public abstract WorldGeneratorSettings getGeneratorSettings();
 
 	public void tickUpdate() {
 		if (shouldRebuildActiveEntitiesArray) {

@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 import chrislo27.kilojoule.client.Main;
-import chrislo27.kilojoule.core.generation.GeneratorSettings;
+import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.WorldGenerator;
 import chrislo27.kilojoule.core.universe.Universe;
 import chrislo27.kilojoule.core.world.World;
