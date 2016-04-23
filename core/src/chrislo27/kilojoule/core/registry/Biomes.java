@@ -25,6 +25,7 @@ public class Biomes {
 	private void loadResources() {
 		addBiome("hills", new Biome(new Color(0, 175f / 255f, 17f / 255f, 1)));
 		addBiome("desert", new Biome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
+		addBiome("wasteland", new Biome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
 	}
 
 	public static Biome getBiome(String key) {
