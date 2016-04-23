@@ -44,11 +44,11 @@ public class RoughHeightmapStep extends Step {
 		if (current < heights.length) {
 
 			heights[current] = world.universe.simplexNoise.eval(current * interval * heightsFactor,
-					0);
+					-world.worldHeight);
 			roughness[current] = world.universe.simplexNoise
-					.eval(current * interval * roughnessFactor, world.worldHeight);
+					.eval(current * interval * roughnessFactor, -world.worldHeight - 1);
 			detail[current] = world.universe.simplexNoise.eval(current * interval * detailFactor,
-					world.worldHeight * 2);
+					-world.worldHeight - 2);
 
 		}
 
