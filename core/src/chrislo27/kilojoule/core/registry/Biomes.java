@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.core.biome.Biome;
+import chrislo27.kilojoule.core.biome.WastelandBiome;
 
 public class Biomes {
 
@@ -25,7 +26,7 @@ public class Biomes {
 	private void loadResources() {
 		addBiome("hills", new Biome(new Color(0, 175f / 255f, 17f / 255f, 1)));
 		addBiome("desert", new Biome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
-		addBiome("wasteland", new Biome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
+		addBiome("wasteland", new WastelandBiome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
 	}
 
 	public static Biome getBiome(String key) {
