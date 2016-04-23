@@ -17,7 +17,7 @@ public abstract class Step {
 
 	public abstract String getMessageString();
 
-	public void onStart(Step lastStep) {
+	public void onStart(Step lastStep, WorldLoadingBuffer buffer) {
 
 	}
 

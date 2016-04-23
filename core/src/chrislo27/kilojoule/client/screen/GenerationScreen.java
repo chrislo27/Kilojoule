@@ -1,6 +1,7 @@
 package chrislo27.kilojoule.client.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -32,6 +33,8 @@ public class GenerationScreen extends Updateable<Main> {
 	private float universalTotal = 0;
 
 	private long lastNanoRenderTime = AVG_FRAME_TIME;
+
+	private boolean generating = true;
 
 	public GenerationScreen(Main m, Universe u) {
 		super(m);
@@ -115,13 +118,16 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(worldBuffer.tempCam.combined);
 		main.batch.begin();
 
-		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()) {
+		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()
+				&& generating) {
 			generator.step(worldBuffer);
 		}
 
 		main.batch.end();
 
 		main.batch.setProjectionMatrix(main.camera.combined);
+
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) generating = true;
 	}
 
 	@Override

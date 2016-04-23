@@ -44,7 +44,7 @@ public class WorldGenerator {
 			if (lastStep < currentStep) {
 				lastStep = currentStep;
 				if (currentStep > 0) {
-					steps.get(currentStep).onStart(steps.get(currentStep - 1));
+					steps.get(currentStep).onStart(steps.get(currentStep - 1), buffer);
 				}
 			}
 			steps.get(currentStep).step(world, buffer);
