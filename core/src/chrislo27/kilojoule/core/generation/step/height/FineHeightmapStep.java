@@ -11,7 +11,7 @@ import ionium.util.i18n.Localization;
 
 public class FineHeightmapStep extends Step {
 
-	protected double actualHeights[];
+	protected int actualHeights[];
 
 	int x = 0;
 	private RoughHeightmapStep lastStep;
@@ -31,9 +31,9 @@ public class FineHeightmapStep extends Step {
 				* world.getBiome(x).generatorSettings.hillAmplification
 				+ generator.settings.seaLevel;
 
-		actualHeights[x] = actualHeight;
+		actualHeights[x] = (int) actualHeight;
 
-		drawHeight(x, actualHeight, buffer);
+		drawHeight(x, actualHeights[x], buffer);
 
 		x++;
 		setPercentage((x * 1f) / world.worldWidth);
@@ -43,9 +43,9 @@ public class FineHeightmapStep extends Step {
 		}
 	}
 
-	private void drawHeight(int x, double actualHeight, WorldLoadingBuffer buffer) {
+	private void drawHeight(int x, int actualHeight, WorldLoadingBuffer buffer) {
 		float color = (x % lastStep.interval == 0 ? 0.4f : 0.25f);
-		buffer.fillRect(color, color, color, x, 0, 1, (int) actualHeight);
+		buffer.fillRect(color, color, color, x, 0, 1, actualHeight);
 	}
 
 	private void smoothBiomeBorders(World world, WorldLoadingBuffer buffer) {
@@ -62,17 +62,17 @@ public class FineHeightmapStep extends Step {
 				int pointOfChange = x;
 				int left = Math.max(0, x - lastStep.interval);
 				int right = Math.min(actualHeights.length - 1, x + lastStep.interval - 1);
-				double leftHeight = actualHeights[left];
-				double rightHeight = actualHeights[right];
+				int leftHeight = actualHeights[left];
+				int rightHeight = actualHeights[right];
 
 				for (int i = left; i <= right; i++) {
-					actualHeights[i] = MathHelper.lerp(leftHeight, rightHeight,
+					actualHeights[i] = (int) MathHelper.lerp(leftHeight, rightHeight,
 							((i - left) * 1f) / (right - left));
 
+					buffer.fillRect(0, 0, 0, i, 0, 1, world.worldHeight);
 					drawHeight(i, actualHeights[i], buffer);
 				}
 
-				buffer.fillRect(0, 0, 0, pointOfChange, 0, 1, world.worldHeight);
 				buffer.fillRect(0.8f, 0.25f, 0.25f, pointOfChange, 0, 1,
 						(int) actualHeights[pointOfChange]);
 
@@ -94,7 +94,7 @@ public class FineHeightmapStep extends Step {
 
 		if (lastStep instanceof RoughHeightmapStep) {
 			this.lastStep = (RoughHeightmapStep) lastStep;
-			actualHeights = new double[this.generator.world.worldWidth];
+			actualHeights = new int[this.generator.world.worldWidth];
 
 			for (int i = 0; i < actualHeights.length; i++) {
 				actualHeights[i] = -999;
