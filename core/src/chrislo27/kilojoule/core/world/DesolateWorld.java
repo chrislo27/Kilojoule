@@ -14,7 +14,7 @@ public class DesolateWorld extends World {
 
 	@Override
 	public void assignBiomes(Array<BiomeRange> rangeArray) {
-		rangeArray.add(new BiomeRange(Biomes.getBiome("wasteland"), 0.5f));
+		rangeArray.add(new BiomeRange(Biomes.getBiome("wasteland"), 1));
 	}
 
 }
