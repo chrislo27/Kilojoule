@@ -1,10 +1,6 @@
 package chrislo27.kilojoule.core.chunk;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import chrislo27.kilojoule.core.block.Block;
-import chrislo27.kilojoule.core.registry.Blocks;
-import ionium.templates.Main;
 
 public class Chunk {
 
