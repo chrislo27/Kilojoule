@@ -3,10 +3,10 @@ package chrislo27.kilojoule.core.generation;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
+import chrislo27.kilojoule.core.generation.step.BiomeStep;
 import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.generation.step.height.FineHeightmapStep;
 import chrislo27.kilojoule.core.generation.step.height.RoughHeightmapStep;
-import chrislo27.kilojoule.core.generation.step.test.TripleHeightmapStep;
 import chrislo27.kilojoule.core.world.World;
 
 /**
@@ -34,6 +34,7 @@ public class WorldGenerator {
 	public void setSteps() {
 		steps.clear();
 
+		steps.add(new BiomeStep(this));
 		steps.add(new RoughHeightmapStep(this));
 		steps.add(new FineHeightmapStep(this));
 	}

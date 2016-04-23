@@ -7,11 +7,11 @@ import com.badlogic.gdx.utils.Array;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
+import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.universe.Universe;
-import ionium.util.noise.SimplexNoise;
 import ionium.util.quadtree.QuadTree;
 
-public class World {
+public abstract class World {
 
 	public final int worldWidth, worldHeight;
 	public final int chunksWidth, chunksHeight;
@@ -25,7 +25,6 @@ public class World {
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
-
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
@@ -45,6 +44,8 @@ public class World {
 
 		this.universe = un;
 	}
+
+	public abstract void assignBiomes(Array<BiomeRange> rangeArray);
 
 	public void tickUpdate() {
 		if (shouldRebuildActiveEntitiesArray) {

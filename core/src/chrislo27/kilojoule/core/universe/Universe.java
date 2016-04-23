@@ -2,6 +2,7 @@ package chrislo27.kilojoule.core.universe;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
+import chrislo27.kilojoule.core.world.DesolateWorld;
 import chrislo27.kilojoule.core.world.World;
 import ionium.util.noise.SimplexNoise;
 
@@ -28,7 +29,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("desolate", new World(this, 1280, 720));
+		worlds.put("desolate", new DesolateWorld(this, 1280, 720));
 	}
 
 	public void tickUpdate() {
