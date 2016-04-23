@@ -7,7 +7,6 @@ import chrislo27.kilojoule.core.generation.BiomeGeneratorSettings;
 public class Biome {
 
 	public Color foliageColor = new Color();
-	public float hillCoefficient = 1;
 	public BiomeGeneratorSettings generatorSettings = new BiomeGeneratorSettings();
 
 	public Biome(Color foliage) {

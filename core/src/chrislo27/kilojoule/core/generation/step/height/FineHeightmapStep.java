@@ -28,7 +28,8 @@ public class FineHeightmapStep extends Step {
 		double detail = lastStep.getValue(lastStep.detail, x);
 
 		double actualHeight = (elevation + (roughness * detail)) / (lastStep.heightsFactor * 2f)
-				* world.getBiome(x).hillCoefficient + generator.settings.seaLevel;
+				* world.getBiome(x).generatorSettings.hillAmplification
+				+ generator.settings.seaLevel;
 
 		actualHeights[x] = actualHeight;
 
