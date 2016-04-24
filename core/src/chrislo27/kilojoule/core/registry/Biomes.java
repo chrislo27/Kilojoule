@@ -24,9 +24,9 @@ public class Biomes {
 	private ObjectMap<String, Biome> biomes = new ObjectMap<>();
 
 	private void loadResources() {
-		addBiome("hills", new Biome(new Color(0, 175f / 255f, 17f / 255f, 1)));
-		addBiome("desert", new Biome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
-		addBiome("wasteland", new WastelandBiome(new Color(184f / 255f, 184f / 255f, 61f / 255f, 1)));
+		addBiome("hills", new Biome(new Color(0, 175 / 255f, 17 / 255f, 1)));
+		addBiome("desert", new Biome(new Color(106 / 255f, 150 / 255f, 30 / 255f, 1)));
+		addBiome("wasteland", new WastelandBiome(new Color(106 / 255f, 150 / 255f, 30 / 255f, 1)));
 	}
 
 	public static Biome getBiome(String key) {

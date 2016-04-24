@@ -22,7 +22,7 @@ public abstract class Block {
 		return renderBlock;
 	}
 
-	public Color getMapColor(World world, int x, int y) {
+	public Color getMapColor(Color foliage) {
 		return mapColor;
 	}
 

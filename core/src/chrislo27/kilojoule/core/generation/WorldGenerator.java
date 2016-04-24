@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
 import chrislo27.kilojoule.core.generation.step.BiomeStep;
 import chrislo27.kilojoule.core.generation.step.Step;
+import chrislo27.kilojoule.core.generation.step.height.FillLandscapeStep;
 import chrislo27.kilojoule.core.generation.step.height.FineHeightmapStep;
 import chrislo27.kilojoule.core.generation.step.height.RoughHeightmapStep;
 import chrislo27.kilojoule.core.world.World;
@@ -43,6 +44,7 @@ public class WorldGenerator {
 		steps.add(new BiomeStep(this));
 		steps.add(new RoughHeightmapStep(this));
 		steps.add(new FineHeightmapStep(this));
+		steps.add(new FillLandscapeStep(this));
 	}
 
 	public void step(WorldLoadingBuffer buffer) {

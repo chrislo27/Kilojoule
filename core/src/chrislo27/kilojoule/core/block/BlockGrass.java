@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.block;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -9,6 +10,11 @@ public class BlockGrass extends BlockDirt {
 
 	public BlockGrass() {
 		this.renderBlock = new RenderGrass("dirt", "grass");
+	}
+	
+	@Override
+	public Color getMapColor(Color foliage) {
+		return foliage;
 	}
 
 	@Override

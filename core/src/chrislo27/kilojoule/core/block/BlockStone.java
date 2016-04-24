@@ -9,6 +9,7 @@ public class BlockStone extends Block {
 
 	public BlockStone() {
 		this.renderBlock = new RenderBlockGeneric("stone");
+		this.mapColor.set(0.5f, 0.5f, 0.5f, 1);
 	}
 
 	@Override

@@ -23,6 +23,8 @@ import ionium.util.i18n.Localization;
 public class GenerationScreen extends Updateable<Main> {
 
 	private static final long AVG_FRAME_TIME = (long) ((1f / 60f) * 1_000_000_000);
+	private static final long SLOWER_TIME = 50_000;
+	private static final boolean USE_SLOWER_TIME = false;
 
 	private final Universe universe;
 
@@ -121,8 +123,8 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(worldBuffer.tempCam.combined);
 		main.batch.begin();
 
-		while (System.nanoTime() - time < lastNanoRenderTime && !generator.isFinished()
-				&& generating) {
+		while (System.nanoTime() - time < (USE_SLOWER_TIME ? SLOWER_TIME : lastNanoRenderTime)
+				&& !generator.isFinished() && generating) {
 			generator.step(worldBuffer);
 		}
 
