@@ -2,6 +2,7 @@ package chrislo27.kilojoule.core.universe;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
+import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.DesolateWorld;
 import chrislo27.kilojoule.core.world.World;
 import ionium.util.noise.SimplexNoise;
@@ -14,6 +15,7 @@ import ionium.util.noise.SimplexNoise;
 public class Universe {
 
 	public ObjectMap<String, World> worlds = new ObjectMap<>();
+	public EntityPlayer player;
 
 	private String currentWorld;
 
