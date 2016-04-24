@@ -2,6 +2,9 @@ package chrislo27.kilojoule.core.entity;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.evilco.mc.nbt.error.TagNotFoundException;
+import com.evilco.mc.nbt.error.UnexpectedTagTypeException;
+import com.evilco.mc.nbt.tag.TagCompound;
 
 import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
@@ -25,6 +28,15 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	public boolean shouldBeRemoved() {
 		return false;
+	}
+
+	@Override
+	public void writeToNBT(TagCompound compound) {
+	}
+
+	@Override
+	public void readFromNBT(TagCompound compound)
+			throws TagNotFoundException, UnexpectedTagTypeException {
 	}
 
 	@Override
