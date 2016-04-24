@@ -112,7 +112,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 	@Override
 	public void renderUpdate() {
-		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
+		if (generator.isFinished()) {
 			currentGen++;
 
 			if (currentGen < allGenerators.size - 1) {
