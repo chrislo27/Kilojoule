@@ -50,7 +50,7 @@ public abstract class World {
 	}
 
 	public abstract void assignBiomes(Array<BiomeRange> rangeArray);
-	
+
 	public abstract WorldGeneratorSettings getGeneratorSettings();
 
 	public void tickUpdate() {
@@ -70,6 +70,16 @@ public abstract class World {
 				c.tickUpdate();
 			} else {
 				activeChunks.removeIndex(i);
+			}
+		}
+
+		for (int i = activeEntities.size - 1; i >= 0; i--) {
+			Entity e = activeEntities.get(i);
+
+			e.tickUpdate();
+
+			if (e.shouldBeRemoved()) {
+				removeEntity(e);
 			}
 		}
 

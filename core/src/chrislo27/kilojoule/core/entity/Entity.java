@@ -9,13 +9,21 @@ import ionium.util.quadtree.QuadRectangleable;
 public abstract class Entity implements QuadRectangleable {
 
 	public World world;
-	
+
 	public Rectangle boundingBox = new Rectangle();
 	public Vector2 velocity = new Vector2(0, 0);
 
 	public Entity(World world, float x, float y, float width, float height) {
 		this.world = world;
 		boundingBox.set(x, y, width, height);
+	}
+
+	public void tickUpdate() {
+
+	}
+
+	public boolean shouldBeRemoved() {
+		return false;
 	}
 
 	@Override
