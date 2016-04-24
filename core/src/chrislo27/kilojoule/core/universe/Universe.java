@@ -34,7 +34,19 @@ public class Universe {
 		worlds.put("desolate", new DesolateWorld(this, 1280, 720));
 	}
 
+	public void spawnPlayer() {
+		World defaultWorld = worlds.get("desolate");
+
+		player = new EntityPlayer(defaultWorld, defaultWorld.worldWidth / 2,
+				defaultWorld.worldHeight);
+		player.boundingBox.y -= player.boundingBox.height;
+
+		defaultWorld.addEntity(player);
+	}
+
 	public void tickUpdate() {
+		if (player == null) spawnPlayer();
+
 		for (World w : worlds.values()) {
 			w.tickUpdate();
 		}
