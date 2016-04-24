@@ -10,8 +10,8 @@ import ionium.screen.Updateable;
 
 public class WorldScreen extends Updateable<Main> {
 
-	Universe universe;
-	WorldRenderer renderer;
+	private Universe universe;
+	private WorldRenderer renderer;
 
 	public WorldScreen(Main m) {
 		super(m);
@@ -36,7 +36,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void tickUpdate() {
-		universe.tickUpdate();
+		if (universe != null) universe.tickUpdate();
 
 	}
 

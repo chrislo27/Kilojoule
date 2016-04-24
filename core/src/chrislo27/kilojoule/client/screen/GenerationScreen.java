@@ -13,10 +13,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 import chrislo27.kilojoule.client.Main;
-import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.WorldGenerator;
 import chrislo27.kilojoule.core.universe.Universe;
 import chrislo27.kilojoule.core.world.World;
+import ionium.registry.ScreenRegistry;
 import ionium.screen.Updateable;
 import ionium.util.i18n.Localization;
 
@@ -114,7 +114,15 @@ public class GenerationScreen extends Updateable<Main> {
 	public void renderUpdate() {
 		if (generator.isFinished() && currentGen < allGenerators.size - 1) {
 			currentGen++;
-			updateCurrentGen();
+
+			if (currentGen < allGenerators.size - 1) {
+				updateCurrentGen();
+			} else {
+				WorldScreen ws = ScreenRegistry.get("world", WorldScreen.class);
+				ws.setUniverse(universe);
+
+				main.setScreen(ws);
+			}
 		}
 
 		long time = System.nanoTime();
