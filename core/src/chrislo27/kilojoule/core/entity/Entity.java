@@ -3,10 +3,11 @@ package chrislo27.kilojoule.core.entity;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
 import ionium.util.quadtree.QuadRectangleable;
 
-public abstract class Entity implements QuadRectangleable {
+public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	public World world;
 
