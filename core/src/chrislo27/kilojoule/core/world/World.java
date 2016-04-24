@@ -116,8 +116,7 @@ public abstract class World {
 	}
 
 	public Chunk getChunk(int cx, int cy) {
-		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight)
-			throw new IllegalArgumentException("Chunk " + cx + ", " + cy + " is out of bounds");
+		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight) return null;
 
 		if (chunks[cx][cy] == null) {
 			setChunk(new Chunk(cx, cy), cx, cy);
@@ -137,7 +136,7 @@ public abstract class World {
 	}
 
 	public boolean isChunkActive(int cx, int cy) {
-		return getChunk(cx, cy).isChunkActive();
+		return getChunk(cx, cy) != null && getChunk(cx, cy).isChunkActive();
 	}
 
 	public void loadChunk(int time, int x, int y) {
