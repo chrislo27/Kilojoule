@@ -17,8 +17,6 @@ public class Universe {
 	public ObjectMap<String, World> worlds = new ObjectMap<>();
 	public EntityPlayer player;
 
-	private String currentWorld;
-
 	public final long seed;
 	public SimplexNoise simplexNoise;
 
@@ -53,7 +51,9 @@ public class Universe {
 	}
 
 	public World getCurrentWorld() {
-		return worlds.get(currentWorld);
+		if (player == null) spawnPlayer();
+
+		return player.world;
 	}
 
 }
