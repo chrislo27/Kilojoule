@@ -60,8 +60,8 @@ public class FineHeightmapStep extends Step {
 
 			if (current != lastBiome) {
 				int pointOfChange = x;
-				int left = Math.max(0, x - lastStep.interval);
-				int right = Math.min(actualHeights.length - 1, x + lastStep.interval - 1);
+				int left = Math.max(0, (x - 1) / lastStep.interval);
+				int right = Math.min(actualHeights.length - 1, ((x + 1) / lastStep.interval) + 1);
 				int leftHeight = actualHeights[left];
 				int rightHeight = actualHeights[right];
 
