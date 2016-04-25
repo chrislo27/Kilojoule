@@ -35,9 +35,8 @@ public class Universe {
 	public void spawnPlayer() {
 		World defaultWorld = worlds.get("desolate");
 
-		player = new EntityPlayer(defaultWorld, defaultWorld.worldWidth / 2,
-				defaultWorld.worldHeight);
-		player.physicsBody.bounds.y -= player.physicsBody.bounds.height;
+		player = new EntityPlayer(defaultWorld, 4,
+				4);
 
 		defaultWorld.addEntity(player);
 	}

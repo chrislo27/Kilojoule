@@ -47,7 +47,7 @@ public class WorldGenerator {
 		steps.add(new FineHeightmapStep(this));
 		steps.add(new FillLandscapeStep(this));
 		
-		steps.add(new CaveStep(this));
+		//steps.add(new CaveStep(this));
 	}
 
 	public void step(WorldLoadingBuffer buffer) {

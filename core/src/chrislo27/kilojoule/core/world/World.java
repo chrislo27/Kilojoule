@@ -11,6 +11,8 @@ import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.universe.Universe;
+import ionium.aabbcollision.CollisionResolver;
+import ionium.registry.GlobalVariables;
 import ionium.util.quadtree.QuadTree;
 
 public abstract class World {
@@ -28,6 +30,7 @@ public abstract class World {
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
+	public CollisionResolver collisionResolver;
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
@@ -45,6 +48,8 @@ public abstract class World {
 		biomes = new Biome[worldWidth];
 
 		quadTree = new QuadTree<>(new Rectangle(0, 0, sizex, sizey), 0, 8, 8);
+
+		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"));
 
 		this.universe = un;
 	}
