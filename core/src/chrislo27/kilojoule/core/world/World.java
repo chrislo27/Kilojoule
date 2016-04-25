@@ -105,14 +105,18 @@ public abstract class World {
 	}
 
 	public boolean isEntityInActiveChunk(Entity e) {
-		return isChunkActive(((int) (e.boundingBox.x)) / Chunk.SIZE,
-				((int) (e.boundingBox.y)) / Chunk.SIZE)
-				|| isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
-						((int) (e.boundingBox.y)) / Chunk.SIZE)
-				|| isChunkActive(((int) (e.boundingBox.x)) / Chunk.SIZE,
-						((int) (e.boundingBox.y + e.boundingBox.height)) / Chunk.SIZE)
-				|| isChunkActive(((int) (e.boundingBox.x + e.boundingBox.width)) / Chunk.SIZE,
-						((int) (e.boundingBox.y + e.boundingBox.height)) / Chunk.SIZE);
+		return isChunkActive(((int) (e.physicsBody.bounds.x)) / Chunk.SIZE,
+				((int) (e.physicsBody.bounds.y)) / Chunk.SIZE)
+				|| isChunkActive(
+						((int) (e.physicsBody.bounds.x + e.physicsBody.bounds.width)) / Chunk.SIZE,
+						((int) (e.physicsBody.bounds.y))
+								/ Chunk.SIZE)
+				|| isChunkActive(((int) (e.physicsBody.bounds.x)) / Chunk.SIZE,
+						((int) (e.physicsBody.bounds.y + e.physicsBody.bounds.height)) / Chunk.SIZE)
+				|| isChunkActive(
+						((int) (e.physicsBody.bounds.x + e.physicsBody.bounds.width)) / Chunk.SIZE,
+						((int) (e.physicsBody.bounds.y + e.physicsBody.bounds.height))
+								/ Chunk.SIZE);
 	}
 
 	public Chunk getChunk(int cx, int cy) {

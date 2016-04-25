@@ -37,7 +37,7 @@ public class Universe {
 
 		player = new EntityPlayer(defaultWorld, defaultWorld.worldWidth / 2,
 				defaultWorld.worldHeight);
-		player.boundingBox.y -= player.boundingBox.height;
+		player.physicsBody.bounds.y -= player.physicsBody.bounds.height;
 
 		defaultWorld.addEntity(player);
 	}
