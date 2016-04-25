@@ -24,9 +24,10 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		float oldTimescale = world.collisionResolver.timeScale;
 		world.collisionResolver.timeScale = 1;
 		Array<PhysicsBody> bodies = world.collisionResolver.getTempBodyArray();
-		bodies.add(new PhysicsBody(x + 2, y + 0.9821749817324f, 1, 10));
+		bodies.add(new PhysicsBody(x + 3, y + 3, 1, 1));
+		bodies.add(new PhysicsBody(x + 2, y + 2, 1, 1));
 
-		this.physicsBody.velocity.set(100, 0);
+		this.physicsBody.velocity.set(10, 10);
 
 		Main.logger.debug("original player pos: " + physicsBody.toString());
 		Main.logger.debug("body pos: " + bodies.first().toString());

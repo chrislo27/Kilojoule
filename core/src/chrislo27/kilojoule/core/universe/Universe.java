@@ -35,8 +35,7 @@ public class Universe {
 	public void spawnPlayer() {
 		World defaultWorld = worlds.get("desolate");
 
-		player = new EntityPlayer(defaultWorld, 4,
-				4);
+		player = new EntityPlayer(defaultWorld, 0, 0);
 
 		defaultWorld.addEntity(player);
 	}
