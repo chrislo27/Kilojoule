@@ -3,6 +3,7 @@ package chrislo27.kilojoule.core.world;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 import chrislo27.kilojoule.core.biome.Biome;
 import chrislo27.kilojoule.core.block.Block;
@@ -12,6 +13,7 @@ import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
+import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
 import ionium.util.quadtree.QuadTree;
 
@@ -31,6 +33,14 @@ public abstract class World {
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
 	public CollisionResolver collisionResolver;
+	public Pool<PhysicsBody> physicsBodyPool = new Pool<PhysicsBody>(){
+
+		@Override
+		protected PhysicsBody newObject() {
+			return new PhysicsBody();
+		}
+		
+	};
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
