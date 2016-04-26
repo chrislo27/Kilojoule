@@ -21,26 +21,6 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		this.world = world;
 		physicsBody.setBounds(x, y, width, height);
 
-		float oldTimescale = world.collisionResolver.timeScale;
-		world.collisionResolver.timeScale = 1;
-		Array<PhysicsBody> bodies = world.collisionResolver.getTempBodyArray();
-		bodies.add(world.physicsBodyPool.obtain().setBounds(x + 3, y + 3, 1, 1));
-		bodies.add(world.physicsBodyPool.obtain().setBounds(x + 2, y + 2, 1, 1));
-
-		this.physicsBody.velocity.set(1000, 1000);
-
-		Main.logger.debug("original player pos: " + physicsBody.toString());
-		Main.logger.debug("body pos: " + bodies.first().toString());
-		Main.logger.debug("non-obstructed pos: " + (physicsBody.bounds.x + physicsBody.velocity.x)
-				+ ", " + (physicsBody.bounds.y + physicsBody.velocity.y));
-
-		Main.logger.debug("collided position: "
-				+ world.collisionResolver.resolveCollisionBetweenBodies(physicsBody, bodies));
-
-		world.collisionResolver.timeScale = oldTimescale;
-		
-		world.physicsBodyPool.freeAll(bodies);
-
 	}
 
 	public void tickUpdate() {
