@@ -80,6 +80,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void dispose() {
+		renderer.dispose();
 	}
 
 }

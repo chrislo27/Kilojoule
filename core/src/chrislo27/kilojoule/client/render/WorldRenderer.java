@@ -4,13 +4,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Disposable;
 
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.World;
 import ionium.templates.Main;
 
-public class WorldRenderer {
+public class WorldRenderer implements Disposable {
 
 	public static int extraMargin = 1;
 
@@ -75,6 +76,10 @@ public class WorldRenderer {
 		batch.setColor(1, 1, 1, 1);
 
 		batch.end();
+	}
+
+	@Override
+	public void dispose() {
 	}
 
 }
