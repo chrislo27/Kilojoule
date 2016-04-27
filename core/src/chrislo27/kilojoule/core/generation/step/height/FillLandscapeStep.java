@@ -1,5 +1,7 @@
 package chrislo27.kilojoule.core.generation.step.height;
 
+import com.badlogic.gdx.utils.Array;
+
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
 import chrislo27.kilojoule.core.generation.WorldGenerator;
 import chrislo27.kilojoule.core.generation.settings.BlockLayer;
@@ -20,11 +22,15 @@ public class FillLandscapeStep extends Step {
 	public void step(World world, WorldLoadingBuffer buffer) {
 
 		int y = heights[x];
-		
-		for (BlockLayer layer : world.getBiome(x).generatorSettings.blockLayers) {
+		Array<BlockLayer> layers = world.getBiome(x).generatorSettings.blockLayers;
 
-			for (int i = 0; i < layer.amount; i++, y--) {
-				world.setBlock(layer.block, x, i);
+		for (int layerindex = 0; layerindex < layers.size; layerindex++) {
+			BlockLayer layer = layers.get(layerindex);
+			int numLeft = y;
+
+			for (int i = 0; i < (layerindex == layers.size - 1 ? numLeft
+					: layer.amount); i++, y--) {
+				world.setBlock(layer.block, x, y);
 			}
 
 			buffer.fillRect(layer.block.getMapColor(world.getBiome(x).foliageColor), x, 0, 1,
