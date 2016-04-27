@@ -62,7 +62,8 @@ public abstract class World {
 		chunks = new Chunk[chunksWidth][chunksHeight];
 		biomes = new Biome[worldWidth];
 
-		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"));
+		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"),
+				1f / Block.TILE_SIZE);
 
 		this.universe = un;
 	}
