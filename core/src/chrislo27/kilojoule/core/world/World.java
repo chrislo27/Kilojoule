@@ -16,6 +16,7 @@ import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
+import ionium.benchmarking.TickBenchmark;
 import ionium.registry.GlobalVariables;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
@@ -83,6 +84,7 @@ public abstract class World {
 			rebuildActiveChunksArray();
 		}
 
+		TickBenchmark.instance().start("chunkUpdate");
 		for (int i = activeChunks.size - 1; i >= 0; i--) {
 			Chunk c = activeChunks.get(i);
 			if (c.isChunkActive()) {
@@ -91,17 +93,27 @@ public abstract class World {
 				activeChunks.removeIndex(i);
 			}
 		}
+		TickBenchmark.instance().stop("chunkUpdate");
 
+		TickBenchmark.instance().start("collision");
 		for (int i = activeEntities.size - 1; i >= 0; i--) {
 			Entity e = activeEntities.get(i);
 
 			e.movementUpdate();
+		}
+		TickBenchmark.instance().stop("collision");
+
+		TickBenchmark.instance().start("entityUpdate");
+		for (int i = activeEntities.size - 1; i >= 0; i--) {
+			Entity e = activeEntities.get(i);
+
 			e.tickUpdate();
 
 			if (e.shouldBeRemoved()) {
 				removeEntity(e);
 			}
 		}
+		TickBenchmark.instance().stop("entityUpdate");
 
 	}
 
