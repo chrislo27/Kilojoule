@@ -2,6 +2,7 @@ package chrislo27.kilojoule.core.world;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
@@ -46,6 +47,7 @@ public abstract class World {
 
 	};
 	private Array<Coordinate> tempCoords = new Array<>();
+	public final Vector2 gravity = new Vector2(0, -9.8f);
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
