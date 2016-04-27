@@ -52,10 +52,10 @@ public class WorldScreen extends Updateable<Main> {
 			return;
 		}
 
-		array.add("player x: " + universe.player.physicsBody.bounds.x);
-		array.add("player y: " + universe.player.physicsBody.bounds.y);
-		array.add("player velox: " + universe.player.physicsBody.velocity.x);
-		array.add("player veloy: " + universe.player.physicsBody.velocity.y);
+		array.add("player X: " + universe.player.physicsBody.bounds.x);
+		array.add("player Y: " + universe.player.physicsBody.bounds.y);
+		array.add("player veloX: " + universe.player.physicsBody.velocity.x);
+		array.add("player veloY: " + universe.player.physicsBody.velocity.y);
 	}
 
 	@Override
