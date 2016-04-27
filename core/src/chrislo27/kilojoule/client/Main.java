@@ -59,8 +59,6 @@ public class Main extends ionium.templates.Main {
 		Gdx.graphics.setTitle(getTitle());
 
 		AssetRegistry.instance().addAssetLoader(new DefAssetLoader());
-
-		Utils.setCursorVisibility(false);
 	}
 
 	private void resizeScreenFromSettings() {
