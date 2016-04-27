@@ -23,6 +23,10 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	}
 
+	public void movementUpdate() {
+
+	}
+
 	public void tickUpdate() {
 
 	}

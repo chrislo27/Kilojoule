@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Pool;
 import chrislo27.kilojoule.core.biome.Biome;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.chunk.Chunk;
+import chrislo27.kilojoule.core.chunk.IChunkLoader;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
@@ -15,6 +16,9 @@ import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
+import ionium.util.CoordPool;
+import ionium.util.Coordinate;
+import ionium.util.MathHelper;
 import ionium.util.quadtree.QuadTree;
 
 public abstract class World {
@@ -33,14 +37,15 @@ public abstract class World {
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
 	public CollisionResolver collisionResolver;
-	public Pool<PhysicsBody> physicsBodyPool = new Pool<PhysicsBody>(){
+	public Pool<PhysicsBody> physicsBodyPool = new Pool<PhysicsBody>() {
 
 		@Override
 		protected PhysicsBody newObject() {
 			return new PhysicsBody();
 		}
-		
+
 	};
+	private Array<Coordinate> tempCoords = new Array<>();
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
@@ -91,6 +96,7 @@ public abstract class World {
 		for (int i = activeEntities.size - 1; i >= 0; i--) {
 			Entity e = activeEntities.get(i);
 
+			e.movementUpdate();
 			e.tickUpdate();
 
 			if (e.shouldBeRemoved()) {
@@ -111,7 +117,7 @@ public abstract class World {
 	public void addEntity(Entity e) {
 		allEntities.add(e);
 
-		if (isEntityInActiveChunk(e)) activeEntities.add(e);
+		if (isEntityInActiveChunk(e) || e instanceof IChunkLoader) activeEntities.add(e);
 	}
 
 	public void removeEntity(Entity e) {
@@ -120,18 +126,44 @@ public abstract class World {
 	}
 
 	public boolean isEntityInActiveChunk(Entity e) {
-		return isChunkActive(((int) (e.physicsBody.bounds.x)) / Chunk.SIZE,
-				((int) (e.physicsBody.bounds.y)) / Chunk.SIZE)
-				|| isChunkActive(
-						((int) (e.physicsBody.bounds.x + e.physicsBody.bounds.width)) / Chunk.SIZE,
-						((int) (e.physicsBody.bounds.y))
-								/ Chunk.SIZE)
-				|| isChunkActive(((int) (e.physicsBody.bounds.x)) / Chunk.SIZE,
-						((int) (e.physicsBody.bounds.y + e.physicsBody.bounds.height)) / Chunk.SIZE)
-				|| isChunkActive(
-						((int) (e.physicsBody.bounds.x + e.physicsBody.bounds.width)) / Chunk.SIZE,
-						((int) (e.physicsBody.bounds.y + e.physicsBody.bounds.height))
-								/ Chunk.SIZE);
+		tempCoords.clear();
+		getAllChunksInArea(tempCoords, e.physicsBody.bounds.x, e.physicsBody.bounds.y,
+				e.physicsBody.bounds.width, e.physicsBody.bounds.height);
+
+		boolean allClear = true;
+		for (Coordinate c : tempCoords) {
+			if (!getChunk(c.getX(), c.getY()).isChunkActive()) {
+				allClear = false;
+				break;
+			}
+		}
+
+		CoordPool.freeAll(tempCoords);
+
+		return allClear;
+	}
+
+	public void getAllChunksInArea(Array<Coordinate> array, Rectangle rect) {
+		getAllChunksInArea(array, rect.x, rect.y, rect.width, rect.height);
+	}
+
+	public void getAllChunksInArea(Array<Coordinate> array, float x, float y, float w, float h) {
+		Coordinate topLeft = CoordPool.obtain().setPosition((int) (x) / Chunk.SIZE,
+				(int) (y + h) / Chunk.SIZE);
+		Coordinate topRight = CoordPool.obtain().setPosition((int) (x + w) / Chunk.SIZE,
+				(int) (y + h) / Chunk.SIZE);
+		Coordinate bottomLeft = CoordPool.obtain().setPosition((int) (x) / Chunk.SIZE,
+				(int) (y) / Chunk.SIZE);
+
+		for (int cx = topLeft.getX(); cx <= topRight.getX(); cx++) {
+			for (int cy = bottomLeft.getY(); cy <= topLeft.getY(); cy++) {
+				array.add(CoordPool.obtain().setPosition(cx, cy));
+			}
+		}
+
+		CoordPool.free(topLeft);
+		CoordPool.free(topRight);
+		CoordPool.free(bottomLeft);
 	}
 
 	public Chunk getChunk(int cx, int cy) {
@@ -150,7 +182,7 @@ public abstract class World {
 		chunks[cx][cy] = chunk;
 
 		if (chunk != null && chunk.isChunkActive()) {
-			activeChunks.add(chunk);
+			loadChunk(chunk.getChunkLoadedTime(), cx, cy);
 		}
 	}
 
@@ -159,7 +191,48 @@ public abstract class World {
 	}
 
 	public void loadChunk(int time, int x, int y) {
-		getChunk(x, y).loadedTime = time;
+		time = Math.max(0, time);
+
+		Chunk chunk = getChunk(x, y);
+
+		chunk.loadChunk(time);
+
+		if (time <= 0) {
+			boolean shouldUnload = true;
+			for (Entity e : allEntities) {
+				if (e instanceof IChunkLoader && MathHelper.intersects(e.physicsBody.bounds.x,
+						e.physicsBody.bounds.y, e.physicsBody.bounds.width,
+						e.physicsBody.bounds.height, x, y, 16, 16)) {
+					shouldUnload = false;
+
+					break;
+				}
+			}
+
+			if (shouldUnload) {
+				for (int bx = 0; bx < Chunk.SIZE; bx++) {
+					for (int by = 0; by < Chunk.SIZE; by++) {
+						if (chunk.getBlock(bx, by) != null
+								&& chunk.getBlock(bx, by) instanceof IChunkLoader) {
+							shouldUnload = false;
+
+							break;
+						}
+					}
+				}
+			}
+
+			if (shouldUnload) {
+				activeChunks.removeValue(chunk, true);
+			} else {
+				chunk.loadChunk(
+						(int) (IChunkLoader.CHUNK_LOAD_TIME * GlobalVariables.getFloat("TICKS")));
+			}
+		} else {
+			if (!activeChunks.contains(chunk, true)) {
+				activeChunks.add(chunk);
+			}
+		}
 	}
 
 	public Block getBlock(int x, int y) {
@@ -190,7 +263,7 @@ public abstract class World {
 		activeEntities.clear();
 
 		for (Entity e : allEntities) {
-			if (isEntityInActiveChunk(e)) activeEntities.add(e);
+			if (isEntityInActiveChunk(e) || e instanceof IChunkLoader) activeEntities.add(e);
 		}
 	}
 

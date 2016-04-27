@@ -8,7 +8,7 @@ public class Chunk {
 
 	public int chunkX, chunkY;
 	private Block[][] blocks = new Block[SIZE][SIZE];
-	public int loadedTime = 0;
+	private int loadedTime = 0;
 
 	public Chunk(int x, int y) {
 		chunkX = x;
@@ -36,6 +36,14 @@ public class Chunk {
 
 	public boolean isChunkActive() {
 		return loadedTime > 0;
+	}
+
+	public int getChunkLoadedTime() {
+		return loadedTime;
+	}
+
+	public void loadChunk(int time) {
+		loadedTime = Math.max(0, loadedTime);
 	}
 
 }
