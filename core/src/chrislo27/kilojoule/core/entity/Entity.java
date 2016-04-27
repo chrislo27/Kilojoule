@@ -39,7 +39,8 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 		tempCoordArray.clear();
 		tempBodyArray.clear();
-		world.getAllBlocksInArea(tempCoordArray, physicsBody.bounds);
+		world.getAllBlocksInArea(tempCoordArray,
+				physicsBody.getAreaOfTravel(world.collisionResolver.timeScale));
 
 		for (int i = 0; i < tempCoordArray.size; i++) {
 			Coordinate c = tempCoordArray.get(i);
