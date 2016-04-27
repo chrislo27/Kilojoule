@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.World;
+import ionium.templates.Main;
 
 public class WorldRenderer {
 

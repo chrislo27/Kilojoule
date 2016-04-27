@@ -164,6 +164,26 @@ public abstract class World {
 		CoordPool.free(bottomLeft);
 	}
 
+	public void getAllBlocksInArea(Array<Coordinate> array, Rectangle rect) {
+		getAllBlocksInArea(array, rect.x, rect.y, rect.width, rect.height);
+	}
+
+	public void getAllBlocksInArea(Array<Coordinate> array, float x, float y, float w, float h) {
+		Coordinate topLeft = CoordPool.obtain().setPosition((int) (x), (int) (y + h));
+		Coordinate topRight = CoordPool.obtain().setPosition((int) (x + w), (int) (y + h));
+		Coordinate bottomLeft = CoordPool.obtain().setPosition((int) (x), (int) (y));
+
+		for (int cx = topLeft.getX(); cx <= topRight.getX(); cx++) {
+			for (int cy = bottomLeft.getY(); cy <= topLeft.getY(); cy++) {
+				array.add(CoordPool.obtain().setPosition(cx, cy));
+			}
+		}
+
+		CoordPool.free(topLeft);
+		CoordPool.free(topRight);
+		CoordPool.free(bottomLeft);
+	}
+
 	public Chunk getChunk(int cx, int cy) {
 		if (cx < 0 || cy < 0 || cx >= chunksWidth || cy >= chunksHeight) return null;
 

@@ -42,6 +42,20 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void getDebugStrings(Array<String> array) {
+		if (universe == null) {
+			array.add("Universe is null");
+			return;
+		}
+
+		if (universe.player == null) {
+			array.add("Player doesn't exist");
+			return;
+		}
+
+		array.add("player x: " + universe.player.physicsBody.bounds.x);
+		array.add("player y: " + universe.player.physicsBody.bounds.y);
+		array.add("player velox: " + universe.player.physicsBody.velocity.x);
+		array.add("player veloy: " + universe.player.physicsBody.velocity.y);
 	}
 
 	@Override
