@@ -69,6 +69,11 @@ public class WorldRenderer {
 			}
 		}
 
+		batch.setColor(0.8f, 0.8f, 0.8f, 1);
+		Main.fillRect(batch, world.universe.player.getX(), world.universe.player.getY(),
+				world.universe.player.getWidth(), world.universe.player.getHeight());
+		batch.setColor(1, 1, 1, 1);
+
 		batch.end();
 	}
 

@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.entity;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.evilco.mc.nbt.error.TagNotFoundException;
@@ -11,6 +12,7 @@ import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
+import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.quadtree.QuadRectangleable;
@@ -37,11 +39,29 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		Vector2 collisionResult;
 		Array<PhysicsBody> bodies = world.collisionResolver.getTempBodyArray();
 
+		// prep temp arrays
 		tempCoordArray.clear();
 		tempBodyArray.clear();
+
+		// set tmp1 to the original bounds
+		Rectangle.tmp.set(physicsBody.bounds);
+
+		// expand the bounds by one block so we have detection AROUND us
+		physicsBody.bounds.x -= 1;
+		physicsBody.bounds.y -= 1;
+		physicsBody.bounds.width += 2;
+		physicsBody.bounds.height += 2;
+
+		// add the coordinates from CoordPool
 		world.getAllBlocksInArea(tempCoordArray,
 				physicsBody.getAreaOfTravel(world.collisionResolver.timeScale));
 
+		// set tmp2 to the expanded bounds
+		Rectangle.tmp2.set(physicsBody.bounds);
+		// reset bounds
+		physicsBody.bounds.set(Rectangle.tmp);
+
+		// add all the physicsbodies to the array
 		for (int i = 0; i < tempCoordArray.size; i++) {
 			Coordinate c = tempCoordArray.get(i);
 			Block b = world.getBlock(c.getX(), c.getY());
@@ -63,9 +83,11 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 			bodies.add(result);
 		}
 
+		// free coordinates, we're done
 		CoordPool.freeAll(tempCoordArray);
 		tempCoordArray.clear();
 
+		// add entity physics
 		for (int i = 0; i < world.getActiveEntities().size; i++) {
 			Entity e = world.getActiveEntities().get(i);
 
@@ -74,16 +96,20 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 			bodies.add(e.physicsBody);
 		}
 
+		// resolve collision
 		collisionResult = world.collisionResolver.resolveCollisionBetweenBodies(this.physicsBody,
-				bodies);
+				bodies, Rectangle.tmp2);
 
+		// set position
 		physicsBody.bounds.x = collisionResult.x;
 		physicsBody.bounds.y = collisionResult.y;
 
+		// kill velocity if we hit
 		if (world.collisionResolver.wasLastResolutionACollision()) {
 			physicsBody.velocity.setZero();
 		}
 
+		// free physicsbodies
 		world.physicsBodyPool.freeAll(tempBodyArray);
 		tempBodyArray.clear();
 	}
