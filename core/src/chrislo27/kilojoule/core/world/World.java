@@ -20,7 +20,6 @@ import ionium.registry.GlobalVariables;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
-import ionium.util.quadtree.QuadTree;
 
 public abstract class World {
 
@@ -33,7 +32,6 @@ public abstract class World {
 	private Array<Chunk> activeChunks = new Array<>();
 	private boolean shouldRebuildActiveChunksArray = true;
 
-	public QuadTree<Entity> quadTree;
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
 	public boolean shouldRebuildActiveEntitiesArray = true;
@@ -63,8 +61,6 @@ public abstract class World {
 
 		chunks = new Chunk[chunksWidth][chunksHeight];
 		biomes = new Biome[worldWidth];
-
-		quadTree = new QuadTree<>(new Rectangle(0, 0, sizex, sizey), 0, 8, 8);
 
 		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"));
 
