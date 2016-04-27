@@ -24,7 +24,7 @@ public class FillLandscapeStep extends Step {
 		for (BlockLayer layer : world.getBiome(x).generatorSettings.blockLayers) {
 
 			for (int i = 0; i < layer.amount; i++, y--) {
-				world.setBlock(layer.block, x, y);
+				world.setBlock(layer.block, x, i);
 			}
 
 			buffer.fillRect(layer.block.getMapColor(world.getBiome(x).foliageColor), x, 0, 1,
