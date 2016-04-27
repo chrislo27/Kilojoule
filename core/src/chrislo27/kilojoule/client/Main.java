@@ -106,13 +106,6 @@ public class Main extends ionium.templates.Main {
 	public void inputUpdate() {
 		super.inputUpdate();
 
-		if (Gdx.input.isKeyPressed(DebugSetting.DEBUG_KEY)) {
-			if (Gdx.input.isKeyPressed(Keys.I) && Gdx.input.isKeyJustPressed(Keys.N)) {
-				Localization.instance().reloadFromFile();
-				Main.logger.debug("Reloaded I18N from files");
-			}
-		}
-
 	}
 
 	@Override
