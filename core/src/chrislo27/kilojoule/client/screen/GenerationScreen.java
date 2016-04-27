@@ -79,9 +79,11 @@ public class GenerationScreen extends Updateable<Main> {
 		main.batch.setProjectionMatrix(main.camera.combined);
 		main.batch.begin();
 
-		main.batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight(), 0, 0, buffer.getColorBufferTexture().getWidth(),
-				buffer.getColorBufferTexture().getHeight(), false, true);
+		if (buffer != null) {
+			main.batch.draw(buffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
+					Gdx.graphics.getHeight(), 0, 0, buffer.getColorBufferTexture().getWidth(),
+					buffer.getColorBufferTexture().getHeight(), false, true);
+		}
 
 		universalTotal = 0;
 		for (WorldGenerator g : allGenerators) {
@@ -120,6 +122,9 @@ public class GenerationScreen extends Updateable<Main> {
 			} else {
 				WorldScreen ws = ScreenRegistry.get("world", WorldScreen.class);
 				ws.setUniverse(universe);
+
+				buffer.dispose();
+				buffer = null;
 
 				main.setScreen(ws);
 			}
@@ -173,7 +178,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 	@Override
 	public void dispose() {
-		buffer.dispose();
+		if (buffer != null) buffer.dispose();
 	}
 
 	public class WorldLoadingBuffer {
