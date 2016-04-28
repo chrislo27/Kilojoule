@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Disposable;
 
 import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.core.block.Block;
+import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.World;
 
@@ -123,10 +124,17 @@ public class WorldRenderer implements Disposable {
 			}
 		}
 
-		batch.setColor(0.8f, 0.8f, 0.8f, 1);
-		Main.fillRect(batch, world.universe.player.getX(), world.universe.player.getY(),
-				world.universe.player.getWidth(), world.universe.player.getHeight());
-		batch.setColor(1, 1, 1, 1);
+		batch.flush();
+
+		Entity e;
+		for (int i = 0; i < world.getActiveEntities().size; i++) {
+			e = world.getActiveEntities().get(i);
+
+			if (e.renderer != null) {
+				e.renderer.updateLerpPosition();
+				e.renderer.render(batch, world);
+			}
+		}
 
 		batch.end();
 

@@ -7,12 +7,12 @@ import com.evilco.mc.nbt.error.TagNotFoundException;
 import com.evilco.mc.nbt.error.UnexpectedTagTypeException;
 import com.evilco.mc.nbt.tag.TagCompound;
 
+import chrislo27.kilojoule.client.render.entity.EntityRenderer;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
-import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.quadtree.QuadRectangleable;
@@ -23,16 +23,18 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	protected static final Array<PhysicsBody> tempBodyArray = new Array<>();
 
 	public World world;
-
+	public EntityRenderer renderer;
 	public PhysicsBody physicsBody = new PhysicsBody();
+	public transient Vector2 lastKnownPosition = new Vector2();
 
 	public Entity(World world, float x, float y, float width, float height) {
 		this.world = world;
 		physicsBody.setBounds(x, y, width, height);
-
+		lastKnownPosition.set(x, y);
 	}
 
 	public void movementUpdate() {
+		lastKnownPosition.set(physicsBody.bounds.x, physicsBody.bounds.y);
 		physicsBody.velocity.add(world.gravity.x / GlobalVariables.getInt("TICKS"),
 				world.gravity.y / GlobalVariables.getInt("TICKS"));
 

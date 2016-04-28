@@ -1,9 +1,10 @@
 package chrislo27.kilojoule.client;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -15,10 +16,8 @@ import chrislo27.kilojoule.client.screen.WorldScreen;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
-import ionium.util.DebugSetting;
 import ionium.util.Logger;
 import ionium.util.Utils;
-import ionium.util.i18n.Localization;
 import ionium.util.resolution.AspectRatio;
 import ionium.util.resolution.Resolution;
 
@@ -105,7 +104,6 @@ public class Main extends ionium.templates.Main {
 	@Override
 	public void inputUpdate() {
 		super.inputUpdate();
-
 	}
 
 	@Override
