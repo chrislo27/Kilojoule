@@ -12,10 +12,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
+import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.World;
-import ionium.templates.Main;
 
 public class WorldRenderer implements Disposable {
 
@@ -44,7 +44,7 @@ public class WorldRenderer implements Disposable {
 			tempVector.set(player.physicsBody.bounds.x, player.physicsBody.bounds.y,
 					camera.position.z);
 
-			camera.position.lerp(tempVector, 0.5f);
+			camera.position.lerp(tempVector, Gdx.graphics.getDeltaTime() * 8f);
 		}
 
 		camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth * 0.5f,
