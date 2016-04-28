@@ -25,7 +25,9 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void render(float delta) {
-		if (universe != null) renderer.render(main.batch, universe.getCurrentWorld());
+		if (universe != null) {
+			renderer.render(main, main.camera.combined, main.batch, universe.getCurrentWorld());
+		}
 
 		main.batch.setProjectionMatrix(main.camera.combined);
 	}
@@ -60,6 +62,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void resize(int width, int height) {
+		renderer.resize(width, height);
 	}
 
 	@Override

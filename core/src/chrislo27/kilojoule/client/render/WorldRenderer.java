@@ -1,8 +1,14 @@
 package chrislo27.kilojoule.client.render;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -18,9 +24,17 @@ public class WorldRenderer implements Disposable {
 	public OrthographicCamera camera;
 	private Vector3 tempVector = new Vector3();
 
+	private FrameBuffer worldBuffer;
+	private FrameBuffer lightingBuffer;
+	private FrameBuffer bypassBuffer;
+
+	private boolean isBypassing = false;
+
 	public WorldRenderer() {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 26.5f, 15);
+
+		createBuffers();
 	}
 
 	protected void updateCamera(World world) {
@@ -40,10 +54,49 @@ public class WorldRenderer implements Disposable {
 		camera.update();
 	}
 
-	public void render(Batch batch, World world) {
+	public void render(Main main, Matrix4 oldProjectionMatrix, Batch batch, World world) {
 		updateCamera(world);
 
 		batch.setProjectionMatrix(camera.combined);
+
+		renderWorldToBuffer(batch, world);
+		renderLightingToBuffer(batch, world);
+
+		batch.setProjectionMatrix(oldProjectionMatrix);
+		batch.begin();
+
+		// draw world
+		batch.draw(worldBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), 0, 0, worldBuffer.getColorBufferTexture().getWidth(),
+				worldBuffer.getColorBufferTexture().getHeight(), false, true);
+
+		// lighting buffer
+		batch.setShader(main.maskshader);
+		Main.useMask(worldBuffer.getColorBufferTexture());
+		batch.draw(lightingBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), 0, 0, lightingBuffer.getColorBufferTexture().getWidth(),
+				lightingBuffer.getColorBufferTexture().getHeight(), false, true);
+		batch.setShader(Main.defaultShader);
+
+		batch.draw(bypassBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), 0, 0, bypassBuffer.getColorBufferTexture().getWidth(),
+				bypassBuffer.getColorBufferTexture().getHeight(), false, true);
+
+		batch.end();
+	}
+
+	public void renderWorldToBuffer(Batch batch, World world) {
+		bypassBuffer.begin();
+
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		bypassBuffer.end();
+
+		worldBuffer.begin();
+
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
 
@@ -76,10 +129,70 @@ public class WorldRenderer implements Disposable {
 		batch.setColor(1, 1, 1, 1);
 
 		batch.end();
+
+		worldBuffer.end();
+	}
+
+	public void renderLightingToBuffer(Batch batch, World world) {
+		lightingBuffer.begin();
+
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.begin();
+
+		batch.end();
+
+		lightingBuffer.end();
+	}
+
+	public void beginBypassing() {
+		if (isBypassing) throw new IllegalStateException("Already bypassing!");
+
+		isBypassing = true;
+
+		worldBuffer.end();
+		bypassBuffer.begin();
+	}
+
+	public void endBypassing() {
+		if (!isBypassing) throw new IllegalStateException("Not bypassing!");
+
+		isBypassing = false;
+
+		bypassBuffer.end();
+		worldBuffer.begin();
+	}
+
+	public void resize(int width, int height) {
+		disposeBuffers();
+		createBuffers();
+	}
+
+	private void createBuffers() {
+		worldBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), false);
+		lightingBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), false);
+		bypassBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), false);
+
+		worldBuffer.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		lightingBuffer.getColorBufferTexture().setFilter(TextureFilter.Nearest,
+				TextureFilter.Nearest);
+		bypassBuffer.getColorBufferTexture().setFilter(TextureFilter.Nearest,
+				TextureFilter.Nearest);
+	}
+
+	private void disposeBuffers() {
+		worldBuffer.dispose();
+		lightingBuffer.dispose();
+		bypassBuffer.dispose();
 	}
 
 	@Override
 	public void dispose() {
+		disposeBuffers();
 	}
 
 }
