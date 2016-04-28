@@ -15,16 +15,16 @@ public abstract class EntityRenderer<T extends Entity> {
 	protected static final float THRESHOLD = 1f / Block.TILE_SIZE;
 	protected static final Vector2 tmpVector = new Vector2();
 	protected static final float LERP_SPEED = 8f;
+	protected static float tickRate = -1;
 
 	public final T entity;
-	private final float tickRate;
 
 	protected Vector2 lerpPosition = new Vector2();
 
 	public EntityRenderer(T entity) {
 		this.entity = entity;
 
-		tickRate = 1f / GlobalVariables.getInt("TICKS");
+		if (tickRate < 0) tickRate = 1f / GlobalVariables.getInt("TICKS");
 
 		lerpPosition.set(entity.physicsBody.bounds.x, entity.physicsBody.bounds.y);
 	}
