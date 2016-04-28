@@ -19,7 +19,7 @@ public abstract class EntityRenderer<T extends Entity> {
 
 	public final T entity;
 
-	protected Vector2 lerpPosition = new Vector2();
+	public Vector2 lerpPosition = new Vector2();
 
 	public EntityRenderer(T entity) {
 		this.entity = entity;
