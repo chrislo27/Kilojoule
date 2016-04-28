@@ -30,12 +30,9 @@ public abstract class EntityRenderer<T extends Entity> {
 	}
 
 	public void updateLerpPosition() {
-
 		lerpPosition.set(entity.lastKnownPosition);
-
 		lerpPosition.lerp(tmpVector.set(entity.physicsBody.bounds.x, entity.physicsBody.bounds.y),
 				Main.tickDeltaTime / tickRate);
-
 	}
 
 	public abstract void render(Batch batch, World world);
