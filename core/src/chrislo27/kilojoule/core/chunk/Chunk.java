@@ -8,6 +8,8 @@ public class Chunk {
 
 	public int chunkX, chunkY;
 	private Block[][] blocks = new Block[SIZE][SIZE];
+	private int[][] lighting = new int[SIZE][SIZE];
+
 	private int loadedTime = 0;
 
 	public Chunk(int x, int y) {
@@ -32,6 +34,18 @@ public class Chunk {
 		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return null;
 
 		return blocks[x][y];
+	}
+
+	public void setLighting(int lighting, int x, int y) {
+		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
+
+		this.lighting[x][y] = lighting;
+	}
+
+	public int getLighting(int x, int y) {
+		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return 0;
+
+		return lighting[x][y];
 	}
 
 	public boolean isChunkActive() {

@@ -278,6 +278,18 @@ public abstract class World {
 		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setBlock(block, x % Chunk.SIZE, y % Chunk.SIZE);
 	}
 
+	public int getLighting(int x, int y) {
+		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return 0;
+
+		return getChunk(x / Chunk.SIZE, y / Chunk.SIZE).getLighting(x % Chunk.SIZE, y % Chunk.SIZE);
+	}
+
+	public void setLighting(int light, int x, int y) {
+		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
+
+		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setLighting(light, x % Chunk.SIZE, y % Chunk.SIZE);
+	}
+
 	public Biome getBiome(int x) {
 		if (x < 0 || x >= worldWidth) return null;
 
