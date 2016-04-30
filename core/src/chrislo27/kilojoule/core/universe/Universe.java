@@ -36,8 +36,8 @@ public class Universe {
 		World defaultWorld = worlds.get("desolate");
 
 		player = new EntityPlayer(defaultWorld, defaultWorld.worldWidth / 2f,
-				defaultWorld.getGeneratorSettings().seaLevel
-						+ defaultWorld.getGeneratorSettings().hillHeight);
+				defaultWorld.generatorSettings.seaLevel
+						+ defaultWorld.generatorSettings.hillHeight);
 
 		defaultWorld.addEntity(player);
 

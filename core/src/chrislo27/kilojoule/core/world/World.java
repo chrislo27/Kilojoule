@@ -33,7 +33,7 @@ public abstract class World {
 	private Biome[] biomes;
 	private Array<Chunk> activeChunks = new Array<>();
 	private boolean shouldRebuildActiveChunksArray = true;
-	
+
 	public LightingEngine lightingEngine;
 
 	private Array<Entity> allEntities = new Array<>();
@@ -50,6 +50,8 @@ public abstract class World {
 	};
 	private Array<Coordinate> tempCoords = new Array<>();
 	public final Vector2 gravity = new Vector2(0, -9.8f);
+
+	public WorldGeneratorSettings generatorSettings;
 
 	public World(Universe un, int sizex, int sizey) {
 		if (sizex % Chunk.SIZE != 0 || sizey % Chunk.SIZE != 0) throw new IllegalArgumentException(
@@ -70,13 +72,13 @@ public abstract class World {
 
 		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"),
 				1f / Block.TILE_SIZE);
-		
+
 		lightingEngine = new LightingEngine(this);
+
+		generatorSettings = new WorldGeneratorSettings(this);
 	}
 
 	public abstract void assignBiomes(Array<BiomeRange> rangeArray);
-
-	public abstract WorldGeneratorSettings getGeneratorSettings();
 
 	public void tickUpdate() {
 		if (shouldRebuildActiveEntitiesArray) {

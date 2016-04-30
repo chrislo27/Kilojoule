@@ -19,16 +19,12 @@ import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.lighting.LightUtils;
+import chrislo27.kilojoule.core.lighting.LightingRenderer;
 import chrislo27.kilojoule.core.world.World;
 
 public class WorldRenderer implements Disposable {
 
 	public static int extraMargin = 1;
-
-	private final Color tmp1 = new Color();
-	private final Color tmp2 = new Color();
-	private final Color tmp3 = new Color();
-	private final Color tmp4 = new Color();
 
 	public OrthographicCamera camera;
 	private Vector3 tempVector = new Vector3();
@@ -37,11 +33,15 @@ public class WorldRenderer implements Disposable {
 	private FrameBuffer lightingBuffer;
 	private FrameBuffer bypassBuffer;
 
+	public LightingRenderer lightingRenderer;
+
 	private boolean isBypassing = false;
 
 	public WorldRenderer() {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 26.5f, 15);
+
+		lightingRenderer = new LightingRenderer(this);
 
 		createBuffers();
 	}
@@ -68,8 +68,19 @@ public class WorldRenderer implements Disposable {
 
 		batch.setProjectionMatrix(camera.combined);
 
-		renderWorldToBuffer(batch, world);
-		renderLightingToBuffer(batch, world);
+		int minX = (int) MathUtils.clamp(
+				camera.position.x - camera.viewportWidth * 0.5f - extraMargin, 0, world.worldWidth);
+		int minY = (int) MathUtils.clamp(
+				camera.position.y - camera.viewportHeight * 0.5f - extraMargin, 0,
+				world.worldHeight);
+		int maxX = (int) MathUtils.clamp(
+				camera.position.x + camera.viewportWidth * 0.5f + extraMargin, 0, world.worldWidth);
+		int maxY = (int) MathUtils.clamp(
+				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
+				world.worldHeight);
+
+		renderWorldToBuffer(batch, world, minX, minY, maxX, maxY);
+		renderLightingToBuffer(batch, world, minX, minY, maxX, maxY);
 
 		batch.setProjectionMatrix(oldProjectionMatrix);
 		batch.begin();
@@ -94,7 +105,8 @@ public class WorldRenderer implements Disposable {
 		batch.end();
 	}
 
-	public void renderWorldToBuffer(Batch batch, World world) {
+	public void renderWorldToBuffer(Batch batch, World world, int minX, int minY, int maxX,
+			int maxY) {
 		bypassBuffer.begin();
 
 		Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -108,17 +120,6 @@ public class WorldRenderer implements Disposable {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-
-		int minX = (int) MathUtils.clamp(
-				camera.position.x - camera.viewportWidth * 0.5f - extraMargin, 0, world.worldWidth);
-		int minY = (int) MathUtils.clamp(
-				camera.position.y - camera.viewportHeight * 0.5f - extraMargin, 0,
-				world.worldHeight);
-		int maxX = (int) MathUtils.clamp(
-				camera.position.x + camera.viewportWidth * 0.5f + extraMargin, 0, world.worldWidth);
-		int maxY = (int) MathUtils.clamp(
-				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
-				world.worldHeight);
 
 		Block b;
 		for (int x = minX; x < maxX; x++) {
@@ -149,7 +150,8 @@ public class WorldRenderer implements Disposable {
 		worldBuffer.end();
 	}
 
-	public void renderLightingToBuffer(Batch batch, World world) {
+	public void renderLightingToBuffer(Batch batch, World world, int minX, int minY, int maxX,
+			int maxY) {
 		lightingBuffer.begin();
 
 		Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -157,29 +159,7 @@ public class WorldRenderer implements Disposable {
 
 		batch.begin();
 
-		int minX = (int) MathUtils.clamp(
-				camera.position.x - camera.viewportWidth * 0.5f - extraMargin, 0, world.worldWidth);
-		int minY = (int) MathUtils.clamp(
-				camera.position.y - camera.viewportHeight * 0.5f - extraMargin, 0,
-				world.worldHeight);
-		int maxX = (int) MathUtils.clamp(
-				camera.position.x + camera.viewportWidth * 0.5f + extraMargin, 0, world.worldWidth);
-		int maxY = (int) MathUtils.clamp(
-				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
-				world.worldHeight);
-
-		int light;
-		for (int x = minX; x < maxX; x++) {
-			for (int y = minY; y < maxY; y++) {
-				light = world.getLighting(x, y);
-
-				batch.setColor(LightUtils.getR(light), LightUtils.getG(light),
-						LightUtils.getB(light),
-						1f - Math.max(LightUtils.getLighting(light), LightUtils.getSky(light)));
-				Main.fillRect(batch, x, y, 1, 1);
-				batch.setColor(1, 1, 1, 1);
-			}
-		}
+		lightingRenderer.render(batch, world, minX, minY, maxX, maxY);
 
 		batch.end();
 

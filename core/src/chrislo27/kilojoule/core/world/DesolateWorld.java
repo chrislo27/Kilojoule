@@ -9,6 +9,8 @@ import chrislo27.kilojoule.core.universe.Universe;
 
 public class DesolateWorld extends World {
 
+	
+	
 	public DesolateWorld(Universe un, int sizex, int sizey) {
 		super(un, sizex, sizey);
 	}
@@ -16,13 +18,6 @@ public class DesolateWorld extends World {
 	@Override
 	public void assignBiomes(Array<BiomeRange> rangeArray) {
 		rangeArray.add(new BiomeRange(Biomes.getBiome("wasteland"), 1));
-	}
-
-	@Override
-	public WorldGeneratorSettings getGeneratorSettings() {
-		WorldGeneratorSettings gs = new WorldGeneratorSettings(this);
-		
-		return gs;
 	}
 
 }

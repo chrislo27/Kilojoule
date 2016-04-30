@@ -3,6 +3,7 @@ package chrislo27.kilojoule.core.lighting;
 import java.util.Stack;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -49,7 +50,8 @@ public class LightingEngine {
 				if (world.getBlock(x, y) != null) {
 					break;
 				} else {
-					world.setLighting(LightUtils.rgblsToInt(1, 1, 1, 0, 1), x, y);
+					world.setLighting(LightUtils.rgblsToInt(MathUtils.random(0, 1),
+							MathUtils.random(0, 1), MathUtils.random(0, 1), 0, 1), x, y);
 				}
 			}
 		}
@@ -60,8 +62,6 @@ public class LightingEngine {
 					spreadLight(x, y + 1, world.getLighting(x, y + 1));
 
 					break;
-				} else {
-					world.setLighting(LightUtils.rgblsToInt(1, 1, 1, 0, 1), x, y);
 				}
 			}
 		}
