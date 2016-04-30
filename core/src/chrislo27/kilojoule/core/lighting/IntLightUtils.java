@@ -1,5 +1,7 @@
 package chrislo27.kilojoule.core.lighting;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import ionium.templates.Main;
 
 /**
@@ -7,6 +9,11 @@ import ionium.templates.Main;
  *
  */
 public class IntLightUtils {
+
+	public static final int MAX_R_VALUE = 127;
+	public static final int MAX_G_VALUE = 255;
+	public static final int MAX_B_VALUE = 127;
+	public static final int MAX_LIGHT_VALUE = 31;
 
 	public static final LightingValue tmp = new LightingValue();
 	public static final LightingValue tmp2 = new LightingValue();
@@ -17,6 +24,21 @@ public class IntLightUtils {
 				| (((int) (31 * sky) & 31));
 
 		return result;
+	}
+
+	public static int modify(int rgbls, int rAmt, int gAmt, int bAmt, int lightAmt, int skyAmt) {
+		return IntLightUtils.rgblsToInt(IntLightUtils.getR(rgbls) + rAmt,
+				IntLightUtils.getG(rgbls) + gAmt, IntLightUtils.getB(rgbls) + bAmt,
+				IntLightUtils.getLighting(rgbls) + lightAmt, IntLightUtils.getSky(rgbls) + skyAmt);
+	}
+
+	public static int clamp(int rgbls) {
+		return IntLightUtils.rgblsToInt(
+				MathUtils.clamp(IntLightUtils.getR(rgbls), 0, IntLightUtils.MAX_R_VALUE),
+				MathUtils.clamp(IntLightUtils.getG(rgbls), 0, IntLightUtils.MAX_G_VALUE),
+				MathUtils.clamp(IntLightUtils.getB(rgbls), 0, IntLightUtils.MAX_B_VALUE),
+				MathUtils.clamp(IntLightUtils.getLighting(rgbls), 0, IntLightUtils.MAX_LIGHT_VALUE),
+				MathUtils.clamp(IntLightUtils.getSky(rgbls), 0, IntLightUtils.MAX_LIGHT_VALUE));
 	}
 
 	public static float getR(int rgbls) {
