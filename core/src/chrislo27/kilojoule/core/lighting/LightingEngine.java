@@ -22,12 +22,12 @@ public class LightingEngine {
 
 	public final World world;
 
-	private Stack<LightingUpdate> traversalQueue = new Stack<>();
-	private Pool<LightingUpdate> updatePool = new Pool<LightingUpdate>(64) {
+	private Stack<LightData> traversalQueue = new Stack<>();
+	private Pool<LightData> updatePool = new Pool<LightData>(64) {
 
 		@Override
-		protected LightingUpdate newObject() {
-			return new LightingUpdate();
+		protected LightData newObject() {
+			return new LightData();
 		}
 
 	};
@@ -90,7 +90,7 @@ public class LightingEngine {
 
 		while (traversalQueue.size() > 0) {
 			// origin
-			LightingUpdate lu = traversalQueue.pop();
+			LightData lu = traversalQueue.pop();
 			int x = lu.x;
 			int y = lu.y;
 			int oldSpace = world.getLighting(x, y);
@@ -141,13 +141,13 @@ public class LightingEngine {
 		}
 	}
 
-	private static class LightingUpdate implements Poolable {
+	private static class LightData implements Poolable {
 
 		int x;
 		int y;
 		int rgbls;
 
-		public LightingUpdate set(int x, int y, int rgbls) {
+		public LightData set(int x, int y, int rgbls) {
 			this.x = x;
 			this.y = y;
 			this.rgbls = rgbls;
