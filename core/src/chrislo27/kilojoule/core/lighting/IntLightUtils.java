@@ -19,6 +19,8 @@ public class IntLightUtils {
 	public static final LightingValue tmp = new LightingValue();
 	public static final LightingValue tmp2 = new LightingValue();
 
+	public static final int TOTAL_BLACK = rgblsToInt(0, 0, 0, 0, 0);
+
 	public static int rgblsToInt(float r, float g, float b, float lighting, float sky) {
 		int result = (((int) (127 * r) & 127) << 25) | (((int) (255 * g) & 255) << 17)
 				| (((int) (127 * b) & 127) << 10) | (((int) (31 * lighting) & 31) << 5)
