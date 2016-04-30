@@ -34,12 +34,11 @@ public class IntLightUtils {
 	}
 
 	public static int clamp(int rgbls) {
-		return IntLightUtils.rgblsToInt(
-				MathUtils.clamp(IntLightUtils.getR(rgbls), 0, IntLightUtils.MAX_R_VALUE),
-				MathUtils.clamp(IntLightUtils.getG(rgbls), 0, IntLightUtils.MAX_G_VALUE),
-				MathUtils.clamp(IntLightUtils.getB(rgbls), 0, IntLightUtils.MAX_B_VALUE),
-				MathUtils.clamp(IntLightUtils.getLighting(rgbls), 0, IntLightUtils.MAX_LIGHT_VALUE),
-				MathUtils.clamp(IntLightUtils.getSky(rgbls), 0, IntLightUtils.MAX_LIGHT_VALUE));
+		return IntLightUtils.rgblsToInt(MathUtils.clamp(IntLightUtils.getR(rgbls), 0, 1),
+				MathUtils.clamp(IntLightUtils.getG(rgbls), 0, 1),
+				MathUtils.clamp(IntLightUtils.getB(rgbls), 0, 1),
+				MathUtils.clamp(IntLightUtils.getLighting(rgbls), 0, 1),
+				MathUtils.clamp(IntLightUtils.getSky(rgbls), 0, 1));
 	}
 
 	public static float getR(int rgbls) {
