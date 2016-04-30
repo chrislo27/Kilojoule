@@ -1,11 +1,13 @@
 package chrislo27.kilojoule.client.render;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
@@ -16,11 +18,17 @@ import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
+import chrislo27.kilojoule.core.lighting.LightUtils;
 import chrislo27.kilojoule.core.world.World;
 
 public class WorldRenderer implements Disposable {
 
 	public static int extraMargin = 1;
+
+	private final Color tmp1 = new Color();
+	private final Color tmp2 = new Color();
+	private final Color tmp3 = new Color();
+	private final Color tmp4 = new Color();
 
 	public OrthographicCamera camera;
 	private Vector3 tempVector = new Vector3();
@@ -148,6 +156,30 @@ public class WorldRenderer implements Disposable {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
+
+		int minX = (int) MathUtils.clamp(
+				camera.position.x - camera.viewportWidth * 0.5f - extraMargin, 0, world.worldWidth);
+		int minY = (int) MathUtils.clamp(
+				camera.position.y - camera.viewportHeight * 0.5f - extraMargin, 0,
+				world.worldHeight);
+		int maxX = (int) MathUtils.clamp(
+				camera.position.x + camera.viewportWidth * 0.5f + extraMargin, 0, world.worldWidth);
+		int maxY = (int) MathUtils.clamp(
+				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
+				world.worldHeight);
+
+		int light;
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
+				light = world.getLighting(x, y);
+
+				batch.setColor(LightUtils.getR(light), LightUtils.getG(light),
+						LightUtils.getB(light),
+						1f - Math.max(LightUtils.getLighting(light), LightUtils.getSky(light)));
+				Main.fillRect(batch, x, y, 1, 1);
+				batch.setColor(1, 1, 1, 1);
+			}
+		}
 
 		batch.end();
 

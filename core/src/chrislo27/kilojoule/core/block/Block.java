@@ -10,9 +10,12 @@ import ionium.aabbcollision.PhysicsBody;
 public abstract class Block {
 
 	public static final int TILE_SIZE = 32;
+	public static final int LIGHT_DECREASE_AIR = 1;
+	public static final int LIGHT_DECREASE_SOLID = 8;
 
 	protected BlockRenderer renderBlock;
 	protected Color mapColor = new Color(1, 1, 1, 1);
+	public int lightDecreaseAmount = LIGHT_DECREASE_SOLID;
 
 	public Block() {
 

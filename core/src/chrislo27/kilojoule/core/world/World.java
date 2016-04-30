@@ -13,6 +13,7 @@ import chrislo27.kilojoule.core.chunk.IChunkLoader;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
+import chrislo27.kilojoule.core.lighting.LightingEngine;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
@@ -32,6 +33,8 @@ public abstract class World {
 	private Biome[] biomes;
 	private Array<Chunk> activeChunks = new Array<>();
 	private boolean shouldRebuildActiveChunksArray = true;
+	
+	public LightingEngine lightingEngine;
 
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
@@ -55,6 +58,8 @@ public abstract class World {
 						+ ", remainders are " + (sizex % Chunk.SIZE) + ", " + (sizey % Chunk.SIZE)
 						+ ")");
 
+		this.universe = un;
+
 		worldWidth = sizex;
 		worldHeight = sizey;
 		chunksWidth = worldWidth / Chunk.SIZE;
@@ -65,8 +70,8 @@ public abstract class World {
 
 		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"),
 				1f / Block.TILE_SIZE);
-
-		this.universe = un;
+		
+		lightingEngine = new LightingEngine(this);
 	}
 
 	public abstract void assignBiomes(Array<BiomeRange> rangeArray);

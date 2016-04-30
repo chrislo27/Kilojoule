@@ -9,7 +9,7 @@ import ionium.templates.Main;
  * Converts ints back and forth between RGBLS78755 (RGB, lighting, sky-lighting).
  *
  */
-public class IntLightUtils {
+public class LightUtils {
 
 	public static final int MAX_R_VALUE = 127;
 	public static final int MAX_G_VALUE = 255;
@@ -39,8 +39,11 @@ public class IntLightUtils {
 
 	public static int modify(int rgbls, float rAmt, float gAmt, float bAmt, float lightAmt,
 			float skyAmt) {
-		return clamp(rgblsToInt(getR(rgbls) + rAmt, getG(rgbls) + gAmt, getB(rgbls) + bAmt,
-				getLighting(rgbls) + lightAmt, getSky(rgbls) + skyAmt));
+		return clamp(rgblsToInt(MathUtils.clamp(getR(rgbls) + rAmt, 0, 1),
+				MathUtils.clamp(getG(rgbls) + gAmt, 0, 1),
+				MathUtils.clamp(getB(rgbls) + bAmt, 0, 1),
+				MathUtils.clamp(getLighting(rgbls) + lightAmt, 0, 1),
+				MathUtils.clamp(getSky(rgbls) + skyAmt, 0, 1)));
 	}
 
 	public static int clamp(int rgbls) {
@@ -88,14 +91,14 @@ public class IntLightUtils {
 		}
 
 		public LightingValue set(int rgbls) {
-			set(IntLightUtils.getR(rgbls), IntLightUtils.getG(rgbls), IntLightUtils.getB(rgbls),
-					IntLightUtils.getLighting(rgbls), IntLightUtils.getSky(rgbls));
+			set(LightUtils.getR(rgbls), LightUtils.getG(rgbls), LightUtils.getB(rgbls),
+					LightUtils.getLighting(rgbls), LightUtils.getSky(rgbls));
 
 			return this;
 		}
 
 		public int getRGBLS() {
-			return IntLightUtils.rgblsToInt(r, g, b, lighting, sky);
+			return LightUtils.rgblsToInt(r, g, b, lighting, sky);
 		}
 
 		@Override

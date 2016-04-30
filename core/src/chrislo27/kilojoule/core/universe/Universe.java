@@ -40,6 +40,9 @@ public class Universe {
 						+ defaultWorld.getGeneratorSettings().hillHeight);
 
 		defaultWorld.addEntity(player);
+
+		defaultWorld.lightingEngine.updateLighting(0, 0, defaultWorld.worldWidth,
+				defaultWorld.worldHeight);
 	}
 
 	public void tickUpdate() {
