@@ -20,6 +20,7 @@ public class IntLightUtils {
 	public static final LightingValue tmp2 = new LightingValue();
 
 	public static final int TOTAL_BLACK = rgblsToInt(0, 0, 0, 0, 0);
+	public static final int CLEAR_WHITE = rgblsToInt(1, 1, 1, 0, 0);
 
 	public static int rgblsToInt(float r, float g, float b, float lighting, float sky) {
 		int result = (((int) (127 * r) & 127) << 25) | (((int) (255 * g) & 255) << 17)
@@ -31,9 +32,9 @@ public class IntLightUtils {
 
 	public static int modify(int rgbls, float rAmt, float gAmt, float bAmt, float lightAmt,
 			float skyAmt) {
-		return IntLightUtils.rgblsToInt(IntLightUtils.getR(rgbls) + rAmt,
+		return IntLightUtils.clamp(IntLightUtils.rgblsToInt(IntLightUtils.getR(rgbls) + rAmt,
 				IntLightUtils.getG(rgbls) + gAmt, IntLightUtils.getB(rgbls) + bAmt,
-				IntLightUtils.getLighting(rgbls) + lightAmt, IntLightUtils.getSky(rgbls) + skyAmt);
+				IntLightUtils.getLighting(rgbls) + lightAmt, IntLightUtils.getSky(rgbls) + skyAmt));
 	}
 
 	public static int clamp(int rgbls) {
