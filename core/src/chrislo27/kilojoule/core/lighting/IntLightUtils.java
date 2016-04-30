@@ -26,7 +26,8 @@ public class IntLightUtils {
 		return result;
 	}
 
-	public static int modify(int rgbls, int rAmt, int gAmt, int bAmt, int lightAmt, int skyAmt) {
+	public static float modify(int rgbls, float rAmt, float gAmt, float bAmt, float lightAmt,
+			float skyAmt) {
 		return IntLightUtils.rgblsToInt(IntLightUtils.getR(rgbls) + rAmt,
 				IntLightUtils.getG(rgbls) + gAmt, IntLightUtils.getB(rgbls) + bAmt,
 				IntLightUtils.getLighting(rgbls) + lightAmt, IntLightUtils.getSky(rgbls) + skyAmt);
