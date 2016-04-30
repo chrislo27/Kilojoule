@@ -50,7 +50,8 @@ public class WorldRenderer implements Disposable {
 		EntityPlayer player = world.universe.player;
 
 		if (player != null) {
-			tempVector.set(player.renderer.lerpPosition.x, player.renderer.lerpPosition.y,
+			tempVector.set(player.renderer.lerpPosition.x + player.physicsBody.bounds.width * 0.5f,
+					player.renderer.lerpPosition.y + player.physicsBody.bounds.height * 0.5f,
 					camera.position.z);
 
 			camera.position.lerp(tempVector, Gdx.graphics.getDeltaTime() * 8f);
