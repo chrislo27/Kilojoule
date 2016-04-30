@@ -14,6 +14,7 @@ public class IntLightUtils {
 	public static final int MAX_G_VALUE = 255;
 	public static final int MAX_B_VALUE = 127;
 	public static final int MAX_LIGHT_VALUE = 31;
+	public static final float INVERSE_LIGHT = 1f / MAX_LIGHT_VALUE;
 
 	public static final LightingValue tmp = new LightingValue();
 	public static final LightingValue tmp2 = new LightingValue();
