@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.lighting;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
 import ionium.templates.Main;
@@ -30,19 +31,22 @@ public class IntLightUtils {
 		return result;
 	}
 
+	public static Color setColor(Color c, int rgbls, float alpha) {
+		c.set(getR(rgbls), getG(rgbls), getB(rgbls), alpha);
+
+		return c;
+	}
+
 	public static int modify(int rgbls, float rAmt, float gAmt, float bAmt, float lightAmt,
 			float skyAmt) {
-		return IntLightUtils.clamp(IntLightUtils.rgblsToInt(IntLightUtils.getR(rgbls) + rAmt,
-				IntLightUtils.getG(rgbls) + gAmt, IntLightUtils.getB(rgbls) + bAmt,
-				IntLightUtils.getLighting(rgbls) + lightAmt, IntLightUtils.getSky(rgbls) + skyAmt));
+		return clamp(rgblsToInt(getR(rgbls) + rAmt, getG(rgbls) + gAmt, getB(rgbls) + bAmt,
+				getLighting(rgbls) + lightAmt, getSky(rgbls) + skyAmt));
 	}
 
 	public static int clamp(int rgbls) {
-		return IntLightUtils.rgblsToInt(MathUtils.clamp(IntLightUtils.getR(rgbls), 0, 1),
-				MathUtils.clamp(IntLightUtils.getG(rgbls), 0, 1),
-				MathUtils.clamp(IntLightUtils.getB(rgbls), 0, 1),
-				MathUtils.clamp(IntLightUtils.getLighting(rgbls), 0, 1),
-				MathUtils.clamp(IntLightUtils.getSky(rgbls), 0, 1));
+		return rgblsToInt(MathUtils.clamp(getR(rgbls), 0, 1), MathUtils.clamp(getG(rgbls), 0, 1),
+				MathUtils.clamp(getB(rgbls), 0, 1), MathUtils.clamp(getLighting(rgbls), 0, 1),
+				MathUtils.clamp(getSky(rgbls), 0, 1));
 	}
 
 	public static float getR(int rgbls) {
