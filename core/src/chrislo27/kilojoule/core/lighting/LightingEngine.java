@@ -22,8 +22,8 @@ public class LightingEngine {
 
 	public final World world;
 
-	private Stack<LightData> traversalQueue = new Stack<>();
-	private Pool<LightData> updatePool = new Pool<LightData>(64) {
+	private Stack<LightData> traversalStack = new Stack<>();
+	private Pool<LightData> lightDataPool = new Pool<LightData>(64) {
 
 		@Override
 		protected LightData newObject() {
@@ -83,14 +83,14 @@ public class LightingEngine {
 	}
 
 	private void spreadLight(final int sourceX, final int sourceY, final int rgbls) {
-		traversalQueue.clear();
+		traversalStack.clear();
 
 		// add initial source
-		traversalQueue.push(updatePool.obtain().set(sourceX, sourceY, rgbls));
+		traversalStack.push(lightDataPool.obtain().set(sourceX, sourceY, rgbls));
 
-		while (traversalQueue.size() > 0) {
+		while (traversalStack.size() > 0) {
 			// origin
-			LightData lu = traversalQueue.pop();
+			LightData lu = traversalStack.pop();
 			int x = lu.x;
 			int y = lu.y;
 			int oldSpace = world.getLighting(x, y);
@@ -132,12 +132,12 @@ public class LightingEngine {
 					int mixedColorRgbls = mixLightingColors(newRgbls, world.getLighting(cx, cy));
 
 					// add new update at new direction with new mixed colour
-					traversalQueue.push(updatePool.obtain().set(cx, cy, mixedColorRgbls));
+					traversalStack.push(lightDataPool.obtain().set(cx, cy, mixedColorRgbls));
 				}
 			}
 
 			// free update object
-			updatePool.free(lu);
+			lightDataPool.free(lu);
 		}
 	}
 
