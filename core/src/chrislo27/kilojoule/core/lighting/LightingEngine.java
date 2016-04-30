@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -22,32 +23,49 @@ public class LightingEngine {
 
 	public final World world;
 
-	private Stack<LightData> traversalStack = new Stack<>();
-	private Pool<LightData> lightDataPool = new Pool<LightData>(64) {
+	private Stack<LightingUpdate> traversalStack = new Stack<>();
+	private Pool<LightingUpdate> lightingUpdatePool = new Pool<LightingUpdate>(64) {
 
 		@Override
-		protected LightData newObject() {
-			return new LightData();
+		protected LightingUpdate newObject() {
+			return new LightingUpdate();
 		}
 
 	};
+	private Array<LightingUpdate> updatesToProcess = new Array<>();
+	private boolean needsRefresh = false;
 
 	public LightingEngine(World w) {
 		world = w;
 	}
 
-	public void updateLighting(int startX, int startY, int width, int height) {
+	public void requestUpdate(int x, int y, int rgbls) {
+		needsRefresh = true;
+		if (LightUtils.getLighting(rgbls) > 0 || LightUtils.getSky(rgbls) > 0) {
+			updatesToProcess.add(lightingUpdatePool.obtain().set(x, y, rgbls));
+		}
+	}
+
+	public boolean needsUpdate() {
+		return updatesToProcess.size > 0 || needsRefresh;
+	}
+
+	public void updateLighting(int startX, int startY, int width, int height, boolean force) {
+		if (!force && !needsUpdate()) return;
+
 		// clear area
 		for (int x = startX; x <= startX + width; x++) {
 			for (int y = startY; y < startY + height; y++) {
 				world.setLighting(LightUtils.TOTAL_BLACK, x, y);
 			}
-
 		}
 
+		// sky-cast
 		for (int x = startX; x <= startX + width; x++) {
 			for (int y = world.worldHeight - 1; y >= 0; y--) {
 				if (world.getBlock(x, y) != null) {
+					requestUpdate(x, y + 1, world.getLighting(x, y + 1));
+
 					break;
 				} else {
 					world.setLighting(LightUtils.rgblsToInt(MathUtils.random(0, 1),
@@ -56,15 +74,16 @@ public class LightingEngine {
 			}
 		}
 
-		for (int x = startX; x <= startX + width; x++) {
-			for (int y = world.worldHeight - 1; y >= 0; y--) {
-				if (world.getBlock(x, y) != null) {
-					spreadLight(x, y + 1, world.getLighting(x, y + 1));
+		// process updates
+		for (int i = updatesToProcess.size - 1; i >= 0; i--) {
+			LightingUpdate lu = updatesToProcess.get(i);
 
-					break;
-				}
-			}
+			spreadLight(lu.x, lu.y, lu.rgbls);
+
+			lightingUpdatePool.free(updatesToProcess.removeIndex(i));
 		}
+
+		needsRefresh = false;
 
 	}
 
@@ -78,19 +97,15 @@ public class LightingEngine {
 				LightUtils.getSky(rgbls));
 	}
 
-	private void spreadLightRecursive(final int sourceX, final int sourceY, final int rgbls) {
-
-	}
-
 	private void spreadLight(final int sourceX, final int sourceY, final int rgbls) {
 		traversalStack.clear();
 
 		// add initial source
-		traversalStack.push(lightDataPool.obtain().set(sourceX, sourceY, rgbls));
+		traversalStack.push(lightingUpdatePool.obtain().set(sourceX, sourceY, rgbls));
 
 		while (traversalStack.size() > 0) {
 			// origin
-			LightData lu = traversalStack.pop();
+			LightingUpdate lu = traversalStack.pop();
 			int x = lu.x;
 			int y = lu.y;
 			int oldSpace = world.getLighting(x, y);
@@ -132,22 +147,22 @@ public class LightingEngine {
 					int mixedColorRgbls = mixLightingColors(newRgbls, world.getLighting(cx, cy));
 
 					// add new update at new direction with new mixed colour
-					traversalStack.push(lightDataPool.obtain().set(cx, cy, mixedColorRgbls));
+					traversalStack.push(lightingUpdatePool.obtain().set(cx, cy, mixedColorRgbls));
 				}
 			}
 
 			// free update object
-			lightDataPool.free(lu);
+			lightingUpdatePool.free(lu);
 		}
 	}
 
-	private static class LightData implements Poolable {
+	private static class LightingUpdate implements Poolable {
 
 		int x;
 		int y;
 		int rgbls;
 
-		public LightData set(int x, int y, int rgbls) {
+		public LightingUpdate set(int x, int y, int rgbls) {
 			this.x = x;
 			this.y = y;
 			this.rgbls = rgbls;

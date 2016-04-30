@@ -79,6 +79,10 @@ public class WorldRenderer implements Disposable {
 				camera.position.y + camera.viewportHeight * 0.5f + extraMargin, 0,
 				world.worldHeight);
 
+		if (world.lightingEngine.needsUpdate()) {
+			world.lightingEngine.updateLighting(minX, minY, maxX, maxY, false);
+		}
+
 		renderWorldToBuffer(batch, world, minX, minY, maxX, maxY);
 		renderLightingToBuffer(batch, world, minX, minY, maxX, maxY);
 

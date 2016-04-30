@@ -42,7 +42,7 @@ public class Universe {
 		defaultWorld.addEntity(player);
 
 		defaultWorld.lightingEngine.updateLighting(0, 0, defaultWorld.worldWidth,
-				defaultWorld.worldHeight);
+				defaultWorld.worldHeight, true);
 	}
 
 	public void tickUpdate() {

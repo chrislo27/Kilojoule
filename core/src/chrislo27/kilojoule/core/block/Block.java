@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.client.render.block.BlockRenderer;
+import chrislo27.kilojoule.core.lighting.LightUtils;
+import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.PhysicsBody;
 
 public abstract class Block {
@@ -16,6 +18,7 @@ public abstract class Block {
 	protected BlockRenderer renderBlock;
 	protected Color mapColor = new Color(1, 1, 1, 1);
 	public int lightDecreaseAmount = LIGHT_DECREASE_SOLID;
+	public int lightEmission = LightUtils.rgblsToInt(0, 0, 0, 0, 0);
 
 	public Block() {
 

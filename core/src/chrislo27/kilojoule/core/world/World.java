@@ -1,5 +1,7 @@
 package chrislo27.kilojoule.core.world;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +21,7 @@ import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.benchmarking.TickBenchmark;
 import ionium.registry.GlobalVariables;
+import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
@@ -283,6 +286,7 @@ public abstract class World {
 		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
 
 		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setBlock(block, x % Chunk.SIZE, y % Chunk.SIZE);
+		lightingEngine.requestUpdate(x, y, block.lightEmission);
 	}
 
 	public int getLighting(int x, int y) {
