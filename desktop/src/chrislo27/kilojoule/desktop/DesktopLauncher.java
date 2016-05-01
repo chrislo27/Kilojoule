@@ -18,11 +18,11 @@ public class DesktopLauncher {
 
 		ArgumentInferredLwjglAppConfig config = new ArgumentInferredLwjglAppConfig(args);
 		config.title = "";
-		config.width = GlobalVariables.getInt("DEFAULT_WIDTH");
-		config.height = GlobalVariables.getInt("DEFAULT_HEIGHT");
+		config.width = GlobalVariables.defaultWidth;
+		config.height = GlobalVariables.defaultHeight;
 		config.fullscreen = false;
-		config.foregroundFPS = GlobalVariables.getInt("MAX_FPS");
-		config.backgroundFPS = GlobalVariables.getInt("MAX_FPS");
+		config.foregroundFPS = GlobalVariables.maxFps;
+		config.backgroundFPS = GlobalVariables.maxFps;
 		config.resizable = false;
 		config.vSyncEnabled = true;
 		config.samples = 4;
