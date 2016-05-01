@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.entity;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -13,8 +14,10 @@ import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
+import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
+import ionium.util.MathHelper;
 import ionium.util.quadtree.QuadRectangleable;
 
 public abstract class Entity implements QuadRectangleable, NBTSaveable {
@@ -26,6 +29,11 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	public EntityRenderer renderer;
 	public PhysicsBody physicsBody = new PhysicsBody();
 	public transient Vector2 lastKnownPosition = new Vector2();
+	public Vector2 collidingPosition = new Vector2();
+
+	public Vector2 maxSpeed = new Vector2(10, 10);
+	public Vector2 accSpeed = new Vector2(maxSpeed.x * 2, maxSpeed.y * 2);
+	public float jumpHeight = MathHelper.getJumpVelo(9.8f, 1);
 
 	public Entity(World world, float x, float y, float width, float height) {
 		this.world = world;
@@ -35,10 +43,10 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	public void movementUpdate() {
 		lastKnownPosition.set(physicsBody.bounds.x, physicsBody.bounds.y);
-		physicsBody.velocity.add(world.gravity.x / GlobalVariables.getInt("TICKS"),
-				world.gravity.y / GlobalVariables.getInt("TICKS"));
+//		physicsBody.velocity.add(world.gravity.x / GlobalVariables.ticks,
+//				world.gravity.y / GlobalVariables.ticks);
 
-		Vector2 collisionResult;
+		Vector2[] collisionResult;
 		Array<PhysicsBody> bodies = world.collisionResolver.getTempBodyArray();
 
 		// prep temp arrays
@@ -48,7 +56,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		// set tmp1 to the original bounds
 		Rectangle.tmp.set(physicsBody.bounds);
 
-		// expand the bounds by one block so we have detection AROUND us
+		// expand the bounds so we have blocks around us
 		physicsBody.bounds.x -= 1;
 		physicsBody.bounds.y -= 1;
 		physicsBody.bounds.width += 2;
@@ -94,6 +102,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 			Entity e = world.getActiveEntities().get(i);
 
 			if (e == this) continue;
+			if (!e.physicsBody.bounds.overlaps(Rectangle.tmp2)) continue;
 
 			bodies.add(e.physicsBody);
 		}
@@ -103,13 +112,12 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 				bodies, Rectangle.tmp2);
 
 		// set position
-		physicsBody.bounds.x = collisionResult.x;
-		physicsBody.bounds.y = collisionResult.y;
+		collidingPosition.set(collisionResult[0]);
 
-		// kill velocity if we hit
-		if (world.collisionResolver.wasLastResolutionACollision()) {
-			physicsBody.velocity.setZero();
-		}
+		//physicsBody.velocity.set(collisionResult[1]);
+
+		physicsBody.bounds.x += physicsBody.velocity.x * world.collisionResolver.timeScale;
+		physicsBody.bounds.y += physicsBody.velocity.y * world.collisionResolver.timeScale;
 
 		// free physicsbodies
 		world.physicsBodyPool.freeAll(tempBodyArray);
@@ -131,6 +139,22 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	@Override
 	public void readFromNBT(TagCompound compound)
 			throws TagNotFoundException, UnexpectedTagTypeException {
+	}
+
+	public void move(float amtX, float amtY) {
+		if (Math.abs(physicsBody.velocity.x) <= maxSpeed.x && amtX != 0) {
+			physicsBody.velocity.x = MathUtils.clamp(physicsBody.velocity.x + amtX * accSpeed.x,
+					-maxSpeed.x, maxSpeed.x);
+		}
+
+		if (Math.abs(physicsBody.velocity.y) <= maxSpeed.y && amtY != 0) {
+			physicsBody.velocity.y = MathUtils.clamp(physicsBody.velocity.y + amtY * accSpeed.y,
+					-maxSpeed.y, maxSpeed.y);
+		}
+	}
+
+	public void jump() {
+		physicsBody.velocity.y += jumpHeight;
 	}
 
 	@Override

@@ -14,8 +14,8 @@ public class Settings {
 	public float musicVolume = 1;
 	public float soundVolume = 1;
 
-	public int actualWidth = GlobalVariables.getInt("DEFAULT_WIDTH");
-	public int actualHeight = GlobalVariables.getInt("DEFAULT_HEIGHT");
+	public int actualWidth = GlobalVariables.defaultWidth;
+	public int actualHeight = GlobalVariables.defaultHeight;
 	public boolean fullscreen = false;
 
 	private Settings() {
@@ -36,8 +36,8 @@ public class Settings {
 
 		soundVolume = pref.getFloat("soundVolume", 1f);
 		musicVolume = pref.getFloat("musicVolume", 1f);
-		actualWidth = pref.getInteger("actualWidth", GlobalVariables.getInt("DEFAULT_WIDTH"));
-		actualHeight = pref.getInteger("actualHeight", GlobalVariables.getInt("DEFAULT_HEIGHT"));
+		actualWidth = pref.getInteger("actualWidth", GlobalVariables.defaultWidth);
+		actualHeight = pref.getInteger("actualHeight", GlobalVariables.defaultHeight);
 		fullscreen = pref.getBoolean("fullscreen", true);
 	}
 

@@ -34,6 +34,7 @@ public class WorldScreen extends Updateable<Main> {
 
 	@Override
 	public void renderUpdate() {
+		if (universe != null) universe.inputUpdate();
 	}
 
 	@Override

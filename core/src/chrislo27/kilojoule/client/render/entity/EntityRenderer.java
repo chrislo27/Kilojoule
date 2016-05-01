@@ -24,7 +24,7 @@ public abstract class EntityRenderer<T extends Entity> {
 	public EntityRenderer(T entity) {
 		this.entity = entity;
 
-		if (tickRate < 0) tickRate = 1f / GlobalVariables.getInt("TICKS");
+		if (tickRate < 0) tickRate = 1f / GlobalVariables.ticks;
 
 		lerpPosition.set(entity.physicsBody.bounds.x, entity.physicsBody.bounds.y);
 	}

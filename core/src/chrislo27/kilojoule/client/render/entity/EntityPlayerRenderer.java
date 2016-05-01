@@ -14,7 +14,12 @@ public class EntityPlayerRenderer extends EntityRenderer<EntityPlayer> {
 
 	@Override
 	public void render(Batch batch, World world) {
+		batch.setColor(1, 1, 1, 1);
 		Main.fillRect(batch, lerpPosition.x, lerpPosition.y, 1, 1);
+
+		batch.setColor(0.75f, 0.5f, 0.5f, 1);
+		Main.fillRect(batch, entity.collidingPosition.x, entity.collidingPosition.y, 1, 1);
+		batch.setColor(1, 1, 1, 1);
 	}
 
 }

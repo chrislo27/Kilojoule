@@ -73,8 +73,7 @@ public abstract class World {
 		chunks = new Chunk[chunksWidth][chunksHeight];
 		biomes = new Biome[worldWidth];
 
-		collisionResolver = new CollisionResolver(1f / GlobalVariables.getInt("TICKS"),
-				1f / Block.TILE_SIZE);
+		collisionResolver = new CollisionResolver(1f / GlobalVariables.ticks, 1f / Block.TILE_SIZE);
 
 		lightingEngine = new LightingEngine(this);
 
@@ -266,8 +265,7 @@ public abstract class World {
 			if (shouldUnload) {
 				activeChunks.removeValue(chunk, true);
 			} else {
-				chunk.loadChunk(
-						(int) (IChunkLoader.CHUNK_LOAD_TIME * GlobalVariables.getFloat("TICKS")));
+				chunk.loadChunk((int) (IChunkLoader.CHUNK_LOAD_TIME * GlobalVariables.ticks));
 			}
 		} else {
 			if (!activeChunks.contains(chunk, true)) {

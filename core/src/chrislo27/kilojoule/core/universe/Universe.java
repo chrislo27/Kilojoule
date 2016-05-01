@@ -1,10 +1,13 @@
 package chrislo27.kilojoule.core.universe;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import chrislo27.kilojoule.client.Keybinds;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.DesolateWorld;
 import chrislo27.kilojoule.core.world.World;
+import ionium.util.input.AnyKeyPressed;
 import ionium.util.noise.SimplexNoise;
 
 /**
@@ -50,6 +53,29 @@ public class Universe {
 
 		for (World w : worlds.values()) {
 			w.tickUpdate();
+		}
+	}
+
+	public void inputUpdate() {
+		if (player == null) return;
+
+		if (AnyKeyPressed.isAKeyPressed(Keybinds.LEFT)) {
+			player.move(-Gdx.graphics.getDeltaTime(), 0);
+		}
+
+		if (AnyKeyPressed.isAKeyPressed(Keybinds.RIGHT)) {
+			player.move(Gdx.graphics.getDeltaTime(), 0);
+		}
+
+		if (AnyKeyPressed.isAKeyPressed(Keybinds.UP)) {
+			player.move(0, Gdx.graphics.getDeltaTime());
+		}
+		if (AnyKeyPressed.isAKeyPressed(Keybinds.DOWN)) {
+			player.move(0, -Gdx.graphics.getDeltaTime());
+		}
+
+		if (AnyKeyPressed.isAKeyJustPressed(Keybinds.JUMP)) {
+			player.jump();
 		}
 	}
 
