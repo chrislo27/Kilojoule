@@ -12,6 +12,7 @@ import chrislo27.kilojoule.client.render.entity.EntityRenderer;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.nbt.NBTSaveable;
 import chrislo27.kilojoule.core.world.World;
+import ionium.aabbcollision.CollisionResult;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
 import ionium.templates.Main;
@@ -43,10 +44,10 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	public void movementUpdate() {
 		lastKnownPosition.set(physicsBody.bounds.x, physicsBody.bounds.y);
-//		physicsBody.velocity.add(world.gravity.x / GlobalVariables.ticks,
-//				world.gravity.y / GlobalVariables.ticks);
+		physicsBody.velocity.add(world.gravity.x / GlobalVariables.ticks,
+				world.gravity.y / GlobalVariables.ticks);
 
-		Vector2[] collisionResult;
+		CollisionResult collisionResult;
 		Array<PhysicsBody> bodies = world.collisionResolver.getTempBodyArray();
 
 		// prep temp arrays
@@ -112,14 +113,12 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 				bodies, Rectangle.tmp2);
 
 		// set position
-		collidingPosition.set(collisionResult[0]);
+		collidingPosition.set(collisionResult.newPosition);
+		physicsBody.bounds.x = collisionResult.newPosition.x;
+		physicsBody.bounds.y = collisionResult.newPosition.y;
 
-		//physicsBody.velocity.set(collisionResult[1]);
-
-		physicsBody.bounds.x += physicsBody.velocity.x * world.collisionResolver.timeScale;
-		physicsBody.bounds.y += physicsBody.velocity.y * world.collisionResolver.timeScale;
-
-		// free physicsbodies
+		// free physicsbodies, result
+		world.collisionResolver.freeResult(collisionResult);
 		world.physicsBodyPool.freeAll(tempBodyArray);
 		tempBodyArray.clear();
 	}

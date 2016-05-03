@@ -54,7 +54,7 @@ public class WorldRenderer implements Disposable {
 					player.renderer.lerpPosition.y + player.physicsBody.bounds.height * 0.5f,
 					camera.position.z);
 
-			camera.position.lerp(tempVector, Gdx.graphics.getDeltaTime() * 8f);
+			camera.position.lerp(tempVector, 1);
 		}
 
 		camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth * 0.5f,
