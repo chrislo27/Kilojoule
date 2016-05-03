@@ -50,7 +50,7 @@ public class Blocks {
 		TextureRegionDebleeder.fixAmountPx = 0.25f;
 
 		for (AtlasRegion ar : allRegions) {
-			TextureRegionDebleeder.fixBleeding(ar);
+			//TextureRegionDebleeder.fixBleeding(ar);
 			regions.put(ar.name + (ar.name.endsWith("_") ? ar.index : ""), ar);
 		}
 	}
