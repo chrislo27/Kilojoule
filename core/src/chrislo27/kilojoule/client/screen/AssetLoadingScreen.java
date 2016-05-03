@@ -1,13 +1,13 @@
 package chrislo27.kilojoule.client.screen;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entries;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 import chrislo27.kilojoule.client.Main;
-import chrislo27.kilojoule.client.packer.TilePackedTextureAtlas;
 import chrislo27.kilojoule.client.packer.TileTexturePacker;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.registry.Blocks;
@@ -30,7 +30,7 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 			block.getRequiredTextures(tempMap);
 		}
 
-		TileTexturePacker ttp = new TileTexturePacker(Block.TILE_SIZE);
+		TileTexturePacker ttp = new TileTexturePacker();
 
 		ttp.maxTextureSize = 2048;
 		ttp.mustUsePowerOfTwo = true;
@@ -44,7 +44,7 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 			ttp.addTexture(entry.key, entry.value);
 		}
 
-		TilePackedTextureAtlas atlas = ttp.pack();
+		TextureAtlas atlas = ttp.pack();
 
 		Blocks.instance().setAtlas(atlas);
 

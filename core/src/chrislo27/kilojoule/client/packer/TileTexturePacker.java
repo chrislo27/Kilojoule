@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker.PackStrategy;
 import com.badlogic.gdx.utils.Array;
-
-import ionium.templates.Main;
 
 public class TileTexturePacker {
 
@@ -16,101 +18,57 @@ public class TileTexturePacker {
 	public int maxTextureSize = 2048;
 	public String debugOutputFile = null;
 
-	private int tileSize = 32;
-
 	private Array<NamedTexture> texturesToPack = new Array<>();
 
-	private TilePackedTextureAtlas packedTex = null;
+	private TextureAtlas packedTex = null;
 
-	public TileTexturePacker(int tileSize) {
-		this.tileSize = tileSize;
+	public TileTexturePacker() {
+
 	}
 
-	public TilePackedTextureAtlas pack() {
+	public TextureAtlas pack() {
 		if (packedTex != null) return getPackedTexture();
 		if (texturesToPack.size == 0) throw new IllegalStateException("No textures to pack");
 
-		int tilesWidth = 1;
-		int tilesHeight = 1;
+		PixmapPacker packer = new PixmapPacker(maxTextureSize, maxTextureSize, Format.RGBA8888, 2,
+				true);
 
-		while (tilesWidth * tilesHeight <= texturesToPack.size) {
-			if (mustUsePowerOfTwo) {
-				int n = 1;
+		for (NamedTexture nt : texturesToPack) {
+			TextureData td = nt.texture.getTextureData();
+			td.prepare();
+			Pixmap p = td.consumePixmap();
 
-				while (n <= (tilesWidth <= tilesHeight ? tilesWidth : tilesHeight)) {
-					n = n << 1;
-				}
+			packer.pack(nt.name, p);
 
-				if (tilesWidth <= tilesHeight) {
-					tilesWidth = n;
-				} else {
-					tilesHeight = n;
-				}
-			} else {
-				if (tilesWidth <= tilesHeight) {
-					tilesWidth++;
-				} else {
-					tilesHeight++;
-				}
-			}
-
-			if (tilesWidth * tileSize > maxTextureSize || tilesHeight * tileSize > maxTextureSize) {
-				throw new PackingException(
-						"Exceeded texture size limit (" + maxTextureSize + ") while packing");
+			if (td.disposePixmap()) {
+				p.dispose();
 			}
 		}
 
-		Pixmap pixmap = new Pixmap(tilesWidth * tileSize, tilesHeight * tileSize, Format.RGBA8888);
-
-		for (int y = 0; y < tilesHeight; y++) {
-			for (int x = 0; x < tilesWidth; x++) {
-				int id = y * tilesWidth + x;
-
-				if (id >= texturesToPack.size) break;
-
-				Texture t = texturesToPack.get(id).texture;
-				if (!t.getTextureData().isPrepared()) t.getTextureData().prepare();
-				Pixmap returned = t.getTextureData().consumePixmap();
-
-				pixmap.drawPixmap(returned, x * tileSize, y * tileSize);
-
-				if (t.getTextureData().disposePixmap()) returned.dispose();
-			}
-		}
+		packedTex = packer.generateTextureAtlas(TextureFilter.Nearest, TextureFilter.Nearest,
+				false);
 
 		if (debugOutputFile != null) {
-			PixmapIO.writePNG(Gdx.files.local(debugOutputFile), pixmap);
-		}
-
-		packedTex = new TilePackedTextureAtlas();
-		Texture newTex = new Texture(pixmap);
-		pixmap.dispose();
-		for (int y = 0; y < tilesHeight; y++) {
-			for (int x = 0; x < tilesWidth; x++) {
-				int id = y * tilesWidth + x;
-
-				if (id >= texturesToPack.size) break;
-
-				packedTex.addRegion(texturesToPack.get(id).name, newTex, x * tileSize, y * tileSize,
-						tileSize, tileSize);
+			TextureData td = packedTex.getRegions().first().getTexture().getTextureData();
+			if (!td.isPrepared()) {
+				td.prepare();
 			}
+			Pixmap p = td.consumePixmap();
+			PixmapIO.writePNG(Gdx.files.local(debugOutputFile), p);
 		}
+
+		packer.dispose();
 
 		return getPackedTexture();
 	}
 
 	public TileTexturePacker addTexture(String name, Texture tex) {
-		if (tex.getWidth() != tileSize || tex.getHeight() != tileSize) {
-			throw new IllegalArgumentException("Texture doesn't meet tile size (" + tileSize
-					+ "^2), was " + tex.getWidth() + "x" + tex.getHeight());
-		}
-
 		texturesToPack.add(new NamedTexture(tex, name));
 
 		return this;
 	}
 
-	public TilePackedTextureAtlas getPackedTexture() {
+	public TextureAtlas getPackedTexture() {
 		if (packedTex == null) throw new IllegalStateException("Texture was not packed yet");
 
 		return packedTex;

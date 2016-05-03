@@ -1,10 +1,10 @@
 package chrislo27.kilojoule.core.registry;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import chrislo27.kilojoule.client.packer.TilePackedTextureAtlas;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.block.BlockDirt;
 import chrislo27.kilojoule.core.block.BlockGrass;
@@ -32,7 +32,7 @@ public class Blocks {
 	private Array<Block> allBlocks = new Array<>();
 	private Array<String> allKeys = new Array<>();
 
-	private TilePackedTextureAtlas atlas;
+	private TextureAtlas atlas;
 	private ObjectMap<String, AtlasRegion> regions = new ObjectMap<>();
 
 	private void loadResources() {
@@ -41,7 +41,7 @@ public class Blocks {
 		addBlock("stone", new BlockStone());
 	}
 
-	public void setAtlas(TilePackedTextureAtlas a) {
+	public void setAtlas(TextureAtlas a) {
 		atlas = a;
 
 		Array<AtlasRegion> allRegions = atlas.getRegions();
@@ -55,7 +55,7 @@ public class Blocks {
 		}
 	}
 
-	public TilePackedTextureAtlas getAtlas() {
+	public TextureAtlas getAtlas() {
 		return atlas;
 	}
 
