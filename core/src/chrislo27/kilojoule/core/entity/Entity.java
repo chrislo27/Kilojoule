@@ -30,7 +30,6 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	public EntityRenderer renderer;
 	public PhysicsBody physicsBody = new PhysicsBody();
 	public transient Vector2 lastKnownPosition = new Vector2();
-	public Vector2 collidingPosition = new Vector2();
 
 	public Vector2 maxSpeed = new Vector2(10, 10);
 	public Vector2 accSpeed = new Vector2(maxSpeed.x * 2, maxSpeed.y * 2);
@@ -113,7 +112,6 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 				bodies, Rectangle.tmp2);
 
 		// set position
-		collidingPosition.set(collisionResult.newPosition);
 		physicsBody.bounds.x = collisionResult.newPosition.x;
 		physicsBody.bounds.y = collisionResult.newPosition.y;
 
