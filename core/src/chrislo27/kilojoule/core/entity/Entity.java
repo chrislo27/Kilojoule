@@ -139,14 +139,26 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	}
 
 	public void move(float amtX, float amtY) {
-		if (Math.abs(physicsBody.velocity.x) <= maxSpeed.x && amtX != 0) {
-			physicsBody.velocity.x = MathUtils.clamp(physicsBody.velocity.x + amtX * accSpeed.x,
-					-maxSpeed.x, maxSpeed.x);
+		if ((Math.abs(physicsBody.velocity.x) <= maxSpeed.x
+				|| Math.signum(amtX) != Math.signum(physicsBody.velocity.x)) && amtX != 0) {
+			if (amtX > 0) {
+				physicsBody.velocity.x = Math.min(maxSpeed.x,
+						physicsBody.velocity.x + amtX * accSpeed.x);
+			} else {
+				physicsBody.velocity.x = Math.max(-maxSpeed.x,
+						physicsBody.velocity.x + amtX * accSpeed.x);
+			}
 		}
 
-		if (Math.abs(physicsBody.velocity.y) <= maxSpeed.y && amtY != 0) {
-			physicsBody.velocity.y = MathUtils.clamp(physicsBody.velocity.y + amtY * accSpeed.y,
-					-maxSpeed.y, maxSpeed.y);
+		if ((Math.abs(physicsBody.velocity.y) <= maxSpeed.y
+				|| Math.signum(amtY) != Math.signum(physicsBody.velocity.y)) && amtY != 0) {
+			if (amtY > 0) {
+				physicsBody.velocity.y = Math.min(maxSpeed.y,
+						physicsBody.velocity.y + amtY * accSpeed.y);
+			} else {
+				physicsBody.velocity.y = Math.max(-maxSpeed.y,
+						physicsBody.velocity.y + amtY * accSpeed.y);
+			}
 		}
 	}
 
