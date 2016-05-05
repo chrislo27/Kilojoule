@@ -104,14 +104,15 @@ public class LightingRenderer {
 		avgTmp.mul(world.generatorSettings.allLightTint);
 
 		// multiply by sky light tint
-		avgTmp.set(avgTmp.r + (avgS * world.generatorSettings.skyLightTint.r),
-				avgTmp.g + (avgS * world.generatorSettings.skyLightTint.g),
-				avgTmp.b + (avgS * world.generatorSettings.skyLightTint.b), avgTmp.a);
+		avgTmp.set(avgTmp.r + (avgS * world.generatorSettings.skyLightTint.r * avgTmp.a),
+				avgTmp.g + (avgS * world.generatorSettings.skyLightTint.g * avgTmp.a),
+				avgTmp.b + (avgS * world.generatorSettings.skyLightTint.b * avgTmp.a), avgTmp.a);
 
 		// multiply by artificial light tint
-		avgTmp.set(avgTmp.r + (avgL * world.generatorSettings.artificialLightTint.r),
-				avgTmp.g + (avgL * world.generatorSettings.artificialLightTint.g),
-				avgTmp.b + (avgL * world.generatorSettings.artificialLightTint.b), avgTmp.a);
+		avgTmp.set(avgTmp.r + (avgL * world.generatorSettings.artificialLightTint.r * avgTmp.a),
+				avgTmp.g + (avgL * world.generatorSettings.artificialLightTint.g * avgTmp.a),
+				avgTmp.b + (avgL * world.generatorSettings.artificialLightTint.b * avgTmp.a),
+				avgTmp.a);
 
 		// lerp with shadow colour based on opacity
 		avgTmp.lerp(world.generatorSettings.shadowColor, (a + a2 + a3 + a4) * 0.25f);
