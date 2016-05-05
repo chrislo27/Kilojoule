@@ -284,7 +284,9 @@ public abstract class World {
 		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
 
 		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setBlock(block, x % Chunk.SIZE, y % Chunk.SIZE);
-		lightingEngine.requestUpdate(x, y, block.lightEmission);
+		if (block != null) {
+			lightingEngine.requestUpdate(x, y, block.lightEmission);
+		}
 	}
 
 	public int getLighting(int x, int y) {
