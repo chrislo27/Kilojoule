@@ -68,8 +68,7 @@ public class LightingEngine {
 
 					break;
 				} else {
-					world.setLighting(LightUtils.rgblsToInt(MathUtils.random(0, 1),
-							MathUtils.random(0, 1), MathUtils.random(0, 1), 0, 1), x, y);
+					world.setLighting(LightUtils.rgblsToInt(1, 1, 1, 0, 1), x, y);
 				}
 			}
 		}
