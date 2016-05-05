@@ -14,7 +14,7 @@ public class EntityPlayer extends Entity implements IChunkLoader {
 
 		this.renderer = new EntityPlayerRenderer(this);
 		this.maxSpeed.set(10, 10);
-		this.accSpeed.set(maxSpeed.x * 2, maxSpeed.y * 2);
+		this.accSpeed.set(maxSpeed.x * 5, maxSpeed.y * 5);
 		this.jumpHeight = MathHelper.getJumpVelo(Math.abs(world.gravity.y), 3.25f);
 	}
 

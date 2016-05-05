@@ -35,6 +35,8 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	public Vector2 accSpeed = new Vector2(maxSpeed.x * 2, maxSpeed.y * 2);
 	public float jumpHeight = MathHelper.getJumpVelo(9.8f, 1);
 
+	public Vector2 collidingNormal = new Vector2();
+
 	public Entity(World world, float x, float y, float width, float height) {
 		this.world = world;
 		physicsBody.setBounds(x, y, width, height);
@@ -115,6 +117,8 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		physicsBody.bounds.x = collisionResult.newPosition.x;
 		physicsBody.bounds.y = collisionResult.newPosition.y;
 
+		collidingNormal.set(collisionResult.normal);
+
 		// free physicsbodies, result
 		world.collisionResolver.freeResult(collisionResult);
 		world.physicsBodyPool.freeAll(tempBodyArray);
@@ -162,7 +166,13 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		}
 	}
 
+	public boolean isColliding() {
+		return collidingNormal.x != 0 || collidingNormal.y != 0;
+	}
+
 	public void jump() {
+		if (collidingNormal.y != 1) return;
+
 		physicsBody.velocity.y += jumpHeight;
 	}
 
