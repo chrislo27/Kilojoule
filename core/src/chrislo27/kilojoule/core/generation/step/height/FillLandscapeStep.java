@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.generation.step.height;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.GenerationScreen.WorldLoadingBuffer;
@@ -7,9 +8,12 @@ import chrislo27.kilojoule.core.generation.WorldGenerator;
 import chrislo27.kilojoule.core.generation.settings.BlockLayer;
 import chrislo27.kilojoule.core.generation.step.Step;
 import chrislo27.kilojoule.core.world.World;
+import ionium.templates.Main;
 import ionium.util.i18n.Localization;
 
 public class FillLandscapeStep extends Step {
+
+	private static final Color BLACK = new Color(1, 1, 1, 1);
 
 	int x = 0;
 	int[] heights;
@@ -28,13 +32,15 @@ public class FillLandscapeStep extends Step {
 			BlockLayer layer = layers.get(layerindex);
 			int numLeft = y;
 
+			buffer.fillRect(
+					layer.block == null ? FillLandscapeStep.BLACK
+							: layer.block.getMapColor(world.getBiome(x).foliageColor),
+					x, 0, 1, y + layer.amount);
+
 			for (int i = 0; i < (layerindex == layers.size - 1 ? numLeft
 					: layer.amount); i++, y--) {
 				world.setBlock(layer.block, x, y);
 			}
-
-			buffer.fillRect(layer.block.getMapColor(world.getBiome(x).foliageColor), x, 0, 1,
-					y + layer.amount);
 		}
 
 		x++;

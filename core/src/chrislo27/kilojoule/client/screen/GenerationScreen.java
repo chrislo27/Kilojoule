@@ -46,8 +46,8 @@ public class GenerationScreen extends Updateable<Main> {
 		universe = u;
 
 		for (Entry<String, World> entry : universe.worlds.entries()) {
-			allGenerators.add(
-					new WorldGenerator(entry.key, entry.value, entry.value.generatorSettings));
+			allGenerators
+					.add(new WorldGenerator(entry.key, entry.value, entry.value.generatorSettings));
 		}
 
 		updateCurrentGen();
@@ -193,6 +193,7 @@ public class GenerationScreen extends Updateable<Main> {
 
 		public void setSize(int width, int height) {
 			tempCam.setToOrtho(false, width, height);
+			tempCam.update();
 		}
 
 		public void fillRect(float r, float g, float b, int x, int y, int w, int h) {
