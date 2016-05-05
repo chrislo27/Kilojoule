@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -54,7 +55,8 @@ public class WorldRenderer implements Disposable {
 					player.renderer.lerpPosition.y + player.physicsBody.bounds.height * 0.5f,
 					camera.position.z);
 
-			camera.position.lerp(tempVector, Gdx.graphics.getDeltaTime() * 16);
+			camera.position.interpolate(tempVector, Gdx.graphics.getDeltaTime() * 16,
+					Interpolation.pow2Out);
 		}
 
 		camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth * 0.5f,
