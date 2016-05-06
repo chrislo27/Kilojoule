@@ -34,6 +34,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	public Vector2 maxSpeed = new Vector2(10, 10);
 	public Vector2 accSpeed = new Vector2(maxSpeed.x * 2, maxSpeed.y * 2);
 	public float jumpHeight = MathHelper.getJumpVelo(9.8f, 1);
+	public float dragCoefficient = 4;
 
 	public Vector2 collidingNormal = new Vector2();
 
@@ -119,10 +120,40 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 		collidingNormal.set(collisionResult.normal);
 
+		if (collisionResult.normal.y == 1) {
+			float avgFriction = getAverageGroundFriction();
+			int oldSign = (int) Math.signum(physicsBody.velocity.x);
+
+			physicsBody.velocity.x += ((avgFriction * Math.abs(world.gravity.y) * dragCoefficient)
+					/ GlobalVariables.ticks) * -Math.signum(physicsBody.velocity.x);
+
+			if (((int) Math.signum(physicsBody.velocity.x)) != oldSign) {
+				physicsBody.velocity.x = 0;
+			}
+		}
+
 		// free physicsbodies, result
 		world.collisionResolver.freeResult(collisionResult);
 		world.physicsBodyPool.freeAll(tempBodyArray);
 		tempBodyArray.clear();
+	}
+
+	public float getAverageGroundFriction() {
+		int rangeStart = (int) (physicsBody.bounds.x);
+		int rangeEnd = (int) (physicsBody.bounds.x + physicsBody.bounds.width);
+		float total = 0;
+		int blocks = 0;
+
+		for (int x = rangeStart; x <= rangeEnd; x++) {
+			Block b = world.getBlock(x, (int) (physicsBody.bounds.y - 1));
+
+			if (b != null) {
+				blocks++;
+				total += b.friction;
+			}
+		}
+
+		return (blocks == 0 ? 0 : total / blocks);
 	}
 
 	public void tickUpdate() {
@@ -143,6 +174,8 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	}
 
 	public void move(float amtX, float amtY) {
+		amtX += getAverageGroundFriction() * amtX;
+
 		if ((Math.abs(physicsBody.velocity.x) <= maxSpeed.x
 				|| Math.signum(amtX) != Math.signum(physicsBody.velocity.x)) && amtX != 0) {
 			if (amtX > 0) {

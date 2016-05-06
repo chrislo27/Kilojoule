@@ -19,6 +19,7 @@ public abstract class Block {
 	protected Color mapColor = new Color(1, 1, 1, 1);
 	public int lightDecreaseAmount = LIGHT_DECREASE_SOLID;
 	public int lightEmission = LightUtils.rgblsToInt(0, 0, 0, 0, 0);
+	public float friction = 1;
 
 	public Block() {
 
