@@ -6,9 +6,9 @@ import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.World;
 import ionium.templates.Main;
 
-public class EntityPlayerRenderer extends EntityRenderer<EntityPlayer> {
+public class RenderPlayer extends EntityRenderer<EntityPlayer> {
 
-	public EntityPlayerRenderer(EntityPlayer entity) {
+	public RenderPlayer(EntityPlayer entity) {
 		super(entity);
 	}
 
