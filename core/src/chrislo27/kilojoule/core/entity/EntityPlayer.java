@@ -10,7 +10,7 @@ import ionium.util.MathHelper;
 public class EntityPlayer extends Entity implements IChunkLoader {
 
 	public EntityPlayer(World world, float x, float y) {
-		super(world, x, y, 1, 1);
+		super(world, x, y, 2, 2);
 
 		this.renderer = new RenderPlayer(this);
 		this.maxSpeed.set(10, 10);
