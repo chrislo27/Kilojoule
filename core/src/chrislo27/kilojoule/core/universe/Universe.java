@@ -1,12 +1,19 @@
 package chrislo27.kilojoule.core.universe;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.client.Keybinds;
+import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
 import chrislo27.kilojoule.core.world.DesolateWorld;
 import chrislo27.kilojoule.core.world.World;
+import ionium.templates.Main;
+import ionium.util.DebugSetting;
 import ionium.util.input.AnyKeyPressed;
 import ionium.util.noise.SimplexNoise;
 
@@ -48,6 +55,17 @@ public class Universe {
 				defaultWorld.worldHeight, true);
 	}
 
+	private void lookForPlayer() {
+		for (World w : worlds.values()) {
+			for (Entity e : w.getAllEntities()) {
+				if (e instanceof EntityPlayer) {
+					player = (EntityPlayer) e;
+					return;
+				}
+			}
+		}
+	}
+
 	public void tickUpdate() {
 		if (player == null) spawnPlayer();
 
@@ -77,10 +95,22 @@ public class Universe {
 		if (AnyKeyPressed.isAKeyJustPressed(Keybinds.JUMP)) {
 			player.jump();
 		}
+
+		if (DebugSetting.debug && Gdx.input.isKeyJustPressed(Keys.V)) {
+			try {
+				UniverseSavingLoading.save(this, new FileHandle("saves/test/"));
+				Main.logger.info("Saved world");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public World getCurrentWorld() {
-		if (player == null) spawnPlayer();
+		if (player == null) {
+			lookForPlayer();
+			if (player == null) spawnPlayer();
+		}
 
 		return player.world;
 	}
