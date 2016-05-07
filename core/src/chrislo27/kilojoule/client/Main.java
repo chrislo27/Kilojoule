@@ -2,16 +2,18 @@ package chrislo27.kilojoule.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.AssetLoadingScreen;
-import chrislo27.kilojoule.client.screen.GenerationScreen;
+import chrislo27.kilojoule.client.screen.MainMenuScreen;
 import chrislo27.kilojoule.client.screen.WorldScreen;
-import chrislo27.kilojoule.core.universe.Universe;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
 import ionium.util.Logger;
@@ -32,13 +34,15 @@ public class Main extends ionium.templates.Main {
 	public BitmapFont font;
 	public BitmapFont fontBordered;
 
+	public Skin uiSkin;
+
 	public Main(Logger l) {
 		super(l);
 	}
 
 	@Override
 	public Screen getScreenToSwitchToAfterLoadingAssets() {
-		return new GenerationScreen(this, new Universe(System.nanoTime()));
+		return ScreenRegistry.get("mainMenu");
 	}
 
 	@Override
@@ -72,6 +76,7 @@ public class Main extends ionium.templates.Main {
 
 		reg.add("assetloading", new AssetLoadingScreen(this));
 		reg.add("world", new WorldScreen(this));
+		reg.add("mainMenu", new MainMenuScreen(this));
 	}
 
 	@Override
@@ -141,6 +146,14 @@ public class Main extends ionium.templates.Main {
 
 		ttfGenerator.dispose();
 
+		// load scene2d skin
+		{
+			uiSkin = new Skin();
+			uiSkin.add("default-font", font, BitmapFont.class);
+			FileHandle json = Gdx.files.internal("uiskin/uiskin.json");
+			uiSkin.addRegions(new TextureAtlas(json.sibling("uiskin.atlas")));
+			uiSkin.load(json);
+		}
 	}
 
 	@Override
