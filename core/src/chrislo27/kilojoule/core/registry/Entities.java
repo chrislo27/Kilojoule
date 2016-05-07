@@ -23,6 +23,7 @@ public class Entities {
 	}
 
 	private HashMap<String, Class<? extends Entity>> allEntities = new HashMap<>();
+	private HashMap<Class<? extends Entity>, String> reverseMap = new HashMap<>();
 
 	private void loadResources() {
 		addEntity("player", EntityPlayer.class);
@@ -30,6 +31,10 @@ public class Entities {
 
 	public static Class<? extends Entity> getEntityClass(String id) {
 		return instance().allEntities.get(id);
+	}
+
+	public static String getEntityID(Class<? extends Entity> clazz) {
+		return instance().reverseMap.get(clazz);
 	}
 
 	public static Entity getNewInstance(String id, World world, float x, float y) {
@@ -46,6 +51,7 @@ public class Entities {
 
 	public void addEntity(String id, Class<? extends Entity> clazz) {
 		instance().allEntities.put(id, clazz);
+		instance().reverseMap.put(clazz, id);
 	}
 
 }
