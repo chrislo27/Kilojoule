@@ -1,12 +1,12 @@
 package chrislo27.kilojoule.core.entity;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.evilco.mc.nbt.error.TagNotFoundException;
 import com.evilco.mc.nbt.error.UnexpectedTagTypeException;
 import com.evilco.mc.nbt.tag.TagCompound;
+import com.evilco.mc.nbt.tag.TagFloat;
 
 import chrislo27.kilojoule.client.render.entity.EntityRenderer;
 import chrislo27.kilojoule.core.block.Block;
@@ -15,7 +15,6 @@ import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.CollisionResult;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
-import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
@@ -166,11 +165,18 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 	@Override
 	public void writeToNBT(TagCompound compound) {
+		compound.setTag(new TagFloat("PosX", physicsBody.bounds.x));
+		compound.setTag(new TagFloat("PosY", physicsBody.bounds.y));
+		compound.setTag(new TagFloat("VelocityX", physicsBody.velocity.x));
+		compound.setTag(new TagFloat("VelocityY", physicsBody.velocity.y));
 	}
 
 	@Override
 	public void readFromNBT(TagCompound compound)
 			throws TagNotFoundException, UnexpectedTagTypeException {
+		physicsBody.bounds.x = compound.getFloat("PosX");
+		physicsBody.bounds.y = compound.getFloat("PosY");
+		physicsBody.velocity.set(compound.getFloat("VelocityX"), compound.getFloat("VelocityY"));
 	}
 
 	public void move(float amtX, float amtY) {

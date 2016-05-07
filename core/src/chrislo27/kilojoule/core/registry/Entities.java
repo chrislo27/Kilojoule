@@ -39,7 +39,7 @@ public class Entities {
 
 	public static Entity getNewInstance(String id, World world, float x, float y) {
 		try {
-			return getEntityClass(id).getConstructor(World.class, Float.class, Float.class)
+			return getEntityClass(id).getConstructor(World.class, float.class, float.class)
 					.newInstance(world, x, y);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException e) {

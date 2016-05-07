@@ -95,15 +95,6 @@ public class Universe {
 		if (AnyKeyPressed.isAKeyJustPressed(Keybinds.JUMP)) {
 			player.jump();
 		}
-
-		if (DebugSetting.debug && Gdx.input.isKeyJustPressed(Keys.V)) {
-			try {
-				UniverseSavingLoading.save(this, new FileHandle("saves/test/"));
-				Main.logger.info("Saved world");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public World getCurrentWorld() {

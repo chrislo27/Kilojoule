@@ -1,12 +1,19 @@
 package chrislo27.kilojoule.client.screen;
 
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.Main;
 import chrislo27.kilojoule.client.render.WorldRenderer;
 import chrislo27.kilojoule.core.universe.Universe;
+import chrislo27.kilojoule.core.universe.UniverseSavingLoading;
 import chrislo27.kilojoule.core.world.World;
 import ionium.screen.Updateable;
+import ionium.util.DebugSetting;
 
 public class WorldScreen extends Updateable<Main> {
 
@@ -35,6 +42,25 @@ public class WorldScreen extends Updateable<Main> {
 	@Override
 	public void renderUpdate() {
 		if (universe != null) universe.inputUpdate();
+
+		if (DebugSetting.debug) {
+			if (Gdx.input.isKeyJustPressed(Keys.V)) {
+				try {
+					UniverseSavingLoading.save(universe, new FileHandle("saves/test/"));
+					Main.logger.info("Saved world");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (Gdx.input.isKeyJustPressed(Keys.C)) {
+				try {
+					universe = UniverseSavingLoading.load(new FileHandle("saves/test/"));
+					Main.logger.info("Loaded world");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
 	}
 
 	@Override

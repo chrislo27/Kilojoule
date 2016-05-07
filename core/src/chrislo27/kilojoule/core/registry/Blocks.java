@@ -64,10 +64,14 @@ public class Blocks {
 	}
 
 	public static Block getBlock(String key) {
+		if (key == null) return null;
+
 		return instance().blocks.get(key);
 	}
 
 	public static String getKey(Block block) {
+		if (block == null) return null;
+
 		return instance().reverseMap.get(block);
 	}
 
