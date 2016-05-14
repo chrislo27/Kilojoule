@@ -182,6 +182,14 @@ public class UniverseSavingLoading {
 
 			for (Entity e : world.getAllEntities()) {
 				String entityId = Entities.getEntityID(e.getClass());
+
+				if (entityId == null) {
+					Main.logger.warn("Entity with class " + e.getClass().getSimpleName()
+							+ " doesn't have a reflection key");
+
+					continue;
+				}
+
 				TagCompound tc = new TagCompound(entityId);
 
 				tc.setTag(new TagString("ReflectionID", entityId));
