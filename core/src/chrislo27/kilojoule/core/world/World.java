@@ -22,6 +22,7 @@ import ionium.registry.GlobalVariables;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
+import ionium.util.quadtree.QuadTree;
 
 public abstract class World {
 
@@ -38,6 +39,8 @@ public abstract class World {
 
 	private Array<Entity> allEntities = new Array<>();
 	private Array<Entity> activeEntities = new Array<>();
+	private Array<Entity> quadtreeRetrievalArray = new Array<>();
+	private QuadTree<Entity> entityQuadtree;
 	public boolean shouldRebuildActiveEntitiesArray = true;
 	public CollisionResolver collisionResolver;
 	public Pool<PhysicsBody> physicsBodyPool = new Pool<PhysicsBody>() {
@@ -70,6 +73,7 @@ public abstract class World {
 		chunks = new Chunk[chunksWidth][chunksHeight];
 		biomes = new Biome[worldWidth];
 
+		entityQuadtree = new QuadTree(sizex, sizey);
 		collisionResolver = new CollisionResolver(1f / GlobalVariables.ticks, 1f / Block.TILE_SIZE);
 
 		lightingEngine = new LightingEngine(this);
@@ -78,6 +82,14 @@ public abstract class World {
 	}
 
 	public abstract void assignBiomes(Array<BiomeRange> rangeArray);
+
+	public Array<Entity> getNearbyCollidableEntities(Entity reference) {
+		quadtreeRetrievalArray.clear();
+
+		entityQuadtree.retrieve(quadtreeRetrievalArray, reference);
+
+		return quadtreeRetrievalArray;
+	}
 
 	public void tickUpdate() {
 		if (shouldRebuildActiveEntitiesArray) {
@@ -102,6 +114,13 @@ public abstract class World {
 		TickBenchmark.instance().stop("chunkUpdate");
 
 		TickBenchmark.instance().start("collision");
+		entityQuadtree.clear();
+		for (int i = activeEntities.size - 1; i >= 0; i--) {
+			Entity e = activeEntities.get(i);
+
+			entityQuadtree.insert(e);
+		}
+
 		for (int i = activeEntities.size - 1; i >= 0; i--) {
 			Entity e = activeEntities.get(i);
 
