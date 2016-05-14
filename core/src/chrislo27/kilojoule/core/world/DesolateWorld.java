@@ -9,8 +9,6 @@ import chrislo27.kilojoule.core.universe.Universe;
 
 public class DesolateWorld extends World {
 
-	
-	
 	public DesolateWorld(Universe un, int sizex, int sizey) {
 		super(un, sizex, sizey);
 	}
