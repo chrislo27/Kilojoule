@@ -14,6 +14,7 @@ import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.lighting.LightingEngine;
+import chrislo27.kilojoule.core.tileentity.ITileEntityProvider;
 import chrislo27.kilojoule.core.tileentity.TileEntity;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
@@ -309,9 +310,20 @@ public abstract class World {
 	public void setBlock(Block block, int x, int y) {
 		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
 
+		boolean wasSame = getBlock(x, y) == block;
+
 		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setBlock(block, x % Chunk.SIZE, y % Chunk.SIZE);
 		if (block != null) {
 			lightingEngine.requestUpdate(x, y, block.lightEmission);
+
+			if (!wasSame) {
+				setTileEntity(null, x, y);
+
+				if (block instanceof ITileEntityProvider) {
+					setTileEntity(((ITileEntityProvider) block).createNewTileEntity(this, x, y), x,
+							y);
+				}
+			}
 		}
 	}
 
