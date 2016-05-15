@@ -19,6 +19,7 @@ import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.benchmarking.TickBenchmark;
 import ionium.registry.GlobalVariables;
+import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
@@ -115,7 +116,7 @@ public abstract class World {
 
 		TickBenchmark.instance().start("collision");
 		entityQuadtree.clear();
-		for (int i = activeEntities.size - 1; i >= 0; i--) {
+		for (int i = 0; i < activeEntities.size; i++) {
 			Entity e = activeEntities.get(i);
 
 			entityQuadtree.insert(e);
@@ -154,6 +155,10 @@ public abstract class World {
 		return allEntities;
 	}
 
+	public QuadTree<Entity> getEntityQuadtree() {
+		return entityQuadtree;
+	}
+
 	public void addEntity(Entity e) {
 		allEntities.add(e);
 
@@ -172,7 +177,8 @@ public abstract class World {
 
 		boolean allClear = true;
 		for (Coordinate c : tempCoords) {
-			if (!getChunk(c.getX(), c.getY()).isChunkActive()) {
+			if (getChunk(c.getX(), c.getY()) != null
+					&& !getChunk(c.getX(), c.getY()).isChunkActive()) {
 				allClear = false;
 				break;
 			}
