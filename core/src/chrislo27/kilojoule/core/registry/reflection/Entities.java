@@ -1,4 +1,4 @@
-package chrislo27.kilojoule.core.registry;
+package chrislo27.kilojoule.core.registry.reflection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

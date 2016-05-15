@@ -28,8 +28,8 @@ import com.evilco.mc.nbt.tag.TagString;
 import chrislo27.kilojoule.core.chunk.Chunk;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.nbt.BlockIDMap;
-import chrislo27.kilojoule.core.registry.Entities;
-import chrislo27.kilojoule.core.registry.Worlds;
+import chrislo27.kilojoule.core.registry.reflection.Entities;
+import chrislo27.kilojoule.core.registry.reflection.Worlds;
 import chrislo27.kilojoule.core.world.World;
 import ionium.templates.Main;
 

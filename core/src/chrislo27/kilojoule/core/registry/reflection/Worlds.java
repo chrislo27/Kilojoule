@@ -1,4 +1,4 @@
-package chrislo27.kilojoule.core.registry;
+package chrislo27.kilojoule.core.registry.reflection;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
