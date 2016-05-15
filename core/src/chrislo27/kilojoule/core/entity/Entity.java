@@ -1,5 +1,6 @@
 package chrislo27.kilojoule.core.entity;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -15,6 +16,7 @@ import chrislo27.kilojoule.core.world.World;
 import ionium.aabbcollision.CollisionResult;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.registry.GlobalVariables;
+import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
@@ -34,6 +36,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	public Vector2 accSpeed = new Vector2(maxSpeed.x * 2, maxSpeed.y * 2);
 	public float jumpHeight = MathHelper.getJumpVelo(9.8f, 1);
 	public float dragCoefficient = 4;
+	public float frictionCoefficient = 1;
 
 	public Vector2 collidingNormal = new Vector2();
 
@@ -101,7 +104,6 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 		// add entity physics
 		Array<Entity> nearby = world.getNearbyCollidableEntities(this);
-
 		for (int i = 0; i < nearby.size; i++) {
 			Entity e = nearby.get(i);
 
@@ -122,7 +124,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		collidingNormal.set(collisionResult.normal);
 
 		if (collisionResult.normal.y == 1) {
-			float avgFriction = getAverageGroundFriction();
+			float avgFriction = getAverageGroundFriction() + getAverageEntityFriction(nearby);
 			int oldSign = (int) Math.signum(physicsBody.velocity.x);
 
 			physicsBody.velocity.x += ((avgFriction * Math.abs(world.gravity.y) * dragCoefficient)
@@ -137,6 +139,25 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		world.collisionResolver.freeResult(collisionResult);
 		world.physicsBodyPool.freeAll(tempBodyArray);
 		tempBodyArray.clear();
+	}
+
+	public float getAverageEntityFriction(Array<Entity> nearby) {
+		float friction = 0;
+		int counted = 0;
+
+		for (int i = 0; i < nearby.size; i++) {
+			Entity e = nearby.get(i);
+
+			if (e == this) continue;
+
+			if (MathUtils.isEqual(e.physicsBody.bounds.y + e.physicsBody.bounds.height,
+					this.physicsBody.bounds.y, world.collisionResolver.tolerance)) {
+				friction += e.frictionCoefficient;
+				counted++;
+			}
+		}
+
+		return counted == 0 ? 0 : friction / counted;
 	}
 
 	public float getAverageGroundFriction() {
