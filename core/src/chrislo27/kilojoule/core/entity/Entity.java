@@ -104,11 +104,12 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 
 		// add entity physics
 		Array<Entity> nearby = world.getNearbyCollidableEntities(this);
+		Rectangle pathBounds = this.physicsBody.getAreaOfTravel(world.collisionResolver.timeScale);
 		for (int i = 0; i < nearby.size; i++) {
 			Entity e = nearby.get(i);
 
 			if (e == this) continue;
-			if (!e.physicsBody.bounds.overlaps(Rectangle.tmp2)) continue;
+			if (!e.physicsBody.bounds.overlaps(pathBounds)) continue;
 
 			bodies.add(e.physicsBody);
 		}
