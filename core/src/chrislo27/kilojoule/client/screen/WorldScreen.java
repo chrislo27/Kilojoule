@@ -46,15 +46,15 @@ public class WorldScreen extends Updateable<Main> {
 		if (DebugSetting.debug) {
 			if (Gdx.input.isKeyJustPressed(Keys.V)) {
 				try {
-					UniverseSavingLoading.save(universe, new FileHandle("saves/test/"));
-					Main.logger.info("Saved world");
+					UniverseSavingLoading.save(universe, new FileHandle("saves/quicksave/"));
+					Main.logger.info("Quicksaved world");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else if (Gdx.input.isKeyJustPressed(Keys.C)) {
 				try {
-					universe = UniverseSavingLoading.load(new FileHandle("saves/test/"));
-					Main.logger.info("Loaded world");
+					universe = UniverseSavingLoading.load(new FileHandle("saves/quicksave/"));
+					Main.logger.info("Quickloaded world");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
