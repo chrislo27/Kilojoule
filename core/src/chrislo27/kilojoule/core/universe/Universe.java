@@ -35,7 +35,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("desolate", new DesolateWorld(this, 64, 720));
+		worlds.put("desolate", new DesolateWorld(this, 1280, 720));
 	}
 
 	public void spawnPlayer() {
@@ -49,17 +49,6 @@ public class Universe {
 
 		defaultWorld.lightingEngine.updateLighting(0, 0, defaultWorld.worldWidth,
 				defaultWorld.worldHeight, true);
-
-		float height = 5;
-		for (int i = 0; i < 16; i++) {
-			EntitySolidTest e = new EntitySolidTest(defaultWorld,
-					player.physicsBody.bounds.x + MathUtils.random(-5, 5),
-					player.physicsBody.bounds.y - height, MathUtils.random(0.75f, 1.5f),
-					MathUtils.random(0.75f, 1.5f));
-
-			height += e.physicsBody.bounds.height;
-			defaultWorld.addEntity(e);
-		}
 	}
 
 	private void lookForPlayer() {
