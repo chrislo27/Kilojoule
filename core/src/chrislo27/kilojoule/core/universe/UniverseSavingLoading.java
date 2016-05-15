@@ -81,6 +81,8 @@ public class UniverseSavingLoading {
 		baos.close();
 		gzipStream.close();
 		outputStream.close();
+		
+		System.gc();
 	}
 
 	public static byte[] loadBytes(FileHandle file) throws IOException {
@@ -141,6 +143,8 @@ public class UniverseSavingLoading {
 
 		universe.player = null;
 
+		System.gc();
+		
 		return universe;
 	}
 
