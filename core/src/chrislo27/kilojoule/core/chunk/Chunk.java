@@ -1,10 +1,13 @@
 package chrislo27.kilojoule.core.chunk;
 
+import java.util.List;
+
 import com.evilco.mc.nbt.error.TagNotFoundException;
 import com.evilco.mc.nbt.error.UnexpectedTagTypeException;
 import com.evilco.mc.nbt.tag.TagCompound;
 import com.evilco.mc.nbt.tag.TagInteger;
 import com.evilco.mc.nbt.tag.TagIntegerArray;
+import com.evilco.mc.nbt.tag.TagList;
 
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.nbt.BlockIDMap;
@@ -104,6 +107,8 @@ public class Chunk {
 			int[] allBlocks = new int[SIZE * SIZE];
 			int[] allLighting = new int[SIZE * SIZE];
 
+			TagList tileEntityList = new TagList("TileEntities");
+
 			for (int x = 0; x < SIZE; x++) {
 				for (int y = 0; y < SIZE; y++) {
 					int index = getBlockIndex(x, y);
@@ -111,11 +116,20 @@ public class Chunk {
 					allBlocks[index] = blocks[x][y] == null ? 0
 							: idMap.keyToValue.get(Blocks.getKey(blocks[x][y]));
 					allLighting[index] = lighting[x][y];
+
+					if (getTileEntity(x, y) != null) {
+						TagCompound teTag = new TagCompound(null);
+
+						getTileEntity(x, y).writeToNBT(teTag);
+
+						tileEntityList.addTag(teTag);
+					}
 				}
 			}
 
 			compound.setTag(new TagIntegerArray("Blocks", allBlocks));
 			compound.setTag(new TagIntegerArray("Lighting", allLighting));
+			compound.setTag(tileEntityList);
 
 		}
 	}
@@ -128,6 +142,7 @@ public class Chunk {
 
 		int[] allBlocks = compound.getIntegerArray("Blocks");
 		int[] allLighting = compound.getIntegerArray("Lighting");
+		List<TagCompound> tileEntityList = compound.getList("TileEntities", TagCompound.class);
 
 		for (int i = 0; i < SIZE * SIZE; i++) {
 			int x = getXFromIndex(i);
@@ -136,6 +151,15 @@ public class Chunk {
 			setBlock(allBlocks[i] == 0 ? null : Blocks.getBlock(idMap.valueToKey.get(allBlocks[i])),
 					x, y);
 			setLighting(allLighting[i], x, y);
+		}
+
+		for (TagCompound tc : tileEntityList) {
+			int x = tc.getInteger("PosX") % SIZE;
+			int y = tc.getInteger("PosY") % SIZE;
+
+			if (getTileEntity(x, y) != null) {
+				getTileEntity(x, y).readFromNBT(tc);
+			}
 		}
 	}
 
