@@ -34,8 +34,6 @@ public class Main extends ionium.templates.Main {
 	public BitmapFont font;
 	public BitmapFont fontBordered;
 
-	public Skin uiSkin;
-
 	public Main(Logger l) {
 		super(l);
 	}
@@ -145,15 +143,6 @@ public class Main extends ionium.templates.Main {
 		biggerFontBordered.setFixedWidthGlyphs("0123456789");
 
 		ttfGenerator.dispose();
-
-		// load scene2d skin
-		{
-			uiSkin = new Skin();
-			uiSkin.add("default-font", font, BitmapFont.class);
-			FileHandle json = Gdx.files.internal("uiskin/uiskin.json");
-			uiSkin.addRegions(new TextureAtlas(json.sibling("uiskin.atlas")));
-			uiSkin.load(json);
-		}
 	}
 
 	@Override
