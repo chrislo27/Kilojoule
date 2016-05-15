@@ -1,19 +1,15 @@
 package chrislo27.kilojoule.core.universe;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import chrislo27.kilojoule.client.Keybinds;
 import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.entity.EntityPlayer;
+import chrislo27.kilojoule.core.entity.EntitySolidTest;
 import chrislo27.kilojoule.core.world.DesolateWorld;
 import chrislo27.kilojoule.core.world.World;
-import ionium.templates.Main;
-import ionium.util.DebugSetting;
 import ionium.util.input.AnyKeyPressed;
 import ionium.util.noise.SimplexNoise;
 
@@ -39,7 +35,7 @@ public class Universe {
 	}
 
 	private void addWorlds() {
-		worlds.put("desolate", new DesolateWorld(this, 1280, 720));
+		worlds.put("desolate", new DesolateWorld(this, 64, 720));
 	}
 
 	public void spawnPlayer() {
@@ -53,6 +49,17 @@ public class Universe {
 
 		defaultWorld.lightingEngine.updateLighting(0, 0, defaultWorld.worldWidth,
 				defaultWorld.worldHeight, true);
+
+		float height = 5;
+		for (int i = 0; i < 16; i++) {
+			EntitySolidTest e = new EntitySolidTest(defaultWorld,
+					player.physicsBody.bounds.x + MathUtils.random(-5, 5),
+					player.physicsBody.bounds.y - height, MathUtils.random(0.75f, 1.5f),
+					MathUtils.random(0.75f, 1.5f));
+
+			height += e.physicsBody.bounds.height;
+			defaultWorld.addEntity(e);
+		}
 	}
 
 	private void lookForPlayer() {
