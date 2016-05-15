@@ -2,20 +2,21 @@ package chrislo27.kilojoule.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
 import chrislo27.kilojoule.client.screen.AssetLoadingScreen;
 import chrislo27.kilojoule.client.screen.MainMenuScreen;
 import chrislo27.kilojoule.client.screen.WorldScreen;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
+import ionium.stage.Actor;
+import ionium.stage.Group;
 import ionium.util.Logger;
 import ionium.util.Utils;
 import ionium.util.resolution.AspectRatio;
@@ -33,6 +34,8 @@ public class Main extends ionium.templates.Main {
 	public BitmapFont biggerFontBordered;
 	public BitmapFont font;
 	public BitmapFont fontBordered;
+
+	public TweenManager tweenManager = new TweenManager();
 
 	public Main(Logger l) {
 		super(l);
@@ -57,6 +60,8 @@ public class Main extends ionium.templates.Main {
 
 		Gdx.graphics.setTitle(getTitle());
 
+		Tween.registerAccessor(Actor.class, new ActorAccessor<Actor>());
+
 		AssetRegistry.instance().addAssetLoader(new DefAssetLoader());
 	}
 
@@ -80,6 +85,8 @@ public class Main extends ionium.templates.Main {
 	@Override
 	protected void preRender() {
 		super.preRender();
+
+		tweenManager.update(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override
