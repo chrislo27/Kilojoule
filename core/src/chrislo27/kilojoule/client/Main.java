@@ -12,10 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 import chrislo27.kilojoule.client.screen.AssetLoadingScreen;
-import chrislo27.kilojoule.client.screen.GenerationScreen;
 import chrislo27.kilojoule.client.screen.MainMenuScreen;
 import chrislo27.kilojoule.client.screen.WorldScreen;
-import chrislo27.kilojoule.core.universe.Universe;
 import ionium.registry.AssetRegistry;
 import ionium.registry.ScreenRegistry;
 import ionium.util.Logger;
@@ -44,7 +42,7 @@ public class Main extends ionium.templates.Main {
 
 	@Override
 	public Screen getScreenToSwitchToAfterLoadingAssets() {
-		return new GenerationScreen(this, new Universe(System.nanoTime()));
+		return ScreenRegistry.get("mainMenu");
 	}
 
 	@Override

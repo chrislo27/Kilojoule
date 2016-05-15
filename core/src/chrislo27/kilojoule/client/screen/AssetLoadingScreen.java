@@ -34,7 +34,9 @@ public class AssetLoadingScreen extends ionium.screen.AssetLoadingScreen {
 
 		ttp.maxTextureSize = 2048;
 		ttp.mustUsePowerOfTwo = true;
-		ttp.debugOutputFile = "debug/blockTextures.png";
+		
+		// causes crash due to PixmapIO stuff
+		//ttp.debugOutputFile = "debug/blockTextures.png";
 
 		Entries<String, Texture> iterator = tempMap.entries();
 		Entry<String, Texture> entry;

@@ -1,15 +1,16 @@
 package chrislo27.kilojoule.client.packer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.PixmapIO.PNG;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.PixmapPacker.PackStrategy;
 import com.badlogic.gdx.utils.Array;
 
 public class TileTexturePacker {
@@ -43,6 +44,8 @@ public class TileTexturePacker {
 			if (td.disposePixmap()) {
 				p.dispose();
 			}
+
+			nt.texture.dispose();
 		}
 
 		packedTex = packer.generateTextureAtlas(TextureFilter.Nearest, TextureFilter.Nearest,
@@ -54,7 +57,8 @@ public class TileTexturePacker {
 				td.prepare();
 			}
 			Pixmap p = td.consumePixmap();
-			PixmapIO.writePNG(Gdx.files.local(debugOutputFile), p);
+			FileHandle loc = Gdx.files.local(debugOutputFile);
+			PixmapIO.writePNG(loc, p);
 		}
 
 		packer.dispose();
