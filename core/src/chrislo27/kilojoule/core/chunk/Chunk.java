@@ -9,6 +9,7 @@ import com.evilco.mc.nbt.tag.TagIntegerArray;
 import chrislo27.kilojoule.core.block.Block;
 import chrislo27.kilojoule.core.nbt.BlockIDMap;
 import chrislo27.kilojoule.core.registry.Blocks;
+import chrislo27.kilojoule.core.tileentity.TileEntity;
 
 public class Chunk {
 
@@ -16,6 +17,7 @@ public class Chunk {
 
 	public int chunkX, chunkY;
 	private Block[][] blocks = new Block[SIZE][SIZE];
+	private TileEntity[][] tileEntities = new TileEntity[SIZE][SIZE];
 	private int[][] lighting = new int[SIZE][SIZE];
 
 	private int loadedTime = 0;
@@ -30,6 +32,18 @@ public class Chunk {
 			loadedTime = 0;
 			return;
 		}
+	}
+
+	public void setTileEntity(TileEntity te, int x, int y) {
+		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return;
+
+		tileEntities[x][y] = te;
+	}
+
+	public TileEntity getTileEntity(int x, int y) {
+		if (x < 0 || y < 0 || x >= SIZE || y >= SIZE) return null;
+
+		return tileEntities[x][y];
 	}
 
 	public void setBlock(Block block, int x, int y) {

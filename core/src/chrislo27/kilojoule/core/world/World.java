@@ -14,12 +14,12 @@ import chrislo27.kilojoule.core.entity.Entity;
 import chrislo27.kilojoule.core.generation.WorldGeneratorSettings;
 import chrislo27.kilojoule.core.generation.step.BiomeStep.BiomeRange;
 import chrislo27.kilojoule.core.lighting.LightingEngine;
+import chrislo27.kilojoule.core.tileentity.TileEntity;
 import chrislo27.kilojoule.core.universe.Universe;
 import ionium.aabbcollision.CollisionResolver;
 import ionium.aabbcollision.PhysicsBody;
 import ionium.benchmarking.TickBenchmark;
 import ionium.registry.GlobalVariables;
-import ionium.templates.Main;
 import ionium.util.CoordPool;
 import ionium.util.Coordinate;
 import ionium.util.MathHelper;
@@ -337,6 +337,19 @@ public abstract class World {
 		if (x < 0 || x >= worldWidth) return;
 
 		biomes[x] = b;
+	}
+
+	public TileEntity getTileEntity(int x, int y) {
+		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return null;
+
+		return getChunk(x / Chunk.SIZE, y / Chunk.SIZE).getTileEntity(x % Chunk.SIZE,
+				y % Chunk.SIZE);
+	}
+
+	public void setTileEntity(TileEntity te, int x, int y) {
+		if (x < 0 || y < 0 || x >= worldWidth || y >= worldHeight) return;
+
+		getChunk(x / Chunk.SIZE, y / Chunk.SIZE).setTileEntity(te, x % Chunk.SIZE, y % Chunk.SIZE);
 	}
 
 	private void rebuildActiveEntitiesArray() {
