@@ -124,7 +124,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		collidingNormal.set(collisionResult.normal);
 
 		if (collisionResult.normal.y == 1) {
-			float avgFriction = getAverageGroundFriction() + getAverageEntityFriction(nearby);
+			float avgFriction = getAverageFriction(nearby);
 			int oldSign = (int) Math.signum(physicsBody.velocity.x);
 
 			physicsBody.velocity.x += ((avgFriction * Math.abs(world.gravity.y) * dragCoefficient)
@@ -139,6 +139,10 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 		world.collisionResolver.freeResult(collisionResult);
 		world.physicsBodyPool.freeAll(tempBodyArray);
 		tempBodyArray.clear();
+	}
+
+	public float getAverageFriction(Array<Entity> nearby) {
+		return (getAverageEntityFriction(nearby) + getAverageGroundFriction()) * 0.5f;
 	}
 
 	public float getAverageEntityFriction(Array<Entity> nearby) {
@@ -203,7 +207,7 @@ public abstract class Entity implements QuadRectangleable, NBTSaveable {
 	}
 
 	public void move(float amtX, float amtY) {
-		amtX += getAverageGroundFriction() * amtX;
+		amtX += getAverageFriction(world.getNearbyCollidableEntities(this)) * amtX;
 
 		if ((Math.abs(physicsBody.velocity.x) <= maxSpeed.x
 				|| Math.signum(amtX) != Math.signum(physicsBody.velocity.x)) && amtX != 0) {
