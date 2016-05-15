@@ -81,14 +81,14 @@ public class Universe {
 			player.move(Gdx.graphics.getDeltaTime(), 0);
 		}
 
-		if (AnyKeyPressed.isAKeyPressed(Keybinds.UP)) {
-			player.move(0, Gdx.graphics.getDeltaTime());
-		}
-		if (AnyKeyPressed.isAKeyPressed(Keybinds.DOWN)) {
-			player.move(0, -Gdx.graphics.getDeltaTime());
-		}
+//		if (AnyKeyPressed.isAKeyPressed(Keybinds.UP)) {
+//			player.move(0, Gdx.graphics.getDeltaTime());
+//		}
+//		if (AnyKeyPressed.isAKeyPressed(Keybinds.DOWN)) {
+//			player.move(0, -Gdx.graphics.getDeltaTime());
+//		}
 
-		if (AnyKeyPressed.isAKeyJustPressed(Keybinds.JUMP)) {
+		if (AnyKeyPressed.isAKeyPressed(Keybinds.JUMP) && player.physicsBody.velocity.y == 0) {
 			player.jump();
 		}
 	}
