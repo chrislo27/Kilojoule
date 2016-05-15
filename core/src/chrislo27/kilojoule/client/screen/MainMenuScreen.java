@@ -1,22 +1,21 @@
 package chrislo27.kilojoule.client.screen;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.equations.Bounce;
-import aurelienribon.tweenengine.equations.Quad;
-import chrislo27.kilojoule.client.ActorAccessor;
 import chrislo27.kilojoule.client.Main;
+import chrislo27.kilojoule.core.universe.Universe;
+import chrislo27.kilojoule.core.universe.UniverseSavingLoading;
+import ionium.registry.ScreenRegistry;
 import ionium.screen.Updateable;
 import ionium.stage.Group;
 import ionium.stage.Stage;
-import ionium.stage.ui.LocalizationStrategy;
 import ionium.stage.ui.TextButton;
 import ionium.stage.ui.skin.Palette;
 import ionium.stage.ui.skin.Palettes;
@@ -25,14 +24,15 @@ public class MainMenuScreen extends Updateable<Main> {
 
 	Stage stage;
 	Group mainMenuGroup;
-	Group saveSlotGroup;
 
 	public MainMenuScreen(Main m) {
 		super(m);
 
 		Palette p = Palettes.getIoniumDefault(main.font);
 		stage = new Stage();
-		stage.debugMode = true;
+
+		final MainMenuScreen righthere = this;
+
 		{
 			mainMenuGroup = new Group(stage);
 
@@ -42,19 +42,36 @@ public class MainMenuScreen extends Updateable<Main> {
 				public void onClickRelease(float x, float y) {
 					super.onClickRelease(x, y);
 
-					mainMenuGroup.setEnabled(false);
-					Tween.to(mainMenuGroup, ActorAccessor.SCREEN_X, 0.5f).target(-1)
-							.start(main.tweenManager);
-					Tween.to(saveSlotGroup, ActorAccessor.SCREEN_X, 0.5f).target(0)
-							.setCallback(new TweenCallback() {
+					FileHandle save = Gdx.files.local("saves/save1/");
 
-						@Override
-						public void onEvent(int type, BaseTween<?> arg1) {
-							if (type == COMPLETE) {
-								saveSlotGroup.setEnabled(true);
-							}
+					ScreenRegistry.get("world", WorldScreen.class).setUniverse(null);
+
+					if (save.exists()) {
+						final WorldScreen ws = ScreenRegistry.get("world", WorldScreen.class);
+
+						try {
+							ws.setUniverse(UniverseSavingLoading.load(save));
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-					}).start(main.tweenManager);
+
+						Gdx.app.postRunnable(new Runnable() {
+
+							@Override
+							public void run() {
+								main.setScreen(ws);
+							}
+						});
+					} else {
+						Gdx.app.postRunnable(new Runnable() {
+
+							@Override
+							public void run() {
+								main.setScreen(new GenerationScreen(righthere.main,
+										new Universe(System.nanoTime())));
+							}
+						});
+					}
 				}
 
 			}).setPixelOffsetSize(256, 48).align(Align.center | Align.bottom)
@@ -87,51 +104,7 @@ public class MainMenuScreen extends Updateable<Main> {
 			}).setPixelOffsetSize(256, 48).align(Align.center | Align.bottom)
 					.setScreenOffset(0, 0.25f).setPixelOffset(0, 64);
 
-			stage.addActor(mainMenuGroup).setScreenOffsetSize(0.5f, 0.5f);
-		}
-
-		{
-			saveSlotGroup = new Group(stage);
-
-			int numOfSlots = 8;
-			float initialHeight = 8 + numOfSlots / 2 * 64;
-
-			for (int i = 0; i < numOfSlots; i++) {
-				final int saveNum = i + 1;
-
-				saveSlotGroup.addActor(new TextButton(stage, p, "mainMenu.saveSlot") {
-
-					@Override
-					public String getText() {
-						return getI10NStrategy().get(getLocalizationKey(), saveNum);
-					}
-				}).align(Align.center).setPixelOffset(0, initialHeight - i * 64, 256, 48);
-			}
-
-			saveSlotGroup.addActor(new TextButton(stage, p, "mainMenu.back") {
-
-				@Override
-				public void onClickRelease(float x, float y) {
-					super.onClickRelease(x, y);
-
-					saveSlotGroup.setEnabled(false);
-					Tween.to(saveSlotGroup, ActorAccessor.SCREEN_X, 0.5f).target(1)
-							.start(main.tweenManager);
-					Tween.to(mainMenuGroup, ActorAccessor.SCREEN_X, 0.5f).target(0)
-							.setCallback(new TweenCallback() {
-
-						@Override
-						public void onEvent(int type, BaseTween<?> target) {
-							if (type == COMPLETE) {
-								mainMenuGroup.setEnabled(true);
-
-							}
-						}
-					}).start(main.tweenManager);
-				}
-			}).align(Align.bottomLeft).setPixelOffsetSize(128, 48).setScreenOffset(0.025f, 0.025f);
-
-			//stage.addActor(saveSlotGroup).setScreenOffset(1, 0).setEnabled(false);
+			stage.addActor(mainMenuGroup);
 		}
 	}
 
