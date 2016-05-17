@@ -2,6 +2,8 @@ apply plugin: "java"
 
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs "ionium"
+sourceSets.main.java.srcDirs "ionium-desktop"
 
 project.ext.mainClassName = "chrislo27.kilojoule.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
