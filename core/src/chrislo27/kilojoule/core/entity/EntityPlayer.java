@@ -1,13 +1,12 @@
 package chrislo27.kilojoule.core.entity;
 
-import com.badlogic.gdx.math.Vector2;
-
 import chrislo27.kilojoule.client.render.entity.RenderPlayer;
 import chrislo27.kilojoule.core.chunk.IChunkLoader;
+import chrislo27.kilojoule.core.entity.living.EntityLiving;
 import chrislo27.kilojoule.core.world.World;
 import ionium.util.MathHelper;
 
-public class EntityPlayer extends Entity implements IChunkLoader {
+public class EntityPlayer extends EntityLiving implements IChunkLoader {
 
 	public EntityPlayer(World world, float x, float y) {
 		super(world, x, y, 2, 2);
