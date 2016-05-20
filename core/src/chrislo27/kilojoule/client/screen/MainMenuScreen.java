@@ -28,7 +28,7 @@ public class MainMenuScreen extends Updateable<Main> {
 	public MainMenuScreen(Main m) {
 		super(m);
 
-		Palette p = Palettes.getIoniumDefault(main.font);
+		Palette p = Palettes.getIoniumDefault(main.font, main.fontBordered);
 		stage = new Stage();
 
 		final MainMenuScreen righthere = this;
@@ -39,8 +39,8 @@ public class MainMenuScreen extends Updateable<Main> {
 			mainMenuGroup.addActor(new TextButton(stage, p, "mainMenu.start") {
 
 				@Override
-				public void onClickRelease(float x, float y) {
-					super.onClickRelease(x, y);
+				public void onClickAction(float x, float y) {
+					super.onClickAction(x, y);
 
 					FileHandle save = Gdx.files.local("saves/save1/");
 
@@ -86,8 +86,8 @@ public class MainMenuScreen extends Updateable<Main> {
 				}
 
 				@Override
-				public void onClickRelease(float x, float y) {
-					super.onClickRelease(x, y);
+				public void onClickAction(float x, float y) {
+					super.onClickAction(x, y);
 				}
 
 			}).setPixelOffsetSize(256, 48).align(Align.center | Align.bottom)
@@ -95,8 +95,8 @@ public class MainMenuScreen extends Updateable<Main> {
 			mainMenuGroup.addActor(new TextButton(stage, p, "mainMenu.exit") {
 
 				@Override
-				public void onClickRelease(float x, float y) {
-					super.onClickRelease(x, y);
+				public void onClickAction(float x, float y) {
+					super.onClickAction(x, y);
 
 					Gdx.app.exit();
 				}
